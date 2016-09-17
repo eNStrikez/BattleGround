@@ -11,10 +11,12 @@ import javafx.stage.Stage;
 public class Menu extends Stage {
 
 	Scene scene;
+	Selection selection;
 	GridPane root;
 	Button start, stats, quit, options;
 
 	public Menu() {
+		
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		setWidth(bounds.getWidth());
@@ -29,9 +31,11 @@ public class Menu extends Stage {
 		stats.setAlignment(Pos.CENTER);
 		quit.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
-
+		
+		selection = new Selection(getMaxWidth(), getMaxHeight());
+		
 		start.setOnAction(e -> {
-
+			setScene(selection.getScene());
 		});
 
 		quit.setOnAction(e -> {
@@ -50,6 +54,7 @@ public class Menu extends Stage {
 		root.setVgap(50);
 		root.setHgap(10);
 		scene = new Scene(root, getMaxWidth(), getMaxHeight());
+
 		root.add(start, 0, 0);
 		root.add(stats, 0, 1);
 		root.add(options, 0, 2);
