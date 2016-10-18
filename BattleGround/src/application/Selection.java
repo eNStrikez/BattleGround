@@ -18,7 +18,7 @@ public class Selection {
 	Button back, left, right, start;
 	double screenX, screenY;
 	ArrayList<Character> clones = new ArrayList<Character>();
-	int index = 1;
+	int index = 0;
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
 
@@ -32,22 +32,21 @@ public class Selection {
 
 	// TO BE REPLACED WITH DATABASE QUERY AND RETURN
 	public void addClones() {
-		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15", "EMP", "Punch"));
-		clones.add(new Character("212", 100, 10, 0.8, 1, "DC-15", "EMP", "Punch"));
-		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-17", "EMP", "Bayonet"));
-		clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15", "Thermal Detonator", "Bayonet"));
-		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15", "Thermal Detonator", "Stun Baton"));
-		clones.add(new Character("Deviss", 150, 25, 0.99, 1.5, "DC-17", "EMP", "Gut Knife"));
+		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15", "EMP", "Punch", "CT"));
+		clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15", "EMP", "Punch", "CT"));
+		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-17", "EMP", "Bayonet", "CT"));
+		clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15", "Thermal Detonator", "Bayonet", "Seargent"));
+		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15", "Thermal Detonator", "Stun Baton", "Commander"));
+		clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-17", "EMP", "Gut Knife", "Commander"));
 	}
 
 	public void initComponents() {
 		addClones();
-		drawTimer = new Timer();
 		back = new Button("Back");
 		left = new Button("<-");
 		right = new Button("->");
 		start = new Button("Start");
-		stats = new Canvas(200, 600);
+		stats = new Canvas(400, 600);
 		player = new Canvas(600, 600);
 				
 		statsG = stats.getGraphicsContext2D();
@@ -55,18 +54,8 @@ public class Selection {
 		root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
-		
-		drawTimer.scheduleAtFixedRate(new TimerTask(){
-			@Override
-			public void run() {
-				drawPlayer(playerG);
-				drawStats(statsG);
-			}
-		}, 100, 2000);
-		
-
-		left.setOnAction(e -> chooseLeft());
-		right.setOnAction(e -> chooseRight());
+		left.setOnAction(e -> {chooseLeft(); drawPlayer(playerG); drawStats(statsG);});
+		right.setOnAction(e -> {chooseRight(); drawPlayer(playerG); drawStats(statsG);});
 		start.setOnAction(e -> chooseStart());
 		scene = new Scene(root, screenX, screenY);
 		root.add(stats, 0, 0, 2, 4);
@@ -75,18 +64,20 @@ public class Selection {
 		root.add(left, 2, 4, 1, 1);
 		root.add(start, 3, 4, 1, 1);
 		root.add(right, 4, 4, 1, 1);
+		drawPlayer(playerG);
+		drawStats(statsG);
 	}
 
 	public void chooseLeft() {
 		if (index > 0) {
 			index--;
 		} else {
-			index = clones.size();
+			index = clones.size() - 1;
 		}
 	}
 
 	public void chooseRight() {
-		if (index < clones.size()) {
+		if (index < clones.size() - 1) {
 			index++;
 		} else {
 			index = 0;
@@ -94,7 +85,7 @@ public class Selection {
 	}
 	
 	public void chooseStart(){
-		System.out.println(clones.get(index).name);
+		
 	}
 
 	public Scene getScene() {
@@ -102,12 +93,10 @@ public class Selection {
 	}
 
 	public void drawStats(GraphicsContext g){
-		
+		clones.get(index).drawStats(g, 400, 600);
 	}
 
 	public void drawPlayer(GraphicsContext g){
-		g.setFill(Color.BLUE);
-		g.fillRect(0, 0, 600, 600);
 		clones.get(index).draw(g, 600, 600);
 	}
 
