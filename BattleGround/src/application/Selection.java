@@ -2,14 +2,11 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
-
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 
 public class Selection {
 	Scene scene;
@@ -32,12 +29,13 @@ public class Selection {
 
 	// TO BE REPLACED WITH DATABASE QUERY AND RETURN
 	public void addClones() {
-		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15", "EMP", "Punch", "CT"));
-		clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15", "EMP", "Punch", "CT"));
-		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-17", "EMP", "Bayonet", "CT"));
-		clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15", "Thermal Detonator", "Bayonet", "Seargent"));
-		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15", "Thermal Detonator", "Stun Baton", "Commander"));
-		clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-17", "EMP", "Gut Knife", "Commander"));
+		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15s", "EMP", "Punch", "CT"));
+		clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15s", "EMP", "Punch", "Air Trooper"));
+		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-15a", "EMP", "Bayonet", "CT"));
+		clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15s", "Thermal Detonator", "Bayonet", "Sergeant"));
+		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15s", "Thermal Detonator", "Stun Baton", "Commander"));
+		clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-15a", "EMP", "Gut Knife", "Commander"));
+		clones.add(new Character("Rex", 80, 25, 0.99, 1.5, "Dual DC-17", "EMP", "Punch", "Captain"));
 	}
 
 	public void initComponents() {
@@ -48,7 +46,7 @@ public class Selection {
 		start = new Button("Start");
 		stats = new Canvas(400, 600);
 		player = new Canvas(600, 600);
-				
+
 		statsG = stats.getGraphicsContext2D();
 		playerG = player.getGraphicsContext2D();
 		root = new GridPane();
@@ -83,9 +81,9 @@ public class Selection {
 			index = 0;
 		}
 	}
-	
+
 	public void chooseStart(){
-		
+
 	}
 
 	public Scene getScene() {

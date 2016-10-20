@@ -52,23 +52,30 @@ public class Character {
 		}
 		g.setFont(new Font("Consolas", 16));
 		// health
-		g.fillText("Health", sX / 8, sY / 4, sX / 3);
+		g.fillText("Health", sX / 8, sY / 4 + sY/32, sX / 3);
 		g.fillRect(sX / 3, sY / 4, sX / 2, sY / 32);
 		// speed
-		g.fillText("Speed", sX / 8, sY / 4 + sY / 16, sX / 3);
+		g.fillText("Speed", sX / 8, sY / 4 + sY / 16+ sY/32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + sY / 16, sX / 2, sY / 32);
 		// accuracy
-		g.fillText("Accuracy", sX / 8, sY / 4 + sY / 8, sX / 3);
+		g.fillText("Accuracy", sX / 8, sY / 4 + sY / 8+ sY/32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + sY / 8, sX / 2, sY / 32);
 		// skill
-		g.fillText("Skill", sX / 8, sY / 4 + 3 * sY / 16, sX / 3);
+		g.fillText("Skill", sX / 8, sY / 4 + 3 * sY / 16+ sY/32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, sX / 2, sY / 32);
+		g.fillText("Weapon", sX / 8, sY / 4 + 4 * sY / 16+ sY/32);
+		g.fillText("Grenade", sX / 8, sY / 4 + 5 * sY / 16+ sY/32);
+		g.fillText("Melee", sX / 8, sY / 4 + 6 * sY / 16+ sY/32);
 
 		g.setFill(Color.MEDIUMAQUAMARINE);
 		g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
 		g.fillRect(sX / 3, sY / 4 + sY / 16, (speed / 40) * sX / 2, (sY / 32));
 		g.fillRect(sX / 3, sY / 4 + sY / 8, accuracy * sX / 2, (sY / 32));
 		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (skill / 5) * sX / 2, (sY / 32));
+		g.fillText(weapon, sX / 3, sY / 4 + 4 * sY / 16+ sY/32);
+		g.fillText(grenade, sX / 3, sY / 4 + 5 * sY / 16+ sY/32);
+		g.fillText(melee, sX / 3, sY / 4 + 6 * sY / 16+ sY/32);
+
 	}
 
 	public Object getStats() {

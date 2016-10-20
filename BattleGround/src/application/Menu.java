@@ -16,11 +16,11 @@ public class Menu extends Stage {
 	Button start, stats, quit, options;
 
 	public Menu() {
-		
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		setWidth(bounds.getWidth());
 		setHeight(bounds.getHeight());
+
 
 		start = new Button("START");
 		stats = new Button("STATS");
@@ -31,9 +31,9 @@ public class Menu extends Stage {
 		stats.setAlignment(Pos.CENTER);
 		quit.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
-		
+
 		selection = new Selection(getMaxWidth(), getMaxHeight());
-		
+
 		start.setOnAction(e -> {
 			setScene(selection.getScene());
 		});
