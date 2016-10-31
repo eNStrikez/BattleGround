@@ -35,7 +35,10 @@ public class Selection {
 		clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15s", "Thermal Detonator", "Bayonet", "Sergeant"));
 		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15s", "Thermal Detonator", "Stun Baton", "Commander"));
 		clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-15a", "EMP", "Gut Knife", "Commander"));
-		clones.add(new Character("Rex", 80, 25, 0.99, 1.5, "Dual DC-17", "EMP", "Punch", "Captain"));
+		clones.add(new Character("Rex", 180, 17, 0.7, 1.8, "Dual DC-17", "EMP", "Punch", "Captain"));
+		clones.add(new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Baton", "Commander"));
+		clones.add(new Character("Wolffe", 110, 12, 0.75 , 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade", "Commander"));
+		clones.add(new Character("Sniper", 70, 25, 0.8 , 2.0, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
 	}
 
 	public void initComponents() {
