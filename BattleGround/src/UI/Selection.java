@@ -1,4 +1,4 @@
-package application;
+package UI;
 
 import java.util.ArrayList;
 import java.util.Timer;

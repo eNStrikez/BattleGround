@@ -1,4 +1,4 @@
-package application;
+package UI;
 
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
