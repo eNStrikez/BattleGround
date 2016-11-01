@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -38,7 +38,8 @@ public class Selection {
 		clones.add(new Character("Rex", 180, 17, 0.7, 1.8, "Dual DC-17", "EMP", "Punch", "Captain"));
 		clones.add(new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Baton", "Commander"));
 		clones.add(new Character("Wolffe", 110, 12, 0.75 , 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade", "Commander"));
-		clones.add(new Character("Sniper", 70, 25, 0.8 , 2.0, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Scout", 90, 35, 0.8 , 1.1, "DC-15s", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Sniper", 60, 30, 0.9 , 2.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
 	}
 
 	public void initComponents() {
@@ -98,7 +99,7 @@ public class Selection {
 	}
 
 	public void drawPlayer(GraphicsContext g){
-		clones.get(index).draw(g, 600, 600);
+		clones.get(index).drawPlayer(g, 600, 600);
 	}
 
 }

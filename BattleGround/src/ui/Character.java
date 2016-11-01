@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -14,9 +14,9 @@ public class Character {
 	double speed;
 	double accuracy;
 	double skill;
-	String weapon;
-	String grenade;
-	String melee;
+	String weaponName;
+	String grenadeName;
+	String meleeName;
 	String rank;
 
 	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r) {
@@ -27,13 +27,13 @@ public class Character {
 		speed = sp;
 		accuracy = a;
 		skill = sk;
-		weapon = w;
-		grenade = g;
-		melee = m;
+		weaponName = w;
+		grenadeName = g;
+		meleeName = m;
 		rank = r;
 	}
 
-	public void draw(GraphicsContext g, int sX, int sY) {
+	public void drawPlayer(GraphicsContext g, int sX, int sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(Color.AQUAMARINE);
 		g.fillRect(0, 0, sX, sY);
@@ -77,9 +77,9 @@ public class Character {
 		g.fillRect(sX / 3, sY / 4 + sY / 16, (speed / 40) * sX / 2, (sY / 32));
 		g.fillRect(sX / 3, sY / 4 + sY / 8, accuracy * sX / 2, (sY / 32));
 		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (skill / 5) * sX / 2, (sY / 32));
-		g.fillText(weapon, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
-		g.fillText(grenade, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
-		g.fillText(melee, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
+		g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
+		g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
+		g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
 
 	}
 
