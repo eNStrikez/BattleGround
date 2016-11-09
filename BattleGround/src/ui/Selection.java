@@ -29,6 +29,7 @@ public class Selection {
 
 	// TO BE REPLACED WITH DATABASE QUERY AND RETURN
 	public void addClones() {
+		//Name, health, speed, accuracy, skill, weapon, grenade, melee, rank
 		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15s", "EMP", "Punch", "CT"));
 		clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15s", "EMP", "Punch", "Air Trooper"));
 		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-15a", "EMP", "Bayonet", "CT"));
@@ -39,7 +40,9 @@ public class Selection {
 		clones.add(new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Baton", "Commander"));
 		clones.add(new Character("Wolffe", 110, 12, 0.75 , 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade", "Commander"));
 		clones.add(new Character("Scout", 90, 35, 0.8 , 1.1, "DC-15s", "Flashbang", "Gut Knife", "ARF"));
-		clones.add(new Character("Sniper", 60, 30, 0.9 , 2.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Sniper", 60, 30, 0.9 , 4.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Fives", 200, 12, 0.8, 2.0, "Dual DC-17", "Thermal Imploder", "Punch", "ARC"));
+		clones.add(new Character("Echo", 180, 10, 0.9, 2.5, "Dual DC-17", "Thermal Detonator", "Punch", "ARC"));
 	}
 
 	public void initComponents() {
