@@ -19,7 +19,6 @@ public class Selection {
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
 
-
 	public Selection(double sX, double sY) {
 		initComponents();
 		addClones();
@@ -29,6 +28,7 @@ public class Selection {
 
 	// TO BE REPLACED WITH DATABASE QUERY AND RETURN
 	public void addClones() {
+		//Name, health, speed, accuracy, skill, weapon, grenade, melee, rank
 		clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15s", "EMP", "Punch", "CT"));
 		clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15s", "EMP", "Punch", "Air Trooper"));
 		clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-15a", "EMP", "Bayonet", "CT"));
@@ -36,10 +36,14 @@ public class Selection {
 		clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15s", "Thermal Detonator", "Stun Baton", "Commander"));
 		clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-15a", "EMP", "Gut Knife", "Commander"));
 		clones.add(new Character("Rex", 180, 17, 0.7, 1.8, "Dual DC-17", "EMP", "Punch", "Captain"));
-		clones.add(new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Baton", "Commander"));
-		clones.add(new Character("Wolffe", 110, 12, 0.75 , 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade", "Commander"));
-		clones.add(new Character("Scout", 90, 35, 0.8 , 1.1, "DC-15s", "Flashbang", "Gut Knife", "ARF"));
-		clones.add(new Character("Sniper", 60, 30, 0.9 , 2.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(
+				new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Baton", "Commander"));
+		clones.add(new Character("Wolffe", 110, 12, 0.75, 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade",
+				"Commander"));
+		clones.add(new Character("Scout", 90, 35, 0.8, 1.1, "DC-15s", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Sniper", 60, 30, 0.9, 4.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
+		clones.add(new Character("Fives", 200, 12, 0.8, 2.0, "Dual DC-17", "Thermal Imploder", "Punch",	"ARC"));
+		clones.add(new Character("Echo", 180, 10, 0.9, 2.5, "Dual DC-17", "Thermal Detonator", "Punch",	"ARC"));
 	}
 
 	public void initComponents() {
@@ -56,8 +60,16 @@ public class Selection {
 		root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
-		left.setOnAction(e -> {chooseLeft(); drawPlayer(playerG); drawStats(statsG);});
-		right.setOnAction(e -> {chooseRight(); drawPlayer(playerG); drawStats(statsG);});
+		left.setOnAction(e -> {
+			chooseLeft();
+			drawPlayer(playerG);
+			drawStats(statsG);
+		});
+		right.setOnAction(e -> {
+			chooseRight();
+			drawPlayer(playerG);
+			drawStats(statsG);
+		});
 		start.setOnAction(e -> chooseStart());
 		scene = new Scene(root, screenX, screenY);
 		root.add(stats, 0, 0, 2, 4);
@@ -86,7 +98,7 @@ public class Selection {
 		}
 	}
 
-	public void chooseStart(){
+	public void chooseStart() {
 
 	}
 
@@ -94,11 +106,11 @@ public class Selection {
 		return scene;
 	}
 
-	public void drawStats(GraphicsContext g){
+	public void drawStats(GraphicsContext g) {
 		clones.get(index).drawStats(g, 400, 600);
 	}
 
-	public void drawPlayer(GraphicsContext g){
+	public void drawPlayer(GraphicsContext g) {
 		clones.get(index).drawPlayer(g, 600, 600);
 	}
 
