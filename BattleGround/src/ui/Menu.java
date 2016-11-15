@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -14,8 +15,9 @@ public class Menu extends Stage {
 	Selection selection;
 	GridPane root;
 	Button start, stats, quit, options;
-
+	PasswordField pass;
 	public Menu() {
+
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		setWidth(bounds.getWidth());
@@ -26,15 +28,17 @@ public class Menu extends Stage {
 		stats = new Button("STATS");
 		quit = new Button("QUIT");
 		options = new Button("OPTIONS");
+		pass = new PasswordField();
 
 		start.setAlignment(Pos.CENTER);
 		stats.setAlignment(Pos.CENTER);
 		quit.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
+		pass.setAlignment(Pos.BOTTOM_CENTER);
 
-		selection = new Selection(getMaxWidth(), getMaxHeight());
 
 		start.setOnAction(e -> {
+			selection = new Selection(getMaxWidth(), getMaxHeight(), pass.getText());
 			setScene(selection.getScene());
 		});
 
@@ -59,6 +63,7 @@ public class Menu extends Stage {
 		root.add(stats, 0, 1);
 		root.add(options, 0, 2);
 		root.add(quit, 0, 3);
+		root.add(pass, 1, 0);
 
 		setScene(scene);
 	}
