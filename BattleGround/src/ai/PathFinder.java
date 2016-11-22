@@ -40,7 +40,6 @@ public class PathFinder {
 			if (current == target)
 				break;
 			ArrayList<Block> n = getNeighbours(current);
-			current.setScanned(true);
 			for (Block successor : n) {
 				double successorCost = current.getG() + findDistance(successor, current);
 				if (open.contains(successor)) {

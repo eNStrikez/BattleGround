@@ -12,8 +12,6 @@ public class Block {
 	Block precursor;
 	char type;
 	int moveCost;
-	boolean isMarked = false;
-	boolean isScanned = false;
 
 	public Block(int x, int y, char t){
 		posX = x;
@@ -61,18 +59,13 @@ public class Block {
 		return precursor;
 	}
 
-	public void draw(GraphicsContext g, int posX, int posY, int sizeX, int sizeY) {
+	public void draw(GraphicsContext g, double posX, double posY, double sizeX, double sizeY) {
 		if(type == 'g'){
 			g.setFill(Color.FORESTGREEN);
 		} else if (type == 'w'){
 			g.setFill(Color.AQUA);
 		} else if (type == 'm'){
 			g.setFill(Color.GRAY);
-		}
-		if(isMarked){
-			g.setFill(Color.GOLDENROD);
-		} else if(isScanned){
-			g.setFill(Color.AZURE);
 		}
 
 		g.fillRect(posX, posY, sizeX, sizeY);
@@ -81,14 +74,6 @@ public class Block {
 
 	public int getCost(){
 		return moveCost;
-	}
-
-	public void setMarked(boolean isM){
-		isMarked = isM;
-	}
-	
-	public void setScanned(boolean isS){
-		isScanned = isS;
 	}
 
 

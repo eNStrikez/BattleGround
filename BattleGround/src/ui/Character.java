@@ -1,5 +1,8 @@
 package ui;
 
+import java.sql.Blob;
+import java.sql.SQLException;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -18,9 +21,13 @@ public class Character {
 	String meleeName;
 	String rank;
 
-	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r) {
+	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r, Blob i) {
 		name = n;
-		image = new Image("https://github.com/eNStrikez/BattleGround/blob/master/CT_" + n + ".png?raw=true");
+		try {
+			image = new Image(i.getBinaryStream());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		aspectRatio = image.getWidth()/image.getHeight();
 		health = h;
 		speed = sp;

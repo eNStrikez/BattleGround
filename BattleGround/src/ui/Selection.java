@@ -20,42 +20,34 @@ public class Selection {
 	double screenX, screenY;
 	ArrayList<Character> clones = new ArrayList<Character>();
 	int index = 0;
+	int menuOption = 0;
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
+	SceneManager sManager;
 
-	public Selection(double sX, double sY, String p) {
-		addClones(p);
+	public Selection(double sX, double sY) {
+		addClones();
 		initComponents();
 		screenX = sX;
 		screenY = sY;
 	}
 
-	public void addClones(String password) {
-		// // Name, health, speed, accuracy, skill, weapon, grenade, melee, rank
-		// clones.add(new Character("Default", 100, 10, 0.8, 1, "DC-15s", "EMP","Punch", "CT"));
-		// clones.add(new Character("212", 100, 8, 0.9, 1, "DC-15s", "EMP","Punch", "Air Trooper"));
-		// clones.add(new Character("Shock", 80, 8, 0.95, 1.2, "DC-15a", "EMP","Bayonet", "CT"));
-		// clones.add(new Character("Appo", 150, 15, 0.7, 1.2, "DC-15s","Thermal Detonator", "Bayonet", "Sergeant"));
-		// clones.add(new Character("Cody", 200, 10, 0.8, 1.5, "DC-15s","Thermal Detonator", "Riot Shield", "Commander"));
-		// clones.add(new Character("Deviss", 80, 25, 0.99, 1.5, "DC-15a","EMP", "Gut Knife", "Commander"));
-		// clones.add(new Character("Rex", 180, 17, 0.7, 1.8, "Dual DC-17", "EMP", "Punch", "Captain"));
-		// clones.add(new Character("Fox", 150, 19, 0.8, 1.4, "Dual DC-17", "Thermal Detonator", "Riot Shield", "Commander"));
-		// clones.add(new Character("Wolffe", 110, 12, 0.75, 4.0, "Dual DC-17", "Thermal Imploder", "Vibroblade", "Commander"));
-		// clones.add(new Character("Scout", 90, 35, 0.8, 1.1, "DC-15s", "Flashbang", "Gut Knife", "ARF"));
-		// clones.add(new Character("Sniper", 60, 30, 0.9, 4.5, "DLT-19X", "Flashbang", "Gut Knife", "ARF"));
-		// clones.add(new Character("Fives", 200, 12, 0.8, 2.0, "Dual DC-17","Thermal Imploder", "Punch", "ARC"));
-		// clones.add(new Character("Echo", 180, 10, 0.9, 2.5, "Dual DC-17","Thermal Detonator", "Punch", "ARC"));
-		// clones.add(new Character("Hardcase", 200, 8, 0.5, 2.0, "Z-6 Rotary", "EMP", "Punch", "Corporal"));
-		// clones.add(new Character("Thorn", 250, 6, 0.75, 4.5, "Z-6 Rotary", "Thermal Imploder", "Riot Shield", "Commander"));
+	public void setSceneManager( SceneManager s){
+		sManager = s;
+	}
+
+	public void addClones() {
 
 		try {
+			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", password);
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
+			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from clones");
+			ResultSet rs = stmt.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
 			while (rs.next()) {
 				clones.add(new Character(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4),
-						rs.getDouble(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)));
+						rs.getDouble(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getBlob(10)));
 			}
 			con.close();
 
@@ -64,7 +56,6 @@ public class Selection {
 			System.exit(1);
 		}
 	}
-
 	public void initComponents() {
 		back = new Button("Back");
 		left = new Button("<-");
@@ -89,6 +80,7 @@ public class Selection {
 			drawStats(statsG);
 		});
 		start.setOnAction(e -> chooseStart());
+		back.setOnAction(e -> chooseBack());
 		scene = new Scene(root, screenX, screenY);
 		root.add(stats, 0, 0, 2, 4);
 		root.add(player, 2, 0, 4, 4);
@@ -117,7 +109,11 @@ public class Selection {
 	}
 
 	public void chooseStart() {
+		new Game(screenX, screenY, clones.get(index), sManager);
+	}
 
+	public void chooseBack() {
+		sManager.selectMenu();
 	}
 
 	public Scene getScene() {

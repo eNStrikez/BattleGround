@@ -5,14 +5,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Map {
+public class MapReader {
 	int mapX, mapY;
 
 
-	public Block[][] readFile() {
+	public int getMapX(){
+		return mapX;
+	}
+	
+	public int getMapY(){
+		return mapY;
+	}
+
+	public Block[][] readFile(String name) {
 		Block[][] blockArray;
 		int lineNo = 0;
-		File file = new File("map.txt");
+		File file = new File(name + ".txt");
 
 		try {
 			FileReader reader = new FileReader(file);
