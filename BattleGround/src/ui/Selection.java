@@ -32,6 +32,7 @@ public class Selection {
 		screenY = sY;
 	}
 
+
 	public void setSceneManager( SceneManager s){
 		sManager = s;
 	}
