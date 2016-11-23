@@ -33,8 +33,10 @@ public class Selection {
 	}
 
 
+
 	public void setSceneManager( SceneManager s){
 		sManager = s;
+
 	}
 
 	public void addClones() {
