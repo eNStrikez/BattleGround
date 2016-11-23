@@ -109,7 +109,7 @@ public class Selection {
 	}
 
 	public void chooseStart() {
-		new Game(screenX, screenY, clones.get(index), sManager);
+		sManager.newGame(screenX, screenY, clones.get(index));
 	}
 
 	public void chooseBack() {

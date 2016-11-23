@@ -7,6 +7,7 @@ import ui.Character;
 public class Player extends Entity {
 	double posX, posY;
 	Character character;
+	int moveX, moveY;
 
 	public Player(double x, double y, Character c) {
 		posX = x;
@@ -19,9 +20,9 @@ public class Player extends Entity {
 		g.fillOval(posX * sizeX, posY * sizeY, sizeX, sizeY);
 	}
 
-	public void move(double x, double y) {
-		posX += x;
-		posY += y;
+	public void move() {
+		posX += moveX;
+		posY += moveY;
 	}
 
 	public double getX() {
@@ -30,5 +31,13 @@ public class Player extends Entity {
 
 	public double getY() {
 		return posY;
+	}
+	
+	public void setMoveX(int mX){
+		moveX = mX;
+	}
+	
+	public void setMoveY(int mY){
+		moveY = mY;
 	}
 }

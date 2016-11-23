@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 public class Menu extends Stage {
 
-	Scene scene, optionsScene, statsScene;
+	Scene scene, optionsScene, statsScene, gameScene;
 	Selection selection;
 	GridPane root;
 	Button start, stats, quit, options;
@@ -19,19 +19,22 @@ public class Menu extends Stage {
 
 	public Menu() {
 
-		root = new GridPane();
-		root.setVgap(50);
-		root.setHgap(10);
-		scene = new Scene(root, getMaxWidth(), getMaxHeight());
+		
 
 		sManager = new SceneManager();
 		sManager.setMenu(this);
 		sManager.setMenuScene(this.getScene());
+		
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		setWidth(bounds.getWidth());
 		setHeight(bounds.getHeight());
 
+		root = new GridPane();
+		root.setVgap(50);
+		root.setHgap(10);
+		scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
+		
 		start = new Button("START");
 		stats = new Button("STATS");
 		quit = new Button("QUIT");
@@ -43,7 +46,7 @@ public class Menu extends Stage {
 		options.setAlignment(Pos.CENTER);
 
 		start.setOnAction(e -> {
-			selection = new Selection(getMaxWidth(), getMaxHeight());
+			selection = new Selection(bounds.getWidth(), bounds.getHeight());
 			sManager.setSelection(selection);
 			selection.setSceneManager(sManager);
 			setScene(selection.getScene());
@@ -67,5 +70,10 @@ public class Menu extends Stage {
 		root.add(quit, 0, 3);
 
 		setScene(scene);
+	}
+	
+	public void createGame(double sX, double sY, Character c){
+		gameScene = new Game(sX, sY, c, sManager).getScene();
+		setScene(gameScene);
 	}
 }
