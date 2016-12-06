@@ -59,7 +59,7 @@ public class Block {
 		return precursor;
 	}
 
-	public void draw(GraphicsContext g, double posX, double posY, double sizeX, double sizeY) {
+	public void draw(GraphicsContext g, int posX, int posY, int sizeX, int sizeY) {
 		if(type == 'g'){
 			g.setFill(Color.FORESTGREEN);
 		} else if (type == 'w'){

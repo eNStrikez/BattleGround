@@ -85,6 +85,7 @@ public class Selection {
 		start.setOnAction(e -> chooseStart());
 		back.setOnAction(e -> chooseBack());
 		scene = new Scene(root, screenX, screenY);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		root.add(stats, 0, 0, 2, 4);
 		root.add(player, 2, 0, 4, 4);
 		root.add(back, 0, 4, 2, 1);

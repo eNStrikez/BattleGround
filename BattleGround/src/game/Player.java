@@ -21,8 +21,8 @@ public class Player extends Entity {
 	}
 
 	public void move() {
-		posX += moveX;
-		posY += moveY;
+		posX += moveX*character.getSpeed()/100;
+		posY += moveY*character.getSpeed()/100;
 	}
 
 	public double getX() {
@@ -39,5 +39,13 @@ public class Player extends Entity {
 	
 	public void setMoveY(int mY){
 		moveY = mY;
+	}
+	
+	public Character getCharacter(){
+		return character;
+	}
+	
+	public void fire(){
+		
 	}
 }

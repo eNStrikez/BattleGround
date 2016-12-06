@@ -6,16 +6,16 @@ import javafx.scene.image.Image;
 public class Laser implements Weapon {
 	double posX, posY, sizeX, sizeY, damage;
 
-	public Laser(double x, double y, double sX, double sY){
+	public Laser(double x, double y, double sX, double sY, double damage){
 		posX = x;
 		posY = y;
 		sizeX = sX;
 		sizeY = sY;
 	}
-	
+
 	@Override
 	public void doDamage(Entity e) {
-		
+		e.takeDamage(damage);
 	}
 
 	@Override
@@ -29,12 +29,12 @@ public class Laser implements Weapon {
 
 	@Override
 	public Image getImage() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
-	
+
 	public void move(){
-		
+
 	}
 
 }

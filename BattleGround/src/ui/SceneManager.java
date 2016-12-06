@@ -39,7 +39,7 @@ public class SceneManager {
 	}
 
 	public void selectMenu(){
-		menu.setScene(menuScene);
+		menu.setMenu();
 	}
 
 	public void selectGame(){

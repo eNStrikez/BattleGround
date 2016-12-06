@@ -9,7 +9,7 @@ public class Entity {
 		return new Rectangle2D((int) posX, (int) posY, (int)sizeX, (int)sizeY);
 	}
 	
-	public void takeDamage(int d){
+	public void takeDamage(double d){
 		health -= d;
 		if(health < 0){
 			health = 0;

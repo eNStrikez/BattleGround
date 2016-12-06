@@ -45,6 +45,10 @@ public class Character {
 		g.fillRect(0, 0, sX, sY);
 		g.drawImage(image, (sX - sY*aspectRatio)/2, 0, sY*aspectRatio, sY);
 	}
+	
+	public double getSpeed(){
+		return speed;
+	}
 
 	public void drawStats(GraphicsContext g, int sX, int sY) {
 		g.clearRect(0, 0, sX, sY);
@@ -86,7 +90,6 @@ public class Character {
 		g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
 		g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
 		g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
-
 	}
 
 }
