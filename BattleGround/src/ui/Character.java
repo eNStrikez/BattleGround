@@ -3,6 +3,7 @@ package ui;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+import game.Laser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -16,6 +17,11 @@ public class Character {
 	double speed;
 	double accuracy;
 	double skill;
+	double weaponDamage;
+	double weaponRoF;
+	double weaponOverheat;
+	double weaponMagSize;
+	int red, blue, green;
 	String weaponName;
 	String grenadeName;
 	String meleeName;
@@ -39,15 +45,41 @@ public class Character {
 		rank = r;
 	}
 
+	public void initWeapon(double damage, double roF, double overheat, double magSize, int r, int g, int b){
+		weaponDamage = damage;
+		weaponRoF = roF;
+		weaponOverheat = overheat;
+		weaponMagSize = magSize;
+		red = r;
+		green = g;
+		blue = b;
+	}
+
 	public void drawPlayer(GraphicsContext g, int sX, int sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(Color.AQUAMARINE);
 		g.fillRect(0, 0, sX, sY);
 		g.drawImage(image, (sX - sY*aspectRatio)/2, 0, sY*aspectRatio, sY);
 	}
-	
+
 	public double getSpeed(){
 		return speed;
+	}
+
+	public double getHealth(){
+		return health;
+	}
+
+	public double getAccuracy(){
+		return speed;
+	}
+
+	public String getWeaponName(){
+		return weaponName;
+	}
+
+	public double getWeaponDamage(){
+		return weaponDamage;
 	}
 
 	public void drawStats(GraphicsContext g, int sX, int sY) {
@@ -90,6 +122,12 @@ public class Character {
 		g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
 		g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
 		g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
+	}
+
+	public int[] getRGB(){
+		return new int[]{
+			red, green, blue
+		};
 	}
 
 }

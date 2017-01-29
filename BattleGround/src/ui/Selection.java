@@ -24,10 +24,11 @@ public class Selection {
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
 	SceneManager sManager;
+	final char sMarks = '"';
 
 	public Selection(double sX, double sY) {
 		addClones();
-		initComponents();
+		initCharacterSelect();
 		screenX = sX;
 		screenY = sY;
 	}
@@ -59,7 +60,7 @@ public class Selection {
 			System.exit(1);
 		}
 	}
-	public void initComponents() {
+	public void initCharacterSelect() {
 		back = new Button("Back");
 		left = new Button("<-");
 		right = new Button("->");
@@ -113,6 +114,21 @@ public class Selection {
 	}
 
 	public void chooseStart() {
+		try {
+			System.out.println("Loading...");
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
+			System.out.println("Connected.");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from weapons where name = \""+ clones.get(index).getWeaponName() + "\";");
+			while(rs.next())
+			clones.get(index).initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6), rs.getInt(7), rs.getInt(8));
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
 		sManager.newGame(screenX, screenY, clones.get(index));
 	}
 

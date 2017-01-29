@@ -9,9 +9,8 @@ public class Main extends Application {
 		try {
 			primaryStage = new Menu();
 			primaryStage.show();
-			
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

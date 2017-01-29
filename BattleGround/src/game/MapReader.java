@@ -4,17 +4,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MapReader {
 	int mapX, mapY;
-
+	ArrayList<Block> spawners = new ArrayList<Block>();
 
 	public int getMapX(){
 		return mapX;
 	}
-	
+
 	public int getMapY(){
 		return mapY;
+	}
+
+	public ArrayList<Block> getSpawners(){
+		return spawners;
 	}
 
 	public Block[][] readFile(String name) {
@@ -52,6 +57,9 @@ public class MapReader {
 			while ((line = br.readLine()) != null) {
 				for (int i = 0; i < line.length(); i++) {
 					blockArray[i][lineNo] = new Block(i, lineNo, line.charAt(i));
+					if(blockArray[i][lineNo].type == 's'){
+						spawners.add(blockArray[i][lineNo]);
+					}
 				}
 				lineNo++;
 			}

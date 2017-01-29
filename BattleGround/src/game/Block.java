@@ -2,6 +2,7 @@ package game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class Block {
 	int posX;
@@ -23,8 +24,12 @@ public class Block {
 		} else if (t == 'w'){
 			moveCost = 3;
 		} else if (t == 'm'){
-			moveCost = 100;
+			collidable = true;
 		}
+	}
+
+	public boolean isCollidable(){
+		return collidable;
 	}
 
 	public int getX(){
@@ -59,7 +64,11 @@ public class Block {
 		return precursor;
 	}
 
-	public void draw(GraphicsContext g, int posX, int posY, int sizeX, int sizeY) {
+	public Rectangle getBounds(int scaleX, int scaleY) {
+		return new Rectangle(posX* scaleX, posY*scaleY, scaleX, scaleY);
+	}
+
+	public void draw(GraphicsContext g, int sizeX, int sizeY) {
 		if(type == 'g'){
 			g.setFill(Color.FORESTGREEN);
 		} else if (type == 'w'){
@@ -68,7 +77,7 @@ public class Block {
 			g.setFill(Color.GRAY);
 		}
 
-		g.fillRect(posX, posY, sizeX, sizeY);
+		g.fillRect(posX*sizeX, posY*sizeY, sizeX, sizeY);
 
 	}
 

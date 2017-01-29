@@ -27,6 +27,10 @@ public class PathFinder {
 		start.setH(findHeuristic(start, target)* (1+1/1000));
 		open.add(start);
 		Block current = start;
+		
+		if(target.isCollidable()){
+			return null;
+		}
 
 		while (open.size() > 0) {
 			current = open.getFirst();
@@ -42,6 +46,9 @@ public class PathFinder {
 			ArrayList<Block> n = getNeighbours(current);
 			for (Block successor : n) {
 				double successorCost = current.getG() + findDistance(successor, current);
+				if(successor.isCollidable()){
+					continue;
+				}
 				if (open.contains(successor)) {
 					if (successor.getG() <= successorCost) {
 						continue;
