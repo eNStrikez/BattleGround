@@ -4,9 +4,10 @@ import javafx.geometry.Rectangle2D;
 
 public class Entity {
 	double posX, posY, sizeX, sizeY, health;
+	boolean alive;
 
 	public Entity(){
-
+		alive = true;
 	}
 
 	public void setX(double x){
@@ -29,14 +30,18 @@ public class Entity {
 		health = h;
 	}
 
+	public boolean isAlive() {
+		return alive;
+	}
+
 	public Rectangle2D getBounds() {
-		return new Rectangle2D((int) posX, (int) posY, (int)sizeX, (int)sizeY);
+		return new Rectangle2D((int) posX*sizeX, (int) posY*sizeY, (int)sizeX, (int)sizeY);
 	}
 
 	public void takeDamage(double d){
 		health -= d;
 		if(health < 0){
-			health = 0;
+			alive = false;
 		}
 	}
 }

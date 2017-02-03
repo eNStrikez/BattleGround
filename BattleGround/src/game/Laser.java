@@ -47,7 +47,7 @@ public class Laser implements Weapon {
 
 	@Override
 	public boolean checkCollision(Entity e) {
-		if (e.getBounds().intersects(new Rectangle2D(posX, posY, width, height))) {
+		if (e.getBounds().intersects(new Rectangle2D(posX, posY, Math.abs(width), Math.abs(height)))) {
 			return true;
 		} else {
 			return false;
@@ -78,11 +78,11 @@ public class Laser implements Weapon {
 	public double getY(){
 		return posY;
 	}
-	
+
 	public void setMarked(){
 		marked = true;
 	}
-	
+
 	public boolean isMarked(){
 		return marked;
 	}

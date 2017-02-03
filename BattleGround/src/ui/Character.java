@@ -21,6 +21,8 @@ public class Character {
 	double weaponRoF;
 	double weaponOverheat;
 	double weaponMagSize;
+	double meleeDamage;
+	double meleeRange;
 	int red, blue, green;
 	String weaponName;
 	String grenadeName;
@@ -55,6 +57,11 @@ public class Character {
 		blue = b;
 	}
 
+	public void initMelee(double damage, double range){
+		meleeDamage = damage;
+		meleeRange = range;
+	}
+
 	public void drawPlayer(GraphicsContext g, int sX, int sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(Color.AQUAMARINE);
@@ -69,6 +76,14 @@ public class Character {
 	public double getHealth(){
 		return health;
 	}
+	
+	public double getOverheat(){
+		return weaponOverheat;
+	}
+	
+	public double getRoF(){
+		return weaponRoF;
+	}
 
 	public double getAccuracy(){
 		return speed;
@@ -76,6 +91,10 @@ public class Character {
 
 	public String getWeaponName(){
 		return weaponName;
+	}
+
+	public String getMeleeName(){
+		return meleeName;
 	}
 
 	public double getWeaponDamage(){

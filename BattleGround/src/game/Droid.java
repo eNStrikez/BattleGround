@@ -31,18 +31,37 @@ public class Droid extends Entity {
 		setSY(sY);
 	}
 
-	public void draw(GraphicsContext g){
-		g.setFill(Color.ORANGERED);
-		g.fillOval(posX * sizeX, posY * sizeY, sizeX, sizeY);
-		//g.drawImage(image, posX, posY, sizeX, sizeY);
+	public Droid(Droid d) {
+		image = d.image;
+		speed = d.speed;
+		accuracy = d.accuracy;
+		skill = d.skill;
+		weaponDamage = d.weaponDamage;
+		weaponRoF = d.weaponRoF;
+		weaponOverheat = d.weaponOverheat;
+		weaponMagSize = d.weaponMagSize;
+		meleeDamage = d.meleeDamage;
+		meleeRange = d.meleeRange;
+		red = d.red;
+		blue = d.blue;
+		green = d.green;
+		weaponName = d.weaponName;
+		meleeName = d.meleeName;
+		sizeX = d.sizeX;
+		sizeY = d.sizeY;
+		setHealth(d.health);
 	}
 
-	public void loadDroid(String name){
+	public void draw(GraphicsContext g) {
+		g.setFill(Color.ORANGERED);
+		g.fillOval(posX * sizeX, posY * sizeY, sizeX, sizeY);
+		// g.drawImage(image, posX, posY, sizeX, sizeY);
+	}
+
+	public void loadDroid(String name) {
 		try {
-			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
-			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from droids where droids.name = \"" + name + "\"");
 			while (rs.next()) {
@@ -52,12 +71,13 @@ public class Droid extends Entity {
 				accuracy = rs.getDouble(4);
 				skill = rs.getDouble(5);
 				weaponName = rs.getString(6);
-				image = new Image(rs.getBlob(7).getBinaryStream());
+				// image = new Image(rs.getBlob(7).getBinaryStream());
 				meleeName = rs.getString(8);
 
 			}
 
-			rs = stmt.executeQuery("select * from weapons where name = (select weapon from droids where name = \"" + name + "\");");
+			rs = stmt.executeQuery(
+					"select * from weapons where name = (select weapon from droids where name = \"" + name + "\");");
 			while (rs.next()) {
 				weaponDamage = rs.getDouble(2);
 				weaponRoF = rs.getDouble(3);
@@ -68,7 +88,8 @@ public class Droid extends Entity {
 				green = rs.getInt(8);
 			}
 
-			rs = stmt.executeQuery("select * from melees where name = (select weapon from droids where name = \"" + name + "\");");
+			rs = stmt.executeQuery(
+					"select * from melees where name = (select weapon from droids where name = \"" + name + "\");");
 			while (rs.next()) {
 				meleeDamage = rs.getDouble(2);
 				meleeRange = rs.getDouble(3);
@@ -81,4 +102,29 @@ public class Droid extends Entity {
 		}
 	}
 
+	public void move(Block[][] map, int mapX, int mapY) {
+		int rand = (int) (Math.random() * 4);
+		switch (rand) {
+		case 0:
+			if (posY - 1 < mapY && posY - 1 >= 0)
+				if (!map[(int) posX][(int) posY - 1].collidable)
+					posY -= 1;
+			break;
+		case 1:
+			if (posY + 1 < mapY && posY + 1 >= 0)
+				if (!map[(int) posX][(int) posY + 1].collidable)
+					posY += 1;
+			break;
+		case 2:
+			if (posX - 1 < mapX && posX - 1 >= 0)
+				if (!map[(int) posX - 1][(int) posY].collidable)
+					posX -= 1;
+			break;
+		case 3:
+			if (posX + 1 < mapX && posX + 1 >= 0)
+				if (!map[(int) posX + 1][(int) posY].collidable)
+					posX += 1;
+			break;
+		}
+	}
 }

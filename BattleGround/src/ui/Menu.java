@@ -1,5 +1,6 @@
 package ui;
 
+import game.Game;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -20,13 +21,13 @@ public class Menu extends Stage {
 	public Menu() {
 		sManager = new SceneManager();
 		sManager.setMenu(this);
-		sManager.setMenuScene(this.getScene());	
-		
+		sManager.setMenuScene(this.getScene());
+
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
 		setWidth(bounds.getWidth());
 		setHeight(bounds.getHeight());
-		
+
 		root = new GridPane();
 		root.setVgap(50);
 		root.setHgap(10);
@@ -36,31 +37,31 @@ public class Menu extends Stage {
 		stats = new Button("STATS");
 		quit = new Button("QUIT");
 		options = new Button("OPTIONS");
-		
+
 		start.setAlignment(Pos.CENTER);
 		stats.setAlignment(Pos.CENTER);
 		quit.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
-		
+
 		start.setOnAction(e -> {
 			selection = new Selection(bounds.getWidth(), bounds.getHeight());
 			sManager.setSelection(selection);
 			selection.setSceneManager(sManager);
 			setScene(selection.getScene());
 		});
-		
+
 		quit.setOnAction(e -> {
 			close();
 		});
-		
+
 		options.setOnAction(e -> {
-			
+
 		});
-		
+
 		stats.setOnAction(e -> {
-			
+
 		});
-		
+
 		root.add(start, 0, 0);
 		root.add(stats, 0, 1);
 		root.add(options, 0, 2);
@@ -68,11 +69,11 @@ public class Menu extends Stage {
 		setScene(scene);
 	}
 
-	public void createGame(double sX, double sY, Character c){
-		gameScene = new Game(sX, sY, c, sManager).getScene();
+	public void createGame(double sX, double sY, Character c, String diff){
+		gameScene = new Game(sX, sY, c, sManager, diff).getScene();
 		setScene(gameScene);
 	}
-	
+
 	public void setMenu(){
 		setScene(scene);
 	}

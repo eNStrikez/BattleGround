@@ -1,5 +1,6 @@
 package ui;
 
+import game.Game;
 import javafx.scene.Scene;
 
 public class SceneManager {
@@ -23,7 +24,7 @@ public class SceneManager {
 	public void setGame(Game g){
 		game = g;
 	}
-	
+
 	public void setGameScene(Scene gS){
 		gameScene = gS;
 	}
@@ -45,8 +46,8 @@ public class SceneManager {
 	public void selectGame(){
 		menu.setScene(gameScene);
 	}
-	
-	public void newGame(double sX, double sY, Character c){
-		menu.createGame(sX, sY, c);
+
+	public void newGame(double sX, double sY, Character c, String diff){
+		menu.createGame(sX, sY, c, diff);
 	}
 }

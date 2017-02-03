@@ -57,7 +57,7 @@ public class MapReader {
 			while ((line = br.readLine()) != null) {
 				for (int i = 0; i < line.length(); i++) {
 					blockArray[i][lineNo] = new Block(i, lineNo, line.charAt(i));
-					if(blockArray[i][lineNo].type == 's'){
+					if(line.charAt(i) == 's'){
 						spawners.add(blockArray[i][lineNo]);
 					}
 				}

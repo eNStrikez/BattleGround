@@ -23,10 +23,13 @@ public class Round {
 	public void increaseRound(){
 		currentRound++;
 	}
+	
+	public int getRound(){
+		return currentRound;
+	}
 
 	public int calculateDroids(){
 		int droids;
-
 		droids = difficulty*currentRound + 10;
 		return droids;
 	}

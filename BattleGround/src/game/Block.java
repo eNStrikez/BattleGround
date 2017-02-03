@@ -75,6 +75,8 @@ public class Block {
 			g.setFill(Color.AQUA);
 		} else if (type == 'm'){
 			g.setFill(Color.GRAY);
+		} else if (type == 's'){
+			g.setFill(Color.WHITESMOKE);
 		}
 
 		g.fillRect(posX*sizeX, posY*sizeY, sizeX, sizeY);
