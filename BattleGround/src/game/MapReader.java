@@ -46,6 +46,7 @@ public class MapReader {
 			e.printStackTrace();
 		}
 		blockArray = new Block[mapX][mapY];
+		System.out.println(mapX + "," + mapY);
 
 		lineNo = 0;
 		try {

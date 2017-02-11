@@ -3,7 +3,7 @@ package game;
 import javafx.geometry.Rectangle2D;
 
 public class Entity {
-	double posX, posY, sizeX, sizeY, health;
+	double posX, posY, sizeX, sizeY, health, maxHealth;
 	boolean alive;
 
 	public Entity(){
@@ -28,14 +28,28 @@ public class Entity {
 
 	public void setHealth(double h){
 		health = h;
+		maxHealth = h;
 	}
+
+	public double getX() {
+		return posX;
+	}
+
+	public double getY() {
+		return posY;
+	}
+
+	public double getSizeX() {
+		return posX + sizeX;
+	}
+
+	public double getSizeY() {
+		return posY + sizeY;
+	}
+
 
 	public boolean isAlive() {
 		return alive;
-	}
-
-	public Rectangle2D getBounds() {
-		return new Rectangle2D((int) posX*sizeX, (int) posY*sizeY, (int)sizeX, (int)sizeY);
 	}
 
 	public void takeDamage(double d){

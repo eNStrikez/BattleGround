@@ -1,18 +1,36 @@
 package ui;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Optional;
+
 import game.Game;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Pair;
 
 public class Menu extends Stage {
-
+	public static Integer USER_ID;
 	Scene scene, optionsScene, statsScene, gameScene;
+	Dialog<Pair<String, String>> login;
 	Selection selection;
 	GridPane root;
 	Button start, stats, quit, options;
@@ -22,6 +40,8 @@ public class Menu extends Stage {
 		sManager = new SceneManager();
 		sManager.setMenu(this);
 		sManager.setMenuScene(this.getScene());
+
+		showLoginPopup();
 
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
@@ -69,12 +89,97 @@ public class Menu extends Stage {
 		setScene(scene);
 	}
 
-	public void createGame(double sX, double sY, Character c, String diff){
-		gameScene = new Game(sX, sY, c, sManager, diff).getScene();
-		setScene(gameScene);
+	public void createGame(double sX, double sY, Character c, String diff) {
+		if (!USER_ID.equals(null)) {
+			gameScene = new Game(sX, sY, c, sManager, diff).getScene();
+			setScene(gameScene);
+		} else {
+			System.exit(1);
+		}
 	}
 
-	public void setMenu(){
+	public void showLoginPopup() {
+		login = new Dialog<>();
+		login.setTitle("Login");
+		login.setHeaderText(
+				"Enter your username and password.\nIf you are a new user, type in your desired login details and these will be saved.");
+		login.initStyle(StageStyle.UTILITY);
+
+		ButtonType loginButton = new ButtonType("Login", ButtonData.OK_DONE);
+		login.getDialogPane().getButtonTypes().addAll(loginButton, ButtonType.CANCEL);
+
+		TextField usernameText = new TextField();
+		usernameText.setPromptText("Username");
+
+		PasswordField passwordText = new PasswordField();
+		passwordText.setPromptText("Password");
+
+		GridPane root = new GridPane();
+		root.add(new Label("Username"), 0, 0);
+		root.add(usernameText, 1, 0);
+		root.add(new Label("Password"), 0, 1);
+		root.add(passwordText, 1, 1);
+
+		login.getDialogPane().setContent(root);
+
+		login.setResultConverter(dialogButton -> {
+			if (dialogButton == loginButton) {
+				return new Pair<>(usernameText.getText(), passwordText.getText());
+			}
+			return null;
+		});
+
+		Optional<Pair<String, String>> result = login.showAndWait();
+
+		result.ifPresent(usernamePassword -> {
+			try {
+				System.out.println("Loading...");
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root",
+						"root");
+				System.out.println("Connected.");
+				Statement stmt = con.createStatement();
+				
+				ResultSet rs = stmt.executeQuery("select userID from user where username = '"
+						+ usernamePassword.getKey() + "' and password = '" + usernamePassword.getValue() + "';");
+				
+				if (!rs.next()) {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("Confirm login details");
+					alert.setHeaderText("Account with username " + usernamePassword.getKey() + " will be created.");
+					alert.setContentText("Confirm that these will be the login credentials.");
+					Optional<ButtonType> option = alert.showAndWait();
+					if(option.get() == ButtonType.OK){
+						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
+								+ usernamePassword.getKey() + "', '" + usernamePassword.getValue()
+								+ "');");
+						rs = stmt.executeQuery("select userID from user where username = '" + usernamePassword.getKey() + "';");
+						rs.next();
+					} else {
+						System.exit(1);
+					}		
+				}
+				
+				
+				USER_ID = rs.getInt(1);
+				System.out.println(USER_ID);
+
+				con.close();
+
+			} catch (Exception e) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText("An error occurred during account credential verification or creation.\nPlease try again with valid credentials.");
+				alert.setContentText("Error: " + e);
+				Optional<ButtonType> option = alert.showAndWait();
+				if(option.get() == ButtonType.OK){	
+					System.exit(1);
+				}
+			}
+		});
+	}
+
+	public void setMenu() {
 		setScene(scene);
 	}
 }

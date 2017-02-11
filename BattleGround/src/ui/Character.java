@@ -86,7 +86,7 @@ public class Character {
 	}
 
 	public double getAccuracy(){
-		return speed;
+		return accuracy;
 	}
 
 	public String getWeaponName(){

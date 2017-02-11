@@ -64,11 +64,11 @@ public class Block {
 		return precursor;
 	}
 
-	public Rectangle getBounds(int scaleX, int scaleY) {
-		return new Rectangle(posX* scaleX, posY*scaleY, scaleX, scaleY);
+	public Rectangle getBounds(double x, double y, double sizeX, double sizeY) {
+		return new Rectangle(x*sizeX, y*sizeY, sizeX, sizeY);
 	}
 
-	public void draw(GraphicsContext g, int sizeX, int sizeY) {
+	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY) {
 		if(type == 'g'){
 			g.setFill(Color.FORESTGREEN);
 		} else if (type == 'w'){
@@ -79,7 +79,7 @@ public class Block {
 			g.setFill(Color.WHITESMOKE);
 		}
 
-		g.fillRect(posX*sizeX, posY*sizeY, sizeX, sizeY);
+		g.fillRect(x, y, sizeX, sizeY);
 
 	}
 

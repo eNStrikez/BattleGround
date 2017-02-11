@@ -52,9 +52,15 @@ public class Droid extends Entity {
 		setHealth(d.health);
 	}
 
-	public void draw(GraphicsContext g) {
+	public void draw(GraphicsContext g, double x, double y) {
+		if(health < maxHealth){
+			g.setFill(Color.CRIMSON);
+			g.fillRect(x, y - sizeY/4, sizeX, sizeY/4);
+			g.setFill(Color.LIMEGREEN);
+			g.fillRect(x, y - sizeY/4, sizeX * health/maxHealth, sizeY/4);
+		}
 		g.setFill(Color.ORANGERED);
-		g.fillOval(posX * sizeX, posY * sizeY, sizeX, sizeY);
+		g.fillOval(x, y, sizeX, sizeY);
 		// g.drawImage(image, posX, posY, sizeX, sizeY);
 	}
 
@@ -102,27 +108,27 @@ public class Droid extends Entity {
 		}
 	}
 
-	public void move(Block[][] map, int mapX, int mapY) {
+	public void move(Block[][] map, double mapX, double mapY) {
 		int rand = (int) (Math.random() * 4);
 		switch (rand) {
 		case 0:
-			if (posY - 1 < mapY && posY - 1 >= 0)
-				if (!map[(int) posX][(int) posY - 1].collidable)
+			if (posY - 1 >= 0)
+				if (!map[(int) posX][(int) (posY - 1)].collidable)
 					posY -= 1;
 			break;
 		case 1:
-			if (posY + 1 < mapY && posY + 1 >= 0)
-				if (!map[(int) posX][(int) posY + 1].collidable)
+			if (posY < mapY + 2)
+				if (!map[(int) posX][(int) (posY + 1)].collidable)
 					posY += 1;
 			break;
 		case 2:
-			if (posX - 1 < mapX && posX - 1 >= 0)
-				if (!map[(int) posX - 1][(int) posY].collidable)
+			if (posX - 1 >= 0)
+				if (!map[(int) (posX - 1)][(int) posY].collidable)
 					posX -= 1;
 			break;
 		case 3:
-			if (posX + 1 < mapX && posX + 1 >= 0)
-				if (!map[(int) posX + 1][(int) posY].collidable)
+			if (posX < mapX + 2)
+				if (!map[(int) (posX + 1)][(int) posY].collidable)
 					posX += 1;
 			break;
 		}

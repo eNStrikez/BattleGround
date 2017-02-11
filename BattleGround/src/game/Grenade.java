@@ -11,15 +11,18 @@ public class Grenade implements Weapon{
 	}
 
 	@Override
-	public boolean checkCollision(Entity e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public Image getImage() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean checkCollision(double x1, double y1, double sX1, double sY1, double x2, double y2, double sX2,
+			double sY2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 
 }
