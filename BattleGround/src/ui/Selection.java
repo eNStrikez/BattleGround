@@ -33,10 +33,11 @@ public class Selection {
 	ComboBox<String> difficultyBox;
 
 	public Selection(double sX, double sY) {
-		addClones();
-		initCharacterSelect();
 		screenX = sX;
 		screenY = sY;
+		addClones();
+		initCharacterSelect();
+
 	}
 
 	public void setSceneManager(SceneManager s) {
@@ -49,7 +50,7 @@ public class Selection {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
@@ -72,9 +73,10 @@ public class Selection {
 		left = new Button("<-");
 		right = new Button("->");
 		start = new Button("Start");
-		stats = new Canvas(400, 600);
-		player = new Canvas(600, 600);
-		options = FXCollections.observableArrayList("Youngling", "Padawan", "Jedi Knight", "Jedi Master", "Sith Lord", "Emperor");
+		stats = new Canvas(screenX * 0.3, screenY * 0.8);
+		player = new Canvas(screenX * 0.6, screenY * 0.8);
+		options = FXCollections.observableArrayList("Youngling", "Padawan", "Jedi Knight", "Jedi Master", "Sith Lord",
+				"Emperor");
 		difficultyBox = new ComboBox<String>(options);
 		difficultyBox.getSelectionModel().selectFirst();
 
@@ -128,7 +130,7 @@ public class Selection {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
@@ -136,8 +138,7 @@ public class Selection {
 			while (rs.next())
 				clones.get(index).initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6),
 						rs.getInt(7), rs.getInt(8));
-			rs = stmt
-					.executeQuery("select * from melees where name = \"" + clones.get(index).getMeleeName() + "\";");
+			rs = stmt.executeQuery("select * from melees where name = \"" + clones.get(index).getMeleeName() + "\";");
 			while (rs.next())
 				clones.get(index).initMelee(rs.getInt(2), rs.getInt(3));
 			con.close();
@@ -158,11 +159,11 @@ public class Selection {
 	}
 
 	public void drawStats(GraphicsContext g) {
-		clones.get(index).drawStats(g, 400, 600);
+		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
 	public void drawPlayer(GraphicsContext g) {
-		clones.get(index).drawPlayer(g, 600, 600);
+		clones.get(index).drawPlayer(g, screenX * 0.6, screenY * 0.8);
 	}
 
 }

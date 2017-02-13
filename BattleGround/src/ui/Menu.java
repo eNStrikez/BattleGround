@@ -135,14 +135,14 @@ public class Menu extends Stage {
 			try {
 				System.out.println("Loading...");
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root",
+				Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root",
 						"root");
 				System.out.println("Connected.");
 				Statement stmt = con.createStatement();
-				
+
 				ResultSet rs = stmt.executeQuery("select userID from user where username = '"
 						+ usernamePassword.getKey() + "' and password = '" + usernamePassword.getValue() + "';");
-				
+
 				if (!rs.next()) {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("Confirm login details");
@@ -157,10 +157,10 @@ public class Menu extends Stage {
 						rs.next();
 					} else {
 						System.exit(1);
-					}		
+					}
 				}
-				
-				
+
+
 				USER_ID = rs.getInt(1);
 				System.out.println(USER_ID);
 
@@ -172,7 +172,7 @@ public class Menu extends Stage {
 				alert.setHeaderText("An error occurred during account credential verification or creation.\nPlease try again with valid credentials.");
 				alert.setContentText("Error: " + e);
 				Optional<ButtonType> option = alert.showAndWait();
-				if(option.get() == ButtonType.OK){	
+				if(option.get() == ButtonType.OK){
 					System.exit(1);
 				}
 			}

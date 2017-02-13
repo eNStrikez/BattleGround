@@ -38,11 +38,13 @@ public class Game {
 	Round round;
 	public final static double FRAME_RATE = 100;
 	public final static double ZOOM = 5;
-	public final static boolean DEBUG = true;
+	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
 	double firingX, firingY;
 	double offX, offY;
+	int score;
+
 
 	/**
 	 * @param sX
@@ -52,6 +54,7 @@ public class Game {
 	 * @param diff
 	 */
 	public Game(double sX, double sY, Character c, SceneManager s, String diff) {
+		score = 0;
 		sManager = s;
 		screenX = sX;
 		screenY = sY;
@@ -187,6 +190,7 @@ public class Game {
 									transformXtoS(droid.getX()), transformYtoS(droid.getY()), scaleX, scaleY)
 									&& !laser.isMarked()) {
 								laser.doDamage(droid);
+								incrementScore((int)laser.getDamage());
 								laser.setMarked();
 								if (!droid.isAlive()) {
 									droidIt.remove();
@@ -289,6 +293,14 @@ public class Game {
 	}
 
 	/**
+	 * Add to the score proportional to the difficulty and round the player is on
+	 * @param s
+	 */
+	public void incrementScore(int s){
+		score += s*round.getDifficulty()*round.getRound();
+	}
+
+	/**
 	 * Draws each block in the map as well as any HUD elements
 	 *
 	 * @param g
@@ -305,12 +317,13 @@ public class Game {
 		g.setFill(Color.CRIMSON);
 		g.fillText("Round " + round.getRound(), 10, 10);
 		g.fillText("Droids left: " + droids.size(), 10, 25);
+		g.fillText("Score: " + score, 10, 40);
 		if (DEBUG) {
-			g.fillText("Offset: (" + offX + "," + offY + ")", 10, 40);
-			g.fillText("Player Location: (" + player.getX() + "," + player.getY() + ")", 10, 55);
-			g.fillText("Player Velocity: (" + player.getMoveX() + "," + player.getMoveY() + ")", 10, 70);
-			g.fillText("Zoom: " + ZOOM, 10, 85);
-			g.fillText("Scale: (" + scaleX + "," + scaleY + ")", 10, 100);
+			g.fillText("Offset: (" + offX + "," + offY + ")", 10, 55);
+			g.fillText("Player Location: (" + player.getX() + "," + player.getY() + ")", 10, 70);
+			g.fillText("Player Velocity: (" + player.getMoveX() + "," + player.getMoveY() + ")", 10, 85);
+			g.fillText("Zoom: " + ZOOM, 10, 100);
+			g.fillText("Scale: (" + scaleX + "," + scaleY + ")", 10, 115);
 		}
 	}
 

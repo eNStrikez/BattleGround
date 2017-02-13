@@ -55,6 +55,14 @@ public class Laser implements Weapon {
 	public void doDamage(Entity e) {
 		e.takeDamage(damage);
 	}
+	
+	/**
+	 * Returns the damage value of the laser
+	 * @return
+	 */
+	public double getDamage(){
+		return damage;
+	}
 
 	@Override
 	public boolean checkCollision(double x1, double y1, double sX1, double sY1, double x2, double y2, double sX2, double sY2) {

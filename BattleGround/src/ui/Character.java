@@ -62,7 +62,7 @@ public class Character {
 		meleeRange = range;
 	}
 
-	public void drawPlayer(GraphicsContext g, int sX, int sY) {
+	public void drawPlayer(GraphicsContext g, double sX, double sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(Color.AQUAMARINE);
 		g.fillRect(0, 0, sX, sY);
@@ -101,7 +101,7 @@ public class Character {
 		return weaponDamage;
 	}
 
-	public void drawStats(GraphicsContext g, int sX, int sY) {
+	public void drawStats(GraphicsContext g, double sX, double sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));
 

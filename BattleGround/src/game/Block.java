@@ -1,91 +1,101 @@
 package game;
 
+import java.sql.Blob;
+import java.sql.SQLException;
+
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public class Block {
 	int posX;
 	int posY;
-	boolean collidable = false;
+	boolean collidable;;
 	double h = 0;
 	double g = 0;
 	Block precursor;
-	char type;
+	String type;
 	int moveCost;
+	Image image;
 
-	public Block(int x, int y, char t){
-		posX = x;
-		posY = y;
-		type = t;
+	public Block(int mC, boolean c, Blob i) {
+		moveCost = mC;
+		collidable = c;
 
-		if(t == 'g'){
-			moveCost = 1;
-		} else if (t == 'w'){
-			moveCost = 3;
-		} else if (t == 'm'){
-			collidable = true;
+		try {
+			image = new Image(i.getBinaryStream());
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+
 	}
 
-	public boolean isCollidable(){
+	public Block(Block b, int x, int y){
+		posX = x;
+		posY = y;
+		collidable = b.isCollidable();
+		image = b.getImage();
+		moveCost = b.getCost();
+	}
+
+	public boolean isCollidable() {
 		return collidable;
 	}
 
-	public int getX(){
+	public int getX() {
 		return posX;
 	}
 
-	public int getY(){
+	public int getY() {
 		return posY;
 	}
 
-	public void setG(double a){
+	public void setX(int x) {
+		posX = x;
+	}
+
+	public void setY(int y) {
+		posY = y;
+	}
+
+	public void setG(double a) {
 		g = a;
 	}
 
-	public void setH(double a){
+	public void setH(double a) {
 		h = a;
 	}
 
-	public double getF(){
+	public Image getImage(){
+		return image;
+	}
+
+	public double getF() {
 		return h + g;
 	}
 
-	public double getG(){
+	public double getG() {
 		return g;
 	}
 
-	public void setPrecursor(Block p){
+	public void setPrecursor(Block p) {
 		precursor = p;
 	}
 
-	public Block getPrecursor(){
+	public Block getPrecursor() {
 		return precursor;
 	}
 
 	public Rectangle getBounds(double x, double y, double sizeX, double sizeY) {
-		return new Rectangle(x*sizeX, y*sizeY, sizeX, sizeY);
+		return new Rectangle(x * sizeX, y * sizeY, sizeX, sizeY);
 	}
 
 	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY) {
-		if(type == 'g'){
-			g.setFill(Color.FORESTGREEN);
-		} else if (type == 'w'){
-			g.setFill(Color.AQUA);
-		} else if (type == 'm'){
-			g.setFill(Color.GRAY);
-		} else if (type == 's'){
-			g.setFill(Color.WHITESMOKE);
-		}
-
-		g.fillRect(x, y, sizeX, sizeY);
-
+		g.drawImage(image, x, y, sizeX, sizeY);
 	}
 
-	public int getCost(){
+	public int getCost() {
 		return moveCost;
 	}
-
 
 }

@@ -67,7 +67,7 @@ public class Droid extends Entity {
 	public void loadDroid(String name) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from droids where droids.name = \"" + name + "\"");
 			while (rs.next()) {

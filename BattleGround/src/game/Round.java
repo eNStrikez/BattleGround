@@ -27,6 +27,10 @@ public class Round {
 	public int getRound(){
 		return currentRound;
 	}
+	
+	public int getDifficulty(){
+		return difficulty;
+	}
 
 	public int calculateDroids(){
 		int droids;

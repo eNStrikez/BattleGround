@@ -54,7 +54,7 @@ public class Entity {
 
 	public void takeDamage(double d){
 		health -= d;
-		if(health < 0){
+		if(health <= 0){
 			alive = false;
 		}
 	}

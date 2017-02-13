@@ -132,7 +132,7 @@ public class Player extends Entity {
 			overheatCurrent -= 60;
 		}
 	}
-	
+
 	/**
 	 * Increases the heat of the weapon
 	 */
