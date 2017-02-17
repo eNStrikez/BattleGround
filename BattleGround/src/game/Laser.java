@@ -51,6 +51,9 @@ public class Laser implements Weapon {
 		blue = b;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#doDamage(game.Entity)
+	 */
 	@Override
 	public void doDamage(Entity e) {
 		e.takeDamage(damage);
@@ -64,6 +67,9 @@ public class Laser implements Weapon {
 		return damage;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#checkCollision(double, double, double, double, double, double, double, double)
+	 */
 	@Override
 	public boolean checkCollision(double x1, double y1, double sX1, double sY1, double x2, double y2, double sX2, double sY2) {
 		Rectangle2D laserHitbox = new Rectangle2D(x1, y1, Math.abs(sX1), Math.abs(sY1));
@@ -74,6 +80,9 @@ public class Laser implements Weapon {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#getImage()
+	 */
 	@Override
 	public Image getImage() {
 

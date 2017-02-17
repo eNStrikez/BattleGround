@@ -12,12 +12,24 @@ public class PathFinder {
 	int mapX;
 	int mapY;
 
+	/**
+	 * @param m
+	 * @param mX
+	 * @param mY
+	 */
 	public PathFinder(Block[][] m, int mX, int mY) {
 		map = m;
 		mapX = mX;
 		mapY = mY;
 	}
 
+	/**
+	 * Searches for and returns the shortest possible path (if it exists) between the start and target
+	 *
+	 * @param start
+	 * @param target
+	 * @return
+	 */
 	public LinkedList<Block> findPath(Block start, Block target) {
 		LinkedList<Block> closed = new LinkedList<Block>();
 		LinkedList<Block> open = new LinkedList<Block>();
@@ -27,7 +39,7 @@ public class PathFinder {
 		start.setH(findHeuristic(start, target)* (1+1/1000));
 		open.add(start);
 		Block current = start;
-		
+
 		if(target.isCollidable()){
 			return null;
 		}
@@ -81,10 +93,23 @@ public class PathFinder {
 		return path;
 	}
 
+	/**
+	 * Returns the heuristic Manhattan distance between two blocks on the map
+	 *
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
 	public double findHeuristic(Block b1, Block b2) {
 		return 1 + Math.abs(b1.getX() - b2.getX()) + Math.abs(b1.getY() - b2.getY());
 	}
 
+	/**
+	 * Returns all the existing neighbours of the input block
+	 *
+	 * @param b
+	 * @return
+	 */
 	public ArrayList<Block> getNeighbours(Block b) {
 		ArrayList<Block> n = new ArrayList<Block>();
 
@@ -104,6 +129,13 @@ public class PathFinder {
 		return n;
 	}
 
+	/**
+	 * Returns whether the input coordinates are valid for the current map
+	 *
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean getValid(int x, int y) {
 		boolean isValid = true;
 		if (x > mapX - 1 || x < 0) {

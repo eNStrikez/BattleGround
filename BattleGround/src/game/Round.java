@@ -4,6 +4,9 @@ public class Round {
 	int currentRound = 1;
 	int difficulty;
 
+	/**
+	 * @param difficultyS
+	 */
 	public Round(String difficultyS){
 		if(difficultyS.equals("Youngling")){
 			difficulty = 1;
@@ -20,18 +23,36 @@ public class Round {
 		}
 	}
 
+	/**
+	 * Increment the current round
+	 */
 	public void increaseRound(){
 		currentRound++;
 	}
 	
+	/**
+	 * Returns the current round
+	 * 
+	 * @return
+	 */
 	public int getRound(){
 		return currentRound;
 	}
 	
+	/**
+	 * Returns the difficulty
+	 * 
+	 * @return
+	 */
 	public int getDifficulty(){
 		return difficulty;
 	}
 
+	/**
+	 * Returns the number of droids to spawn in the current round
+	 * 
+	 * @return
+	 */
 	public int calculateDroids(){
 		int droids;
 		droids = difficulty*currentRound + 10;

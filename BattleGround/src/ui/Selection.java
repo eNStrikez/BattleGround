@@ -40,11 +40,20 @@ public class Selection {
 
 	}
 
+	/**
+	 * Set the scene manager of the class
+	 * 
+	 * @param s
+	 */
 	public void setSceneManager(SceneManager s) {
 		sManager = s;
 
 	}
 
+	/**
+	 * Performs an SQL query to return the clones, ordered by the total
+	 * percentage of stats they have out of the maximum stats possible
+	 */
 	public void addClones() {
 
 		try {
@@ -68,6 +77,9 @@ public class Selection {
 		}
 	}
 
+	/**
+	 * Sets up the character selection screen
+	 */
 	public void initCharacterSelect() {
 		back = new Button("Back");
 		left = new Button("<-");
@@ -110,6 +122,9 @@ public class Selection {
 		drawStats(statsG);
 	}
 
+	/**
+	 * Decrement the index
+	 */
 	public void chooseLeft() {
 		if (index > 0) {
 			index--;
@@ -118,6 +133,9 @@ public class Selection {
 		}
 	}
 
+	/**
+	 * Increment the index
+	 */
 	public void chooseRight() {
 		if (index < clones.size() - 1) {
 			index++;
@@ -126,6 +144,9 @@ public class Selection {
 		}
 	}
 
+	/**
+	 * Start the game with the selected clone and initialises the clone's weapons
+	 */
 	public void chooseStart() {
 		try {
 			System.out.println("Loading...");
@@ -150,18 +171,34 @@ public class Selection {
 		sManager.newGame(screenX, screenY, clones.get(index), difficultyBox.getValue());
 	}
 
+	/**
+	 * Go back to the menu screen
+	 */
 	public void chooseBack() {
 		sManager.selectMenu();
 	}
 
+	/**
+	 * Return the scene
+	 */
 	public Scene getScene() {
 		return scene;
 	}
 
+	/**
+	 * Draws the stat bars and information for the clone specified by the index
+	 * 
+	 * @param g
+	 */
 	public void drawStats(GraphicsContext g) {
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
+	/**
+	 * Draws the image of the clone specified by the index
+	 * 
+	 * @param g
+	 */
 	public void drawPlayer(GraphicsContext g) {
 		clones.get(index).drawPlayer(g, screenX * 0.6, screenY * 0.8);
 	}

@@ -89,6 +89,14 @@ public class Menu extends Stage {
 		setScene(scene);
 	}
 
+	/**
+	 * Create a new game scene and sets it as the current scene
+	 *
+	 * @param sX
+	 * @param sY
+	 * @param c
+	 * @param diff
+	 */
 	public void createGame(double sX, double sY, Character c, String diff) {
 		if (!USER_ID.equals(null)) {
 			gameScene = new Game(sX, sY, c, sManager, diff).getScene();
@@ -98,6 +106,9 @@ public class Menu extends Stage {
 		}
 	}
 
+	/**
+	 * Creates and shows a login popup for the player to login or create an account
+	 */
 	public void showLoginPopup() {
 		login = new Dialog<>();
 		login.setTitle("Login");
@@ -179,6 +190,9 @@ public class Menu extends Stage {
 		});
 	}
 
+	/**
+	 * Sets the current scene as the menu scene
+	 */
 	public void setMenu() {
 		setScene(scene);
 	}

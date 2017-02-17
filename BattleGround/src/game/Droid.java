@@ -25,12 +25,20 @@ public class Droid extends Entity {
 	String weaponName;
 	String meleeName;
 
+	/**
+	 * @param name
+	 * @param sX
+	 * @param sY
+	 */
 	public Droid(String name, double sX, double sY) {
 		loadDroid(name);
 		setSX(sX);
 		setSY(sY);
 	}
 
+	/**
+	 * @param d
+	 */
 	public Droid(Droid d) {
 		image = d.image;
 		speed = d.speed;
@@ -52,6 +60,13 @@ public class Droid extends Entity {
 		setHealth(d.health);
 	}
 
+	/**
+	 * Draws the droid and its health bar
+	 * 
+	 * @param g
+	 * @param x
+	 * @param y
+	 */
 	public void draw(GraphicsContext g, double x, double y) {
 		if(health < maxHealth){
 			g.setFill(Color.CRIMSON);
@@ -64,6 +79,11 @@ public class Droid extends Entity {
 		// g.drawImage(image, posX, posY, sizeX, sizeY);
 	}
 
+	/**
+	 * Performs an SQL query to retrieve and save the droid's stats, weapon and melee
+	 * 
+	 * @param name
+	 */
 	public void loadDroid(String name) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -108,6 +128,13 @@ public class Droid extends Entity {
 		}
 	}
 
+	/**
+	 * Moves the droid randomly to an available block
+	 * 
+	 * @param map
+	 * @param mapX
+	 * @param mapY
+	 */
 	public void move(Block[][] map, double mapX, double mapY) {
 		int rand = (int) (Math.random() * 4);
 		switch (rand) {

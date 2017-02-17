@@ -18,18 +18,39 @@ public class MapReader {
 	int mapX, mapY;
 	ArrayList<Block> spawners = new ArrayList<Block>();
 
+	/**
+	 * Returns the width of the map
+	 *
+	 * @return
+	 */
 	public int getMapX() {
 		return mapX;
 	}
 
+	/**
+	 * Returns the height of the map
+	 *
+	 * @return
+	 */
 	public int getMapY() {
 		return mapY;
 	}
 
+	/**
+	 * Returns a list of all the spawners on the map
+	 *
+	 * @return
+	 */
 	public ArrayList<Block> getSpawners() {
 		return spawners;
 	}
 
+	/**
+	 * Returns the map as a 2-dimensional block array and saves a list of the spawner locations
+	 *
+	 * @param name
+	 * @return
+	 */
 	public Block[][] readFile(String name) {
 		Map<String, Block> blockTypes = new HashMap<String, Block>();
 		try {
