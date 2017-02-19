@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.LinkedList;
 
+import ai.PathFinder;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -24,16 +26,20 @@ public class Droid extends Entity {
 	int red, blue, green;
 	String weaponName;
 	String meleeName;
+	Block start, end;
+	LinkedList<Block> path;
+	PathFinder pathFinder;
 
 	/**
 	 * @param name
 	 * @param sX
 	 * @param sY
 	 */
-	public Droid(String name, double sX, double sY) {
+	public Droid(String name, double sX, double sY, PathFinder p) {
 		loadDroid(name);
 		setSX(sX);
 		setSY(sY);
+		pathFinder = p;
 	}
 
 	/**
@@ -57,22 +63,23 @@ public class Droid extends Entity {
 		meleeName = d.meleeName;
 		sizeX = d.sizeX;
 		sizeY = d.sizeY;
+		pathFinder = d.pathFinder;
 		setHealth(d.health);
 	}
 
 	/**
 	 * Draws the droid and its health bar
-	 * 
+	 *
 	 * @param g
 	 * @param x
 	 * @param y
 	 */
 	public void draw(GraphicsContext g, double x, double y) {
-		if(health < maxHealth){
+		if (health < maxHealth) {
 			g.setFill(Color.CRIMSON);
-			g.fillRect(x, y - sizeY/4, sizeX, sizeY/4);
+			g.fillRect(x, y - sizeY / 4, sizeX, sizeY / 4);
 			g.setFill(Color.LIMEGREEN);
-			g.fillRect(x, y - sizeY/4, sizeX * health/maxHealth, sizeY/4);
+			g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
 		}
 		g.setFill(Color.ORANGERED);
 		g.fillOval(x, y, sizeX, sizeY);
@@ -80,8 +87,9 @@ public class Droid extends Entity {
 	}
 
 	/**
-	 * Performs an SQL query to retrieve and save the droid's stats, weapon and melee
-	 * 
+	 * Performs an SQL query to retrieve and save the droid's stats, weapon and
+	 * melee
+	 *
 	 * @param name
 	 */
 	public void loadDroid(String name) {
@@ -115,7 +123,7 @@ public class Droid extends Entity {
 			}
 
 			rs = stmt.executeQuery(
-					"select * from melees where name = (select weapon from droids where name = \"" + name + "\");");
+					"select * from melees where name = (select melee from droids where name = \"" + name + "\");");
 			while (rs.next()) {
 				meleeDamage = rs.getDouble(2);
 				meleeRange = rs.getDouble(3);
@@ -130,7 +138,7 @@ public class Droid extends Entity {
 
 	/**
 	 * Moves the droid randomly to an available block
-	 * 
+	 *
 	 * @param map
 	 * @param mapX
 	 * @param mapY
@@ -158,6 +166,30 @@ public class Droid extends Entity {
 				if (!map[(int) (posX + 1)][(int) posY].collidable)
 					posX += 1;
 			break;
+		}
+	}
+
+	/**
+	 * Sets the droid to patrol a certain route between two points
+	 *
+	 * @param s
+	 * @param e
+	 */
+	public void setPatrolling(Block s, Block e) {
+		start = s;
+		end = e;
+		path = pathFinder.findPath(start, end);
+	}
+
+	/**
+	 * Makes the droid move to the next block in the path. If the path has been
+	 * traversed, it reverses the path and continues
+	 */
+	public void moveThroughPath() {
+		if (path.size() > 0) {
+			Block next = path.pop();
+			posX = next.getX();
+			posY = next.getY();
 		}
 	}
 }

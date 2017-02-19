@@ -30,13 +30,13 @@ public class PathFinder {
 	 * @param target
 	 * @return
 	 */
-	public LinkedList<Block> findPath(Block start, Block target) {
+	public LinkedList<Block> findPath(Block target, Block start) {
 		LinkedList<Block> closed = new LinkedList<Block>();
 		LinkedList<Block> open = new LinkedList<Block>();
 
 		scanned.clear();
 		start.setG(0);
-		start.setH(findHeuristic(start, target)* (1+1/1000));
+		start.setH(findHeuristic(start, target));
 		open.add(start);
 		Block current = start;
 

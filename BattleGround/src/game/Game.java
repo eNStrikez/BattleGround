@@ -2,6 +2,8 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import ai.PathFinder;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -44,7 +46,7 @@ public class Game {
 	double firingX, firingY;
 	double offX, offY;
 	int score;
-
+	PathFinder pF;
 
 	/**
 	 * @param sX
@@ -64,6 +66,7 @@ public class Game {
 		scaleX = (int) (ZOOM * (screenX / mapR.getMapX()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
 		player = new Player(1, 1, scaleX, scaleY, c);
+		pF = new PathFinder(map, mapR.getMapX(), mapR.getMapY());
 		initComponents();
 		initEnemyTypes();
 		round = new Round(diff);
@@ -186,11 +189,10 @@ public class Game {
 						droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
 						for (Laser laser : lasers) {
 							if (laser.checkCollision(transformXtoS(laser.getX()), transformYtoS(laser.getY()),
-									scaleX*laser.getW(), scaleY*laser.getH(),
-									transformXtoS(droid.getX()), transformYtoS(droid.getY()), scaleX, scaleY)
-									&& !laser.isMarked()) {
+									scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(droid.getX()),
+									transformYtoS(droid.getY()), scaleX, scaleY) && !laser.isMarked()) {
 								laser.doDamage(droid);
-								incrementScore((int)laser.getDamage());
+								incrementScore((int) laser.getDamage());
 								laser.setMarked();
 								if (!droid.isAlive()) {
 									droidIt.remove();
@@ -229,7 +231,9 @@ public class Game {
 				Iterator<Droid> droidIt = droids.iterator();
 				while (droidIt.hasNext()) {
 					Droid droid = droidIt.next();
-					droid.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
+					droid.moveThroughPath();
+					// droid.move(map, transformXtoS(mapR.getMapX()),
+					// transformYtoS(mapR.getMapY()));
 				}
 
 			}
@@ -293,11 +297,13 @@ public class Game {
 	}
 
 	/**
-	 * Add to the score proportional to the difficulty and round the player is on
+	 * Add to the score proportional to the difficulty and round the player is
+	 * on
+	 * 
 	 * @param s
 	 */
-	public void incrementScore(int s){
-		score += s*round.getDifficulty()*round.getRound();
+	public void incrementScore(int s) {
+		score += s * round.getDifficulty() * round.getRound();
 	}
 
 	/**
@@ -349,12 +355,12 @@ public class Game {
 	 * Initialises each type of droid
 	 */
 	public void initEnemyTypes() {
-		b1 = new Droid("b1", scaleX, scaleY);
-		b2 = new Droid("b2", scaleX, scaleY);
-		bx = new Droid("bx", scaleX, scaleY);
-		droideka = new Droid("droideka", scaleX, scaleY);
-		ig100 = new Droid("ig100", scaleX, scaleY);
-		grievous = new Droid("grievous", scaleX, scaleY);
+		b1 = new Droid("b1", scaleX, scaleY, pF);
+		b2 = new Droid("b2", scaleX, scaleY, pF);
+		bx = new Droid("bx", scaleX, scaleY, pF);
+		droideka = new Droid("droideka", scaleX, scaleY, pF);
+		ig100 = new Droid("ig100", scaleX, scaleY, pF);
+		grievous = new Droid("grievous", scaleX, scaleY, pF);
 	}
 
 	/**
@@ -403,7 +409,8 @@ public class Game {
 	 */
 	public void spawnRandomDroid() {
 		if (spawners.size() > 0 && droidsLeft > 0) {
-			Block spawn = spawners.get((int) (Math.random() * spawners.size()));
+			int spawnerIndex = (int) (Math.random() * spawners.size());
+			Block spawn = spawners.get(spawnerIndex);
 			double rand = Math.random() * 1250;
 			Droid droid;
 
@@ -423,6 +430,11 @@ public class Game {
 
 			droid.setX(spawn.getX());
 			droid.setY(spawn.getY());
+			if (spawnerIndex + 1 >= spawners.size()) {
+				spawnerIndex = 0;
+			}
+			Block target = spawners.get(spawnerIndex + 1);
+			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
 			droids.add(droid);
 			droidsLeft--;
 		}
