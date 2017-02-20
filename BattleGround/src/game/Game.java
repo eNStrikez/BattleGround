@@ -185,7 +185,6 @@ public class Game {
 								scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(player.getX()),
 								transformYtoS(player.getY()), scaleX, scaleY) && !laser.isMarked() && !laser.isPlayer()) {
 							laser.doDamage(player);
-							incrementScore((int) laser.getDamage());
 							laser.setMarked();
 							if (!player.isAlive()) {
 								sManager.selectMenu();
@@ -422,7 +421,7 @@ public class Game {
 
 	/**
 	 * Calculate the square of the distance between two coordinates
-	 * 
+	 *
 	 * @param x1
 	 * @param y1
 	 * @param x2
