@@ -65,7 +65,7 @@ public class Game {
 		spawners = mapR.getSpawners();
 		scaleX = (int) (ZOOM * (screenX / mapR.getMapX()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
-		player = new Player(89, 39, scaleX, scaleY, c);
+		player = new Player(1, 1, scaleX, scaleY, c);
 		pF = new PathFinder(map, mapR.getMapX(), mapR.getMapY());
 		initComponents();
 		initEnemyTypes();
@@ -181,16 +181,29 @@ public class Game {
 						if (laser.isMarked()) {
 							laserIt.remove();
 						}
+						if (laser.checkCollision(transformXtoS(laser.getX()), transformYtoS(laser.getY()),
+								scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(player.getX()),
+								transformYtoS(player.getY()), scaleX, scaleY) && !laser.isMarked() && !laser.isPlayer()) {
+							laser.doDamage(player);
+							incrementScore((int) laser.getDamage());
+							laser.setMarked();
+							if (!player.isAlive()) {
+								sManager.selectMenu();
+							}
+						}
 					}
 
 					Iterator<Droid> droidIt = droids.iterator();
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
 						droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
+						if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
+							lasers.add(droid.fire(player.getX(), player.getY()));
+						}
 						for (Laser laser : lasers) {
 							if (laser.checkCollision(transformXtoS(laser.getX()), transformYtoS(laser.getY()),
 									scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(droid.getX()),
-									transformYtoS(droid.getY()), scaleX, scaleY) && !laser.isMarked()) {
+									transformYtoS(droid.getY()), scaleX, scaleY) && !laser.isMarked() && laser.isPlayer()) {
 								laser.doDamage(droid);
 								incrementScore((int) laser.getDamage());
 								laser.setMarked();
@@ -200,6 +213,7 @@ public class Game {
 								}
 							}
 						}
+
 					}
 
 					if (droids.size() == 0 && droidsLeft == 0) {
@@ -214,10 +228,11 @@ public class Game {
 						player.cool();
 					}
 
+
+
 					count++;
 				}
 				drawPlayer(g);
-				// player.drawHUD(g, scaleX, scaleY, screenX, screenY);
 			}
 		}));
 		t.play();
@@ -231,13 +246,15 @@ public class Game {
 				Iterator<Droid> droidIt = droids.iterator();
 				while (droidIt.hasNext()) {
 					Droid droid = droidIt.next();
-					droid.moveThroughPath();
-					// droid.move(map, transformXtoS(mapR.getMapX()),
-					// transformYtoS(mapR.getMapY()));
+					if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
+							droid.getY())) {
+						droid.setFiring(true);
+					} else {
+						droid.setFiring(false);
+						droid.moveThroughPath();
+					}
 				}
-
 			}
-
 		}));
 		droidT.play();
 
@@ -339,7 +356,7 @@ public class Game {
 	 * @param g
 	 */
 	public void drawPlayer(GraphicsContext g) {
-		player.draw(g, transformXtoS(player.getX()), transformYtoS(player.getY()), scaleX, scaleY, transformStoX(firingX), transformStoY(firingY));
+		player.draw(g, transformXtoS(player.getX()), transformYtoS(player.getY()), scaleX, scaleY, firingX, firingY);
 	}
 
 	/**
@@ -404,6 +421,19 @@ public class Game {
 	}
 
 	/**
+	 * Calculate the square of the distance between two coordinates
+	 * 
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return
+	 */
+	public double distance(double x1, double y1, double x2, double y2) {
+		return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+	}
+
+	/**
 	 * Uses a random number generator to spawn a random droid at a random
 	 * spawner. The probability of each type of droid is weighted
 	 */
@@ -434,7 +464,8 @@ public class Game {
 				spawnerIndex = 0;
 			}
 			Block target = spawners.get(spawnerIndex + 1);
-			System.out.println((map[spawn.getX()][spawn.getY()] + " To " + map[target.getX()][target.getY()]));
+			// System.out.println((map[spawn.getX()][spawn.getY()] + " To " +
+			// map[target.getX()][target.getY()]));
 			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
 			droids.add(droid);
 			droidsLeft--;

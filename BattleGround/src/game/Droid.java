@@ -23,12 +23,14 @@ public class Droid extends Entity {
 	double weaponMagSize;
 	double meleeDamage;
 	double meleeRange;
+	double range;
 	int red, blue, green;
 	String weaponName;
 	String meleeName;
 	Block start, end;
 	LinkedList<Block> path;
 	PathFinder pathFinder;
+	boolean firing = false;
 
 	/**
 	 * @param name
@@ -65,6 +67,7 @@ public class Droid extends Entity {
 		sizeY = d.sizeY;
 		pathFinder = d.pathFinder;
 		setHealth(d.health);
+		range = d.range;
 	}
 
 	/**
@@ -107,7 +110,7 @@ public class Droid extends Entity {
 				weaponName = rs.getString(6);
 				// image = new Image(rs.getBlob(7).getBinaryStream());
 				meleeName = rs.getString(8);
-
+				range = rs.getDouble(9);
 			}
 
 			rs = stmt.executeQuery(
@@ -186,10 +189,51 @@ public class Droid extends Entity {
 	 * traversed, it reverses the path and continues
 	 */
 	public void moveThroughPath() {
-		if (path.size() > 1) {
+		if (path.size() > 0) {
 			Block next = path.pop();
 			posX = next.getX();
 			posY = next.getY();
+		} else {
+			setPatrolling(end, start);
 		}
+	}
+
+	/**
+	 * Set whether the droid is firing or not
+	 *
+	 * @param f
+	 */
+	public void setFiring(boolean f){
+		firing = f;
+	}
+
+	/**
+	 * Set whether the droid is firing or not
+	 *
+	 * @param f
+	 */
+	public boolean isFiring(){
+		return firing;
+	}
+
+	/**
+	 * Fires a laser from the droids position to the target location
+	 *
+	 * @param tX
+	 * @param tY
+	 * @return
+	 */
+	public Laser fire(double tX, double tY) {
+		return new Laser(accuracy, posX, posY, weaponDamage, tX, tY,
+				red, green, blue, false);
+	}
+
+	/**
+	 * Returns the number of times per second that a laser can be generated
+	 *
+	 * @return
+	 */
+	public double getRoF() {
+		return (60 / weaponRoF) * Game.FRAME_RATE;
 	}
 }

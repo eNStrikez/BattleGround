@@ -51,15 +51,6 @@ public class Player extends Entity {
 		g.drawImage(iV.snapshot(params, null), x, y, sizeX, sizeY);
 	}
 
-	// public void drawHUD(GraphicsContext g, int sizeX, int sizeY, double
-	// screenX, double screenY) {
-	// g.setFill(Color.BLACK);
-	// g.fillRect(sizeX, screenY - 5 * sizeY, screenX - sizeX, sizeY);
-	// g.setFill(Color.ORANGE);
-	// g.fillRect(sizeX, screenY - 5 * sizeY, (screenX - sizeX) *
-	// overheatCurrent / overheatMax, sizeY);
-	// }
-
 	/**
 	 * Attempts to move the player into a neighbouring block, assuming that it
 	 * is not collidable or off the map
@@ -133,7 +124,7 @@ public class Player extends Entity {
 	 */
 	public Laser fire(double tX, double tY) {
 		return new Laser(character.getAccuracy(), posX, posY, character.getWeaponDamage(), tX, tY,
-				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2]);
+				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], true);
 	}
 
 	/**

@@ -11,6 +11,7 @@ public class Laser implements Weapon {
 	double size;
 	int red, blue, green;
 	boolean marked = false;
+	boolean player;
 
 	/**
 	 * @param a
@@ -23,7 +24,7 @@ public class Laser implements Weapon {
 	 * @param g
 	 * @param b
 	 */
-	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b) {
+	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b, boolean isP) {
 		posX = x;
 		posY = y;
 
@@ -49,6 +50,7 @@ public class Laser implements Weapon {
 		red = r;
 		green = g;
 		blue = b;
+		player = isP;
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +60,7 @@ public class Laser implements Weapon {
 	public void doDamage(Entity e) {
 		e.takeDamage(damage);
 	}
-	
+
 	/**
 	 * Returns the damage value of the laser
 	 * @return
@@ -163,6 +165,15 @@ public class Laser implements Weapon {
 	 */
 	public boolean isMarked() {
 		return marked;
+	}
+
+	/**
+	 * Returns whether the laser is marked or not
+	 *
+	 * @return
+	 */
+	public boolean isPlayer() {
+		return player;
 	}
 
 }
