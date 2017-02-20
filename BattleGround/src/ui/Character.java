@@ -12,6 +12,7 @@ import javafx.scene.text.Font;
 public class Character {
 	String name;
 	Image image;
+	Image gImage;
 	double aspectRatio;
 	double health;
 	double speed;
@@ -41,10 +42,13 @@ public class Character {
 	 * @param r
 	 * @param i
 	 */
-	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r, Blob i) {
+	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r, Blob i1, Blob i2) {
 		name = n;
 		try {
-			image = new Image(i.getBinaryStream());
+			image = new Image(i1.getBinaryStream());
+			if(i2 != null){
+				gImage  = new Image(i2.getBinaryStream());
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -175,6 +179,15 @@ public class Character {
 	 */
 	public double getWeaponDamage(){
 		return weaponDamage;
+	}
+
+	/**
+	 * Returns the in-game image of the character
+	 *
+	 * @return
+	 */
+	public Image getImage(){
+		return gImage;
 	}
 
 	/**

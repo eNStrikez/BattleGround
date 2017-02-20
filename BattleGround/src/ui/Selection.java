@@ -42,7 +42,7 @@ public class Selection {
 
 	/**
 	 * Set the scene manager of the class
-	 * 
+	 *
 	 * @param s
 	 */
 	public void setSceneManager(SceneManager s) {
@@ -67,7 +67,7 @@ public class Selection {
 			while (rs.next()) {
 				clones.add(new Character(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4),
 						rs.getDouble(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-						rs.getBlob(10)));
+						rs.getBlob(10), rs.getBlob(11)));
 			}
 			con.close();
 
@@ -187,7 +187,7 @@ public class Selection {
 
 	/**
 	 * Draws the stat bars and information for the clone specified by the index
-	 * 
+	 *
 	 * @param g
 	 */
 	public void drawStats(GraphicsContext g) {
@@ -196,7 +196,7 @@ public class Selection {
 
 	/**
 	 * Draws the image of the clone specified by the index
-	 * 
+	 *
 	 * @param g
 	 */
 	public void drawPlayer(GraphicsContext g) {

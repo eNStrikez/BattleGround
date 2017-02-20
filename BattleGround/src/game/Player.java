@@ -1,6 +1,9 @@
 package game;
 
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import ui.Character;
 
@@ -10,6 +13,8 @@ public class Player extends Entity {
 	double roF;
 	double overheatMax;
 	double overheatCurrent;
+	ImageView iV;
+	Image i;
 
 	/**
 	 * @param x
@@ -27,44 +32,53 @@ public class Player extends Entity {
 		character = c;
 		overheatMax = c.getOverheat();
 		roF = c.getRoF();
+		iV = new ImageView(c.getImage());
 	}
 
 	/**
 	 * Draws the player on the screen
+	 *
 	 * @param g
 	 * @param x
 	 * @param y
 	 * @param sizeX
 	 * @param sizeY
 	 */
-	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY) {
-		g.setFill(Color.DODGERBLUE);
-		g.fillOval(x, y, sizeX, sizeY);
+	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY, double mX, double mY) {
+		iV.setRotate(Math.toDegrees(-Math.atan((mX - x) / (mY - y))));
+		SnapshotParameters params = new SnapshotParameters();
+		params.setFill(Color.TRANSPARENT);
+		g.drawImage(iV.snapshot(params, null), x, y, sizeX, sizeY);
 	}
 
-	public void drawHUD(GraphicsContext g, int sizeX, int sizeY, double screenX, double screenY){
-		g.setFill(Color.BLACK);
-		g.fillRect(sizeX, screenY - 5*sizeY, screenX - sizeX, sizeY);
-		g.setFill(Color.ORANGE);
-		g.fillRect(sizeX, screenY - 5*sizeY, (screenX - sizeX) * overheatCurrent/overheatMax, sizeY);
-	}
+	// public void drawHUD(GraphicsContext g, int sizeX, int sizeY, double
+	// screenX, double screenY) {
+	// g.setFill(Color.BLACK);
+	// g.fillRect(sizeX, screenY - 5 * sizeY, screenX - sizeX, sizeY);
+	// g.setFill(Color.ORANGE);
+	// g.fillRect(sizeX, screenY - 5 * sizeY, (screenX - sizeX) *
+	// overheatCurrent / overheatMax, sizeY);
+	// }
 
 	/**
-	 * Attempts to move the player into a neighbouring block, assuming that it is not collidable or off the map
+	 * Attempts to move the player into a neighbouring block, assuming that it
+	 * is not collidable or off the map
+	 *
 	 * @param map
 	 * @param mapX
 	 * @param mapY
 	 */
 	public void move(Block[][] map, double mapX, double mapY) {
-		if(posX + moveX < mapX -1&& posY + moveY < mapY -1&& posX + moveX >= 0 && posY + moveY >= 0)
-		if(!map[(int) (posX + moveX)][(int) (posY + moveY)].isCollidable()){
-			posX += moveX;
-			posY += moveY;
-		}
+		if (posX + moveX < mapX - 1 && posY + moveY < mapY - 1 && posX + moveX >= 0 && posY + moveY >= 0)
+			if (!map[(int) (posX + moveX)][(int) (posY + moveY)].isCollidable()) {
+				posX += moveX;
+				posY += moveY;
+			}
 	}
 
 	/**
 	 * Sets the player's horizontal velocity
+	 *
 	 * @param mX
 	 */
 	public void setMoveX(double mX) {
@@ -73,6 +87,7 @@ public class Player extends Entity {
 
 	/**
 	 * Sets the player's vertical velocity
+	 *
 	 * @param mY
 	 */
 	public void setMoveY(double mY) {
@@ -81,22 +96,25 @@ public class Player extends Entity {
 
 	/**
 	 * Returns the player's horizontal velocity
+	 *
 	 * @return
 	 */
-	public double getMoveX(){
+	public double getMoveX() {
 		return moveX;
 	}
 
 	/**
 	 * Returns the player's vertical velocity
+	 *
 	 * @return
 	 */
-	public double getMoveY(){
+	public double getMoveY() {
 		return moveY;
 	}
 
 	/**
 	 * Returns the player's character
+	 *
 	 * @return
 	 */
 	public Character getCharacter() {
@@ -104,7 +122,9 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * Creates a laser at the player's current position aimed at the mouse's position
+	 * Creates a laser at the player's current position aimed at the mouse's
+	 * position
+	 *
 	 * @param tX
 	 * @param tY
 	 * @param sizeX
@@ -118,17 +138,18 @@ public class Player extends Entity {
 
 	/**
 	 * Creates a new instance of melee
+	 *
 	 * @return
 	 */
-	public Melee melee(){
+	public Melee melee() {
 		return new Melee();
 	}
 
 	/**
 	 * Reduces the heat of the weapon
 	 */
-	public void cool(){
-		if(overheatCurrent > 0){
+	public void cool() {
+		if (overheatCurrent > 0) {
 			overheatCurrent -= 60;
 		}
 	}
@@ -136,17 +157,18 @@ public class Player extends Entity {
 	/**
 	 * Increases the heat of the weapon
 	 */
-	public void heat(){
-		if(overheatCurrent < overheatMax){
-			overheatCurrent += overheatMax/getRoF();
+	public void heat() {
+		if (overheatCurrent < overheatMax) {
+			overheatCurrent += overheatMax / getRoF();
 		}
 	}
 
 	/**
 	 * Returns the number of times per second that a laser can be generated
+	 *
 	 * @return
 	 */
-	public double getRoF(){
-		return (60/roF) * Game.FRAME_RATE;
+	public double getRoF() {
+		return (60 / roF) * Game.FRAME_RATE;
 	}
 }

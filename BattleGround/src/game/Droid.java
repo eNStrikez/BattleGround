@@ -186,7 +186,7 @@ public class Droid extends Entity {
 	 * traversed, it reverses the path and continues
 	 */
 	public void moveThroughPath() {
-		if (path.size() > 0) {
+		if (path.size() > 1) {
 			Block next = path.pop();
 			posX = next.getX();
 			posY = next.getY();

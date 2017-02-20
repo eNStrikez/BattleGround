@@ -34,6 +34,12 @@ public class PathFinder {
 		LinkedList<Block> closed = new LinkedList<Block>();
 		LinkedList<Block> open = new LinkedList<Block>();
 
+		for(Block[] bRow: map){
+			for(Block b: bRow){
+				b.setPrecursor(null);
+			}
+		}
+		
 		scanned.clear();
 		start.setG(0);
 		start.setH(findHeuristic(start, target));
@@ -44,6 +50,7 @@ public class PathFinder {
 			return null;
 		}
 
+		int count = 0;
 		while (open.size() > 0) {
 			current = open.getFirst();
 			for(Block b: open){
@@ -51,6 +58,7 @@ public class PathFinder {
 					current = b;
 				}
 			}
+			
 			open.remove(current);
 
 			if (current == target)
@@ -70,15 +78,15 @@ public class PathFinder {
 						continue;
 					} else {
 						closed.remove(successor);
-						open.add(successor);
 					}
 				} else {
-					open.add(successor);
 					successor.setH(findHeuristic(successor, target) * (1+1/1000));
 				}
 				successor.setG(successorCost);
 				successor.setPrecursor(current);
-
+				open.add(successor);
+				count++;
+				System.out.println("Added block: " + successor.getX() + "," + successor.getY() + " count = " + count);
 			}
 
 			closed.add(current);
@@ -86,10 +94,21 @@ public class PathFinder {
 
 		LinkedList<Block> path = new LinkedList<Block>();
 		path.add(current);
+		int i = 0;
 		while (current.getPrecursor() != null) {
 			current = current.getPrecursor();
 			path.add(current);
+			i++;
+			System.out.println("Start: " + start.getX() + "," + start.getY());
+			System.out.println("Target: " + target.getX() + "," + target.getY());
+			System.out.println("Current: " + current.getX() + "," + current.getY() + " i = " + i);
+			System.out.println();
+			
+			if(count < i){
+				break;
+			}
 		}
+		System.out.println("While Ended");
 		return path;
 	}
 

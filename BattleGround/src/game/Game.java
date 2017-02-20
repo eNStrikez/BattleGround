@@ -65,7 +65,7 @@ public class Game {
 		spawners = mapR.getSpawners();
 		scaleX = (int) (ZOOM * (screenX / mapR.getMapX()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
-		player = new Player(1, 1, scaleX, scaleY, c);
+		player = new Player(89, 39, scaleX, scaleY, c);
 		pF = new PathFinder(map, mapR.getMapX(), mapR.getMapY());
 		initComponents();
 		initEnemyTypes();
@@ -299,7 +299,7 @@ public class Game {
 	/**
 	 * Add to the score proportional to the difficulty and round the player is
 	 * on
-	 * 
+	 *
 	 * @param s
 	 */
 	public void incrementScore(int s) {
@@ -339,7 +339,7 @@ public class Game {
 	 * @param g
 	 */
 	public void drawPlayer(GraphicsContext g) {
-		player.draw(g, transformXtoS(player.getX()), transformYtoS(player.getY()), scaleX, scaleY);
+		player.draw(g, transformXtoS(player.getX()), transformYtoS(player.getY()), scaleX, scaleY, transformStoX(firingX), transformStoY(firingY));
 	}
 
 	/**
@@ -405,7 +405,7 @@ public class Game {
 
 	/**
 	 * Uses a random number generator to spawn a random droid at a random
-	 * spawner The probability of each type of droid is weighted
+	 * spawner. The probability of each type of droid is weighted
 	 */
 	public void spawnRandomDroid() {
 		if (spawners.size() > 0 && droidsLeft > 0) {
@@ -434,6 +434,7 @@ public class Game {
 				spawnerIndex = 0;
 			}
 			Block target = spawners.get(spawnerIndex + 1);
+			System.out.println((map[spawn.getX()][spawn.getY()] + " To " + map[target.getX()][target.getY()]));
 			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
 			droids.add(droid);
 			droidsLeft--;
