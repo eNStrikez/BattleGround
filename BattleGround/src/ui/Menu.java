@@ -20,6 +20,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
@@ -51,6 +57,7 @@ public class Menu extends Stage {
 		root = new GridPane();
 		root.setVgap(50);
 		root.setHgap(10);
+		root.setId("root");
 		scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		start = new Button("START");
@@ -107,7 +114,8 @@ public class Menu extends Stage {
 	}
 
 	/**
-	 * Creates and shows a login popup for the player to login or create an account
+	 * Creates and shows a login popup for the player to login or create an
+	 * account
 	 */
 	public void showLoginPopup() {
 		login = new Dialog<>();
@@ -160,17 +168,16 @@ public class Menu extends Stage {
 					alert.setHeaderText("Account with username " + usernamePassword.getKey() + " will be created.");
 					alert.setContentText("Confirm that these will be the login credentials.");
 					Optional<ButtonType> option = alert.showAndWait();
-					if(option.get() == ButtonType.OK){
+					if (option.get() == ButtonType.OK) {
 						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
-								+ usernamePassword.getKey() + "', '" + usernamePassword.getValue()
-								+ "');");
-						rs = stmt.executeQuery("select userID from user where username = '" + usernamePassword.getKey() + "';");
+								+ usernamePassword.getKey() + "', '" + usernamePassword.getValue() + "');");
+						rs = stmt.executeQuery(
+								"select userID from user where username = '" + usernamePassword.getKey() + "';");
 						rs.next();
 					} else {
 						System.exit(1);
 					}
 				}
-
 
 				USER_ID = rs.getInt(1);
 				System.out.println(USER_ID);
@@ -180,10 +187,11 @@ public class Menu extends Stage {
 			} catch (Exception e) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
-				alert.setHeaderText("An error occurred during account credential verification or creation.\nPlease try again with valid credentials.");
+				alert.setHeaderText(
+						"An error occurred during account credential verification or creation.\nPlease try again with valid credentials.");
 				alert.setContentText("Error: " + e);
 				Optional<ButtonType> option = alert.showAndWait();
-				if(option.get() == ButtonType.OK){
+				if (option.get() == ButtonType.OK) {
 					System.exit(1);
 				}
 			}

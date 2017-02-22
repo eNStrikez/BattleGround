@@ -45,10 +45,23 @@ public class Player extends Entity {
 	 * @param sizeY
 	 */
 	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY, double mX, double mY) {
-		iV.setRotate(Math.toDegrees(-Math.atan((mX - x) / (mY - y))));
+		double angle;
+		
+		angle = -Math.atan((mX - x) / (mY - y));
+		if(mY < y && mX > x){
+			angle -= 2*Math.PI;
+		}
+		
+		iV.setRotate(Math.toDegrees(angle));
+		
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
-		g.drawImage(iV.snapshot(params, null), x, y, sizeX, sizeY);
+		double length = sizeX*Math.abs(Math.cos(angle)) + sizeY*Math.sin(Math.abs(angle));
+		double height = sizeX*Math.sin(Math.abs(angle)) + sizeY*Math.abs(Math.cos(angle));
+		g.setFill(Color.YELLOW);
+		g.fillRect(x, y, length, height);
+		g.drawImage(iV.snapshot(params, null), x, y, length, height);
+		g.fillText(""+Math.toDegrees(angle), x, y + height*1.5);
 	}
 
 	/**

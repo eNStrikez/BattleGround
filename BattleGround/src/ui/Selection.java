@@ -14,6 +14,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 public class Selection {
@@ -118,6 +119,7 @@ public class Selection {
 		root.add(start, 3, 4, 1, 1);
 		root.add(right, 4, 4, 1, 1);
 		root.add(difficultyBox, 2, 5, 3, 1);
+		root.setId("selection");
 		drawPlayer(playerG);
 		drawStats(statsG);
 	}
@@ -191,6 +193,7 @@ public class Selection {
 	 * @param g
 	 */
 	public void drawStats(GraphicsContext g) {
+		
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 

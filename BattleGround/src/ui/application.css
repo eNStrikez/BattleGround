@@ -7,9 +7,17 @@
 	-fx-background-color: #1d1d1d;
 }
 
-.root{
+#root{
+	-fx-background-color: #000000;
+	-fx-background-image: url("https://raw.githubusercontent.com/eNStrikez/BattleGround/master/Logo.png");
+	-fx-background-repeat: stretch;
+	-fx-background-size: contain;
+	-fx-background-position: center center;
+
+}
+
+#selection{
 	-fx-background-color: #1d1d1d;
-	/*-fx-background-image: url("https://raw.githubusercontent.com/eNStrikez/BattleGround/master/menu%20background.png");*/
 }
 
 .button{
