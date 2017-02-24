@@ -60,7 +60,7 @@ public class Selection {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
@@ -153,7 +153,7 @@ public class Selection {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt

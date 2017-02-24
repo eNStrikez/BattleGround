@@ -10,6 +10,7 @@ import ai.PathFinder;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import ui.Main;
 
 public class Droid extends Entity {
 
@@ -86,6 +87,7 @@ public class Droid extends Entity {
 		}
 		g.setFill(Color.ORANGERED);
 		g.fillOval(x, y, sizeX, sizeY);
+		//System.out.println("Droid scale: " + sizeX + "/" + sizeY);
 		// g.drawImage(image, posX, posY, sizeX, sizeY);
 	}
 
@@ -98,7 +100,8 @@ public class Droid extends Entity {
 	public void loadDroid(String name) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://192.168.0.18:3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from droids where droids.name = \"" + name + "\"");
 			while (rs.next()) {
@@ -203,7 +206,7 @@ public class Droid extends Entity {
 	 *
 	 * @param f
 	 */
-	public void setFiring(boolean f){
+	public void setFiring(boolean f) {
 		firing = f;
 	}
 
@@ -212,7 +215,7 @@ public class Droid extends Entity {
 	 *
 	 * @param f
 	 */
-	public boolean isFiring(){
+	public boolean isFiring() {
 		return firing;
 	}
 
@@ -224,8 +227,7 @@ public class Droid extends Entity {
 	 * @return
 	 */
 	public Laser fire(double tX, double tY) {
-		return new Laser(accuracy, posX, posY, weaponDamage, tX, tY,
-				red, green, blue, false);
+		return new Laser(accuracy, posX, posY, weaponDamage, tX, tY, red, green, blue, false);
 	}
 
 	/**

@@ -61,9 +61,9 @@ public class Game {
 		screenX = sX;
 		screenY = sY;
 		mapR = new MapReader();
-		map = mapR.readFile("map");
+		map = mapR.readFile("map2");
 		spawners = mapR.getSpawners();
-		scaleX = (int) (ZOOM * (screenX / mapR.getMapX()));
+		scaleX = (int) (ZOOM * (screenY / mapR.getMapY()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
 		player = new Player(1, 1, scaleX, scaleY, c);
 		pF = new PathFinder(map, mapR.getMapX(), mapR.getMapY());
