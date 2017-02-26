@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Optional;
+import java.util.Random;
 
 import game.Game;
 import javafx.geometry.Pos;
@@ -159,8 +160,9 @@ public class Menu extends Stage {
 				System.out.println("Connected.");
 				Statement stmt = con.createStatement();
 
-				ResultSet rs = stmt.executeQuery("select userID from user where username = '"
-						+ usernamePassword.getKey() + "' and password = '" + usernamePassword.getValue() + "';");
+				ResultSet rs = stmt.executeQuery(
+						"select userID from user where username = '" + usernamePassword.getKey() + "' and password = '"
+								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "';");
 
 				if (!rs.next()) {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -170,7 +172,8 @@ public class Menu extends Stage {
 					Optional<ButtonType> option = alert.showAndWait();
 					if (option.get() == ButtonType.OK) {
 						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
-								+ usernamePassword.getKey() + "', '" + usernamePassword.getValue() + "');");
+								+ usernamePassword.getKey() + "', '"
+								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "');");
 						rs = stmt.executeQuery(
 								"select userID from user where username = '" + usernamePassword.getKey() + "';");
 						rs.next();
@@ -196,6 +199,40 @@ public class Menu extends Stage {
 				}
 			}
 		});
+	}
+
+	/**
+	 * Performs vernam cipher encryption based on username and password. The key
+	 * is generated from a random generator with the seed of the binary form of
+	 * the username.
+	 *
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public String encrypt(String username, String password) {
+		if (username.length() < password.length()) {
+			username = String.format("%" + password.length() + "s", username).replace(' ', '.');
+		} else if (username.length() > password.length()) {
+			password = String.format("%" + username.length() + "s", password).replace(' ', '.');
+		}
+
+		Random rand = new Random();
+		byte[] key = new byte[username.length()];
+		byte[] pass = password.getBytes();
+		String newPass = "";
+		String seed = "";
+
+		for (int i = 0; i < username.length(); i++) {
+			seed += (int) username.charAt(i);
+		}
+		rand.setSeed(Integer.parseInt(seed));
+		rand.nextBytes(key);
+
+		for (int i = 0; i < key.length; i++) {
+			newPass += key[i] ^ pass[i];
+		}
+		return newPass;
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class Game {
 	double screenX, screenY;
 	int scaleX, scaleY;
 	Player player;
-	ArrayList<Laser> lasers = new ArrayList<Laser>();
+	ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	Droid b1, b2, bx, droideka, ig100, grievous;
 	ArrayList<Droid> droids = new ArrayList<Droid>();
 	Round round;
@@ -169,23 +169,23 @@ public class Game {
 			public void handle(ActionEvent event) {
 				if (player.isAlive()) {
 					drawMap(g);
-					Iterator<Laser> laserIt = lasers.iterator();
-					while (laserIt.hasNext()) {
-						Laser laser = laserIt.next();
-						laser.draw(g, transformXtoS(laser.getX()), transformYtoS(laser.getY()),
-								transformXtoS(laser.getX() + laser.getW()), transformYtoS(laser.getY() + laser.getH()));
-						laser.move();
-						if (collidableCheck(laser.getX(), laser.getY())) {
-							laser.setMarked();
+					Iterator<Weapon> weaponIt = weapons.iterator();
+					while (weaponIt.hasNext()) {
+						Weapon weapon = weaponIt.next();
+						weapon.draw(g, transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
+								transformXtoS(weapon.getX() + weapon.getW()), transformYtoS(weapon.getY() + weapon.getH()));
+						weapon.move();
+						if (collidableCheck(weapon.getX(), weapon.getY())) {
+							weapon.setMarked();
 						}
-						if (laser.isMarked()) {
-							laserIt.remove();
+						if (weapon.isMarked()) {
+							weaponIt.remove();
 						}
-						if (laser.checkCollision(transformXtoS(laser.getX()), transformYtoS(laser.getY()),
-								scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(player.getX()),
-								transformYtoS(player.getY()), scaleX, scaleY) && !laser.isMarked() && !laser.isPlayer()) {
-							laser.doDamage(player);
-							laser.setMarked();
+						if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
+								scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(player.getX()),
+								transformYtoS(player.getY()), scaleX, scaleY) && !weapon.isMarked() && !weapon.isPlayer()) {
+							weapon.doDamage(player);
+							weapon.setMarked();
 							if (!player.isAlive()) {
 								sManager.selectMenu();
 							}
@@ -196,16 +196,25 @@ public class Game {
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
 						droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
-						if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
-							lasers.add(droid.fire(player.getX(), player.getY()));
+						if(count % (int) (droid.getSpeed()) == 0){
+							if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
+									droid.getY())) {
+								droid.setFiring(true);
+							} else {
+								droid.setFiring(false);
+								droid.moveThroughPath();
+							}
 						}
-						for (Laser laser : lasers) {
-							if (laser.checkCollision(transformXtoS(laser.getX()), transformYtoS(laser.getY()),
-									scaleX * laser.getW(), scaleY * laser.getH(), transformXtoS(droid.getX()),
-									transformYtoS(droid.getY()), scaleX, scaleY) && !laser.isMarked() && laser.isPlayer()) {
-								laser.doDamage(droid);
-								incrementScore((int) laser.getDamage());
-								laser.setMarked();
+						if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
+							weapons.add(droid.fire(player.getX(), player.getY()));
+						}
+						for (Weapon weapon : weapons) {
+							if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
+									scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
+									transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked() && weapon.isPlayer()) {
+								weapon.doDamage(droid);
+								incrementScore((int) weapon.getDamage());
+								weapon.setMarked();
 								if (!droid.isAlive()) {
 									droidIt.remove();
 									break;
@@ -221,7 +230,7 @@ public class Game {
 					}
 
 					if (count % (int) (player.getRoF()) == 0 && firing) {
-						lasers.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
+						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
 						player.heat();
 					} else {
 						player.cool();
@@ -235,27 +244,6 @@ public class Game {
 			}
 		}));
 		t.play();
-
-		Timeline droidT = new Timeline();
-		droidT.setCycleCount(Timeline.INDEFINITE);
-		droidT.getKeyFrames().add(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				Iterator<Droid> droidIt = droids.iterator();
-				while (droidIt.hasNext()) {
-					Droid droid = droidIt.next();
-					if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
-							droid.getY())) {
-						droid.setFiring(true);
-					} else {
-						droid.setFiring(false);
-						droid.moveThroughPath();
-					}
-				}
-			}
-		}));
-		droidT.play();
 
 		Timeline moveT = new Timeline();
 		moveT.setCycleCount(Timeline.INDEFINITE);

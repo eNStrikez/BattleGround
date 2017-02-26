@@ -87,8 +87,6 @@ public class PathFinder {
 				successor.setPrecursor(current);
 				open.add(successor);
 				count++;
-				// System.out.println("Added block: " + successor.getX() + "," +
-				// successor.getY() + " count = " + count);
 			}
 
 			closed.add(current);
@@ -101,19 +99,12 @@ public class PathFinder {
 			current = current.getPrecursor();
 			path.add(current);
 			i++;
-			// System.out.println("Start: " + start.getX() + "," +
-			// start.getY());
-			// System.out.println("Target: " + target.getX() + "," +
-			// target.getY());
-			// System.out.println("Current: " + current.getX() + "," +
-			// current.getY() + " i = " + i);
-			// System.out.println();
 
 			if (count < i) {
 				break;
 			}
 		}
-		//System.out.println("While Ended");
+
 		return path;
 	}
 
@@ -125,7 +116,7 @@ public class PathFinder {
 	 * @return
 	 */
 	public double findHeuristic(Block b1, Block b2) {
-		return 1 + Math.abs(b1.getX() - b2.getX()) + Math.abs(b1.getY() - b2.getY());
+		return 5*Math.random() + Math.abs(b1.getX() - b2.getX()) + Math.abs(b1.getY() - b2.getY());
 	}
 
 	/**

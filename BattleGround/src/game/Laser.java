@@ -61,10 +61,10 @@ public class Laser implements Weapon {
 		e.takeDamage(damage);
 	}
 
-	/**
-	 * Returns the damage value of the laser
-	 * @return
+	/* (non-Javadoc)
+	 * @see game.Weapon#getDamage()
 	 */
+	@Override
 	public double getDamage(){
 		return damage;
 	}
@@ -82,32 +82,21 @@ public class Laser implements Weapon {
 		return false;
 	}
 
+
 	/* (non-Javadoc)
-	 * @see game.Weapon#getImage()
+	 * @see game.Weapon#move()
 	 */
 	@Override
-	public Image getImage() {
-
-		return null;
-	}
-
-	/**
-	 * Change the lasers position depending on its velocity
-	 */
 	public void move() {
 		posX += speedX;
 		posY += speedY;
 	}
 
-	/**
-	 * Draw the laser on the screen
-	 *
-	 * @param g
-	 * @param x
-	 * @param y
-	 * @param h
-	 * @param w
+
+	/* (non-Javadoc)
+	 * @see game.Weapon#draw(javafx.scene.canvas.GraphicsContext, double, double, double, double)
 	 */
+	@Override
 	public void draw(GraphicsContext g, double x, double y, double h, double w) {
 		g.setStroke(Color.rgb(red, green, blue));
 		g.setLineWidth(5);
@@ -115,63 +104,43 @@ public class Laser implements Weapon {
 		//g.fillRect(x, y, Math.abs(h - x), w - y);
 	}
 
-	/**
-	 * Returns the laser's x coordinate
-	 *
-	 * @return
+	/* (non-Javadoc)
+	 * @see game.Weapon#getX()
 	 */
+	@Override
 	public double getX() {
 		return posX;
 	}
 
-	/**
-	 * Returns the laser's y coordinate
-	 *
-	 * @return
+	/* (non-Javadoc)
+	 * @see game.Weapon#getY()
 	 */
+	@Override
 	public double getY() {
 		return posY;
 	}
 
-	/**
-	 * Returns the laser's logical height
-	 *
-	 * @return
-	 */
+	@Override
 	public double getH() {
 		return height;
 	}
 
-	/**
-	 * Returns the laser's logical width
-	 *
-	 * @return
-	 */
+	@Override
 	public double getW() {
 		return width;
 	}
 
-	/**
-	 * Set the laser as marked for removal
-	 */
+	@Override
 	public void setMarked() {
 		marked = true;
 	}
 
-	/**
-	 * Returns whether the laser is marked or not
-	 *
-	 * @return
-	 */
+	@Override
 	public boolean isMarked() {
 		return marked;
 	}
 
-	/**
-	 * Returns whether the laser is marked or not
-	 *
-	 * @return
-	 */
+	@Override
 	public boolean isPlayer() {
 		return player;
 	}

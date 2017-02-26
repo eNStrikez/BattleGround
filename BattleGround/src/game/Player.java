@@ -48,8 +48,8 @@ public class Player extends Entity {
 		double angle = 0;
 
 		angle = -Math.atan2(mX - x, mY - y);
-		
-		
+
+
 		iV.setRotate(Math.toDegrees(angle));
 
 		SnapshotParameters params = new SnapshotParameters();
@@ -140,13 +140,8 @@ public class Player extends Entity {
 				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], true);
 	}
 
-	/**
-	 * Creates a new instance of melee
-	 *
-	 * @return
-	 */
-	public Melee melee() {
-		return new Melee();
+	public Melee melee(double tX, double tY){
+		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), posX, posY, tX, tY);
 	}
 
 	/**

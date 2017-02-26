@@ -238,4 +238,13 @@ public class Droid extends Entity {
 	public double getRoF() {
 		return (60 / weaponRoF) * Game.FRAME_RATE;
 	}
+	
+	/**
+	 * Returns the droid's speed value
+	 * 
+	 * @return
+	 */
+	public double getSpeed(){
+		return speed;
+	}
 }

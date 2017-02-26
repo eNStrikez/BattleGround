@@ -173,6 +173,24 @@ public class Character {
 	}
 
 	/**
+	 * Returns the melee damage
+	 *
+	 * @return
+	 */
+	public double getMeleeDamage(){
+		return meleeDamage;
+	}
+
+	/**
+	 * Returns the melee range
+	 *
+	 * @return
+	 */
+	public double getMeleeRange(){
+		return meleeRange;
+	}
+
+	/**
 	 * Returns the weapon damage
 	 *
 	 * @return
