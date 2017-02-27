@@ -3,6 +3,8 @@ package ui;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
 import java.util.Random;
@@ -19,16 +21,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,8 +35,6 @@ public class Menu extends Stage {
 	Scene scene, optionsScene, statsScene, gameScene;
 	Dialog<Pair<String, String>> login;
 	Selection selection;
-	GridPane root;
-	Button start, stats, quit, options;
 	SceneManager sManager;
 
 	public Menu() {
@@ -55,21 +49,16 @@ public class Menu extends Stage {
 		setWidth(bounds.getWidth());
 		setHeight(bounds.getHeight());
 
-		root = new GridPane();
+		GridPane root = new GridPane();
 		root.setVgap(50);
 		root.setHgap(10);
 		root.setId("root");
 		scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		start = new Button("START");
-		stats = new Button("STATS");
-		quit = new Button("QUIT");
-		options = new Button("OPTIONS");
-
-		start.setAlignment(Pos.CENTER);
-		stats.setAlignment(Pos.CENTER);
-		quit.setAlignment(Pos.CENTER);
-		options.setAlignment(Pos.CENTER);
+		Button start = new Button("START");
+		Button stats = new Button("STATS");
+		Button quit = new Button("QUIT");
+		Button options = new Button("OPTIONS");
 
 		start.setOnAction(e -> {
 			selection = new Selection(bounds.getWidth(), bounds.getHeight());
@@ -83,11 +72,12 @@ public class Menu extends Stage {
 		});
 
 		options.setOnAction(e -> {
-
+			setScene(optionsScene);
 		});
 
 		stats.setOnAction(e -> {
-
+			initStatsScene(bounds.getWidth(), bounds.getHeight());
+			setScene(statsScene);
 		});
 
 		root.add(start, 0, 0);
@@ -155,6 +145,7 @@ public class Menu extends Stage {
 			try {
 				System.out.println("Loading...");
 				Class.forName("com.mysql.jdbc.Driver");
+
 				Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 						"root");
 				System.out.println("Connected.");
@@ -224,9 +215,10 @@ public class Menu extends Stage {
 		String seed = "";
 
 		for (int i = 0; i < username.length(); i++) {
-			seed += (int) username.charAt(i);
+			seed += (int) username.charAt(i) - 48;
 		}
-		rand.setSeed(Integer.parseInt(seed));
+		System.out.println(seed);
+		rand.setSeed(Long.parseLong(seed));
 		rand.nextBytes(key);
 
 		for (int i = 0; i < key.length; i++) {
@@ -240,5 +232,44 @@ public class Menu extends Stage {
 	 */
 	public void setMenu() {
 		setScene(scene);
+	}
+
+	public void initStatsScene(double sX, double sY) {
+		GridPane root = new GridPane();
+		root.setVgap(50);
+		root.setHgap(10);
+		root.setId("root");
+		statsScene = new Scene(root, sX, sY);
+		statsScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		TableView table = new TableView();
+		try {
+			System.out.println("Loading...");
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			System.out.println("Connected.");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("select * from scores");
+			ResultSetMetaData rsmd = rs.getMetaData();
+			
+			for(int c = 1; c < rsmd.getColumnCount(); c++){
+				table.getColumns().add(new TableColumn(rsmd.getColumnName(c)));
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
+		
+		
+
+		Button back = new Button("BACK");
+
+		back.setOnAction(e -> {
+			setMenu();
+		});
+
+		root.add(back, 0, 0);
+		root.add(table, 1, 0);
 	}
 }

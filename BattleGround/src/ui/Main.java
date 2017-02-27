@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	public final static double FRAME_RATE = 100;
-	public final static String IP = "192.168.0.18";
+	public final static String IP = "192.168.0.9";
 
 	/* (non-Javadoc)
 	 * @see javafx.application.Application#start(javafx.stage.Stage)

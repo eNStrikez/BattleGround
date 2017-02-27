@@ -43,6 +43,7 @@ public class Game {
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
+	boolean meleeing = false;
 	double firingX, firingY;
 	double offX, offY;
 	int score;
@@ -98,6 +99,10 @@ public class Game {
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(1);
 				}
+				
+				if(k.getCode() == KeyCode.V) {
+					meleeing = true;
+				}
 
 			}
 		});
@@ -116,6 +121,10 @@ public class Game {
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(0);
 				}
+				
+				if(k.getCode() == KeyCode.V) {
+					meleeing = false;
+				}
 			}
 		});
 
@@ -124,9 +133,16 @@ public class Game {
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown()) {
 					firing = true;
-					firingX = event.getX();
-					firingY = event.getY();
 				}
+			}
+		});
+		
+		gameScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				firingX = event.getX();
+				firingY = event.getY();
+				
 			}
 		});
 
@@ -146,7 +162,6 @@ public class Game {
 					firing = true;
 					firingX = event.getX();
 					firingY = event.getY();
-
 				}
 			}
 		});

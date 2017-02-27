@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-public class Block {
+public class Block{
 	int posX;
 	int posY;
 	boolean collidable;;

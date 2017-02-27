@@ -141,7 +141,7 @@ public class Player extends Entity {
 	}
 
 	public Melee melee(double tX, double tY){
-		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), posX, posY, tX, tY);
+		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), posX, posY, tX, tY, true);
 	}
 
 	/**

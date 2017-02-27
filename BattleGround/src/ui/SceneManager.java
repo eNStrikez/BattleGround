@@ -7,7 +7,7 @@ public class SceneManager {
 	Selection selection;
 	Menu menu;
 	Game game;
-	Scene menuScene, optionScene, statsScene, gameScene;
+	Scene menuScene, gameScene;
 
 	/**
 	 * Sets the selection window
@@ -52,24 +52,6 @@ public class SceneManager {
 	 */
 	public void setMenuScene(Scene mS){
 		menuScene = mS;
-	}
-
-	/**
-	 * Sets the option scene
-	 *
-	 * @param oS
-	 */
-	public void setOptionScene(Scene oS){
-		optionScene = oS;
-	}
-
-	/**
-	 * Sets the stats scene
-	 *
-	 * @param sS
-	 */
-	public void setStatsScene(Scene sS){
-		statsScene = sS;
 	}
 
 	/**
