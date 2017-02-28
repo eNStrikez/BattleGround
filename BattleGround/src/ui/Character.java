@@ -110,6 +110,15 @@ public class Character {
 	}
 
 	/**
+	 * Return the name of the player
+	 *
+	 * @return
+	 */
+	public String getName(){
+		return name;
+	}
+
+	/**
 	 * Return the speed of the player
 	 *
 	 * @return

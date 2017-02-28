@@ -61,7 +61,7 @@ public class Player extends Entity {
 		g.setFill(Color.YELLOW);
 		//g.fillRect(x, y, length, height);
 		g.drawImage(iV.snapshot(params, null), x, y, length, height);
-		g.fillText("" + Math.toDegrees(angle), x, y + height * 1.5);
+		//g.fillText("" + Math.toDegrees(angle), x, y + height * 1.5);
 	}
 
 	/**

@@ -114,6 +114,7 @@ public class Droid extends Entity {
 				// image = new Image(rs.getBlob(7).getBinaryStream());
 				meleeName = rs.getString(8);
 				range = rs.getDouble(9);
+				System.out.println("Name: " + name + " Speed: " + speed);
 			}
 
 			rs = stmt.executeQuery(

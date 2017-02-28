@@ -1,16 +1,24 @@
 package game;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import ai.PathFinder;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -99,8 +107,8 @@ public class Game {
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(1);
 				}
-				
-				if(k.getCode() == KeyCode.V) {
+
+				if (k.getCode() == KeyCode.V) {
 					meleeing = true;
 				}
 
@@ -121,8 +129,8 @@ public class Game {
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(0);
 				}
-				
-				if(k.getCode() == KeyCode.V) {
+
+				if (k.getCode() == KeyCode.V) {
 					meleeing = false;
 				}
 			}
@@ -136,13 +144,13 @@ public class Game {
 				}
 			}
 		});
-		
+
 		gameScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				firingX = event.getX();
 				firingY = event.getY();
-				
+
 			}
 		});
 
@@ -188,7 +196,8 @@ public class Game {
 					while (weaponIt.hasNext()) {
 						Weapon weapon = weaponIt.next();
 						weapon.draw(g, transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
-								transformXtoS(weapon.getX() + weapon.getW()), transformYtoS(weapon.getY() + weapon.getH()));
+								transformXtoS(weapon.getX() + weapon.getW()),
+								transformYtoS(weapon.getY() + weapon.getH()));
 						weapon.move();
 						if (collidableCheck(weapon.getX(), weapon.getY())) {
 							weapon.setMarked();
@@ -198,10 +207,12 @@ public class Game {
 						}
 						if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
 								scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(player.getX()),
-								transformYtoS(player.getY()), scaleX, scaleY) && !weapon.isMarked() && !weapon.isPlayer()) {
+								transformYtoS(player.getY()), scaleX, scaleY) && !weapon.isMarked()
+								&& !weapon.isPlayer()) {
 							weapon.doDamage(player);
 							weapon.setMarked();
 							if (!player.isAlive()) {
+								saveScore();
 								sManager.selectMenu();
 							}
 						}
@@ -211,7 +222,7 @@ public class Game {
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
 						droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
-						if(count % (int) (droid.getSpeed()) == 0){
+						if (count % (int) droid.getSpeed() == 0) {
 							if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
 									droid.getY())) {
 								droid.setFiring(true);
@@ -226,7 +237,8 @@ public class Game {
 						for (Weapon weapon : weapons) {
 							if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
 									scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
-									transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked() && weapon.isPlayer()) {
+									transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked()
+									&& weapon.isPlayer()) {
 								weapon.doDamage(droid);
 								incrementScore((int) weapon.getDamage());
 								weapon.setMarked();
@@ -246,12 +258,7 @@ public class Game {
 
 					if (count % (int) (player.getRoF()) == 0 && firing) {
 						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
-						player.heat();
-					} else {
-						player.cool();
 					}
-
-
 
 					count++;
 				}
@@ -466,11 +473,27 @@ public class Game {
 				spawnerIndex = 0;
 			}
 			Block target = spawners.get(spawnerIndex + 1);
-			// System.out.println((map[spawn.getX()][spawn.getY()] + " To " +
-			// map[target.getX()][target.getY()]));
+
 			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
 			droids.add(droid);
 			droidsLeft--;
+		}
+	}
+
+	public void saveScore() {
+		try {
+			System.out.println("Loading...");
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
+			System.out.println("Connected.");
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID + ","+ score + ","
+					+ round.getRound() + ",\"" + round.getDifficulty() + "\",\"" + player.getCharacter().getName() + "\");");
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
 		}
 	}
 }

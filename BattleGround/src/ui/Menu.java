@@ -6,10 +6,14 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import game.Game;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -24,6 +28,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -236,12 +241,32 @@ public class Menu extends Stage {
 
 	public void initStatsScene(double sX, double sY) {
 		GridPane root = new GridPane();
+		ObservableList data;
+		class Score{
+			String username;
+			int score;
+			String date;
+			int round;
+			String difficulty;
+			String clone;
+			Score(String u, int s, String da, int r, String di, String c){
+				username = u;
+				score = s;
+				date = da;
+				round = r;
+				difficulty = di;
+				clone = c;
+			}
+			public String username(){
+				return username;
+			}
+		}
 		root.setVgap(50);
 		root.setHgap(10);
-		root.setId("root");
+		//root.setId("root");
 		statsScene = new Scene(root, sX, sY);
 		statsScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		TableView table = new TableView();
+		TableView<Score> table = new TableView<Score>();
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
@@ -249,19 +274,27 @@ public class Menu extends Stage {
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("select * from scores");
+					.executeQuery("select username, score, date, round, difficulty, clone from scores join user on scores.userID = user.userID;");
+			ArrayList<Score> list = new ArrayList<Score>();
+			while(rs.next()){
+				list.add(new Score(rs.getString(1), rs.getInt(2), rs.getTimestamp(3).toString(), rs.getInt(4), rs.getString(5), rs.getString(6)));
+			}
+			data = FXCollections.observableArrayList(list);
+			table.setItems(data);
 			ResultSetMetaData rsmd = rs.getMetaData();
-			
+
 			for(int c = 1; c < rsmd.getColumnCount(); c++){
-				table.getColumns().add(new TableColumn(rsmd.getColumnName(c)));
+				TableColumn col = new TableColumn(rsmd.getColumnName(c));
+				col.setCellValueFactory(new PropertyValueFactory(rsmd.getColumnName(c)));
+				table.getColumns().add(col);
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-		
-		
+
+
 
 		Button back = new Button("BACK");
 
