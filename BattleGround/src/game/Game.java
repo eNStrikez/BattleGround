@@ -221,30 +221,34 @@ public class Game {
 					Iterator<Droid> droidIt = droids.iterator();
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
-						droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
-						if (count % (int) droid.getSpeed() == 0) {
-							if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
-									droid.getY())) {
-								droid.setFiring(true);
-							} else {
-								droid.setFiring(false);
-								droid.moveThroughPath();
+						if (droid.getSpeed() == 0) {
+							droidIt.remove();
+						} else {
+							droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
+							if (count % (int) droid.getSpeed() == 0) {
+								if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
+										droid.getY())) {
+									droid.setFiring(true);
+								} else {
+									droid.setFiring(false);
+									droid.moveThroughPath();
+								}
 							}
-						}
-						if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
-							weapons.add(droid.fire(player.getX(), player.getY()));
-						}
-						for (Weapon weapon : weapons) {
-							if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
-									scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
-									transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked()
-									&& weapon.isPlayer()) {
-								weapon.doDamage(droid);
-								incrementScore((int) weapon.getDamage());
-								weapon.setMarked();
-								if (!droid.isAlive()) {
-									droidIt.remove();
-									break;
+							if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
+								weapons.add(droid.fire(player.getX(), player.getY()));
+							}
+							for (Weapon weapon : weapons) {
+								if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
+										scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
+										transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked()
+										&& weapon.isPlayer()) {
+									weapon.doDamage(droid);
+									incrementScore((int) weapon.getDamage());
+									weapon.setMarked();
+									if (!droid.isAlive()) {
+										droidIt.remove();
+										break;
+									}
 								}
 							}
 						}
@@ -259,20 +263,8 @@ public class Game {
 					if (count % (int) (player.getRoF()) == 0 && firing) {
 						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
 					}
-
-					count++;
-				}
-				drawPlayer(g);
-			}
-		}));
-		t.play();
-
-		Timeline moveT = new Timeline();
-		moveT.setCycleCount(Timeline.INDEFINITE);
-		moveT.getKeyFrames().add(
-				new KeyFrame(Duration.millis(1000 / player.getCharacter().getSpeed()), new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
+					
+					if(count % player.getCharacter().getSpeed() == 0){
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
 						if (offX < 0) {
@@ -289,8 +281,14 @@ public class Game {
 							offY = mapR.mapY - 2 * (player.getY() - offY);
 						}
 					}
-				}));
-		moveT.play();
+
+					count++;
+				}
+				drawPlayer(g);
+			}
+		}));
+		t.play();
+
 
 		Timeline spawnT = new Timeline();
 		spawnT.setCycleCount(Timeline.INDEFINITE);
@@ -488,8 +486,9 @@ public class Game {
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID + ","+ score + ","
-					+ round.getRound() + ",\"" + round.getDifficulty() + "\",\"" + player.getCharacter().getName() + "\");");
+			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID
+					+ "," + score + "," + round.getRound() + ",\"" + round.getDifficultyS() + "\",\""
+					+ player.getCharacter().getName() + "\");");
 
 		} catch (Exception e) {
 			System.out.println(e.toString());

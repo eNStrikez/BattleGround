@@ -3,22 +3,24 @@ package game;
 public class Round {
 	int currentRound = 1;
 	int difficulty;
+	String difficultyS;
 
 	/**
-	 * @param difficultyS
+	 * @param dS
 	 */
-	public Round(String difficultyS){
-		if(difficultyS.equals("Youngling")){
+	public Round(String dS){
+		difficultyS = dS;
+		if(dS.equals("Youngling")){
 			difficulty = 1;
-		} else if(difficultyS.equals("Padawan")){
+		} else if(dS.equals("Padawan")){
 			difficulty = 2;
-		} else if(difficultyS.equals("Jedi Knight")){
+		} else if(dS.equals("Jedi Knight")){
 			difficulty = 4;
-		} else if(difficultyS.equals("Jedi Master")){
+		} else if(dS.equals("Jedi Master")){
 			difficulty = 8;
-		} else if(difficultyS.equals("Sith Lord")){
+		} else if(dS.equals("Sith Lord")){
 			difficulty = 16;
-		} else if(difficultyS.equals("Emperor")){
+		} else if(dS.equals("Emperor")){
 			difficulty = 32;
 		}
 	}
@@ -29,19 +31,19 @@ public class Round {
 	public void increaseRound(){
 		currentRound++;
 	}
-	
+
 	/**
 	 * Returns the current round
-	 * 
+	 *
 	 * @return
 	 */
 	public int getRound(){
 		return currentRound;
 	}
-	
+
 	/**
 	 * Returns the difficulty
-	 * 
+	 *
 	 * @return
 	 */
 	public int getDifficulty(){
@@ -49,8 +51,17 @@ public class Round {
 	}
 
 	/**
+	 * Returns the difficulty name
+	 *
+	 * @return
+	 */
+	public String getDifficultyS(){
+		return difficultyS;
+	}
+
+	/**
 	 * Returns the number of droids to spawn in the current round
-	 * 
+	 *
 	 * @return
 	 */
 	public int calculateDroids(){

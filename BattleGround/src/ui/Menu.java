@@ -12,6 +12,10 @@ import java.util.Optional;
 import java.util.Random;
 
 import game.Game;
+import game.Sortable;
+import game.Sorter;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -41,6 +45,8 @@ public class Menu extends Stage {
 	Dialog<Pair<String, String>> login;
 	Selection selection;
 	SceneManager sManager;
+	boolean scoreAsc = true;
+	boolean roundAsc = true;
 
 	public Menu() {
 		sManager = new SceneManager();
@@ -222,7 +228,6 @@ public class Menu extends Stage {
 		for (int i = 0; i < username.length(); i++) {
 			seed += (int) username.charAt(i) - 48;
 		}
-		System.out.println(seed);
 		rand.setSeed(Long.parseLong(seed));
 		rand.nextBytes(key);
 
@@ -240,33 +245,16 @@ public class Menu extends Stage {
 	}
 
 	public void initStatsScene(double sX, double sY) {
+
 		GridPane root = new GridPane();
-		ObservableList data;
-		class Score{
-			String username;
-			int score;
-			String date;
-			int round;
-			String difficulty;
-			String clone;
-			Score(String u, int s, String da, int r, String di, String c){
-				username = u;
-				score = s;
-				date = da;
-				round = r;
-				difficulty = di;
-				clone = c;
-			}
-			public String username(){
-				return username;
-			}
-		}
+		Sorter sorter = new Sorter();
+		ArrayList<Sortable> list = new ArrayList<Sortable>();
 		root.setVgap(50);
 		root.setHgap(10);
-		//root.setId("root");
+		root.setId("root");
 		statsScene = new Scene(root, sX, sY);
 		statsScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		TableView<Score> table = new TableView<Score>();
+		TableView<Sortable> table = new TableView<Sortable>();
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
@@ -275,17 +263,16 @@ public class Menu extends Stage {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("select username, score, date, round, difficulty, clone from scores join user on scores.userID = user.userID;");
-			ArrayList<Score> list = new ArrayList<Score>();
 			while(rs.next()){
 				list.add(new Score(rs.getString(1), rs.getInt(2), rs.getTimestamp(3).toString(), rs.getInt(4), rs.getString(5), rs.getString(6)));
 			}
-			data = FXCollections.observableArrayList(list);
-			table.setItems(data);
+			table.setItems(FXCollections.observableArrayList(list));
 			ResultSetMetaData rsmd = rs.getMetaData();
 
 			for(int c = 1; c < rsmd.getColumnCount(); c++){
 				TableColumn col = new TableColumn(rsmd.getColumnName(c));
-				col.setCellValueFactory(new PropertyValueFactory(rsmd.getColumnName(c)));
+				col.setCellValueFactory(new PropertyValueFactory<Score, String>(rsmd.getColumnName(c)));
+				col.setSortable(false);
 				table.getColumns().add(col);
 			}
 
@@ -297,12 +284,43 @@ public class Menu extends Stage {
 
 
 		Button back = new Button("BACK");
+		Button score = new Button("SORT BY SCORE");
+		Button round = new Button("SORT BY ROUND");
 
 		back.setOnAction(e -> {
 			setMenu();
 		});
 
+		score.setOnAction(e -> {
+			for(Sortable s: list){
+				s.setValue("score");
+			}
+			table.setItems(FXCollections.observableArrayList(sorter.sort(list, scoreAsc)));
+			scoreAsc = !scoreAsc;
+			if(scoreAsc){
+				score.setText("SORT BY SCORE (ASCENDING)");
+			} else {
+				score.setText("SORT BY SCORE (DESCENDING)");
+			}
+		});
+
+		round.setOnAction(e -> {
+			for(Sortable s: list){
+				s.setValue("round");
+			}
+			table.setItems(FXCollections.observableArrayList(sorter.sort(list, roundAsc)));
+			roundAsc = !roundAsc;
+			if(roundAsc){
+				round.setText("SORT BY ROUND (ASCENDING)");
+			} else {
+				round.setText("SORT BY ROUND (DESCENDING)");
+			}
+		});
+
 		root.add(back, 0, 0);
+		root.add(score, 0, 1);
+		root.add(round, 0, 2);
 		root.add(table, 1, 0);
 	}
 }
+

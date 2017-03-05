@@ -29,7 +29,6 @@ public class Selection {
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
 	SceneManager sManager;
-	final char sMarks = '"';
 	ObservableList<String> options;
 	ComboBox<String> difficultyBox;
 
@@ -193,7 +192,6 @@ public class Selection {
 	 * @param g
 	 */
 	public void drawStats(GraphicsContext g) {
-		
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
