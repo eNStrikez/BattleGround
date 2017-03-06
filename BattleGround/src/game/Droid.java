@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import ui.Main;
 
-public class Droid extends Entity {
+public class Droid extends Entity implements Sortable{
 
 	Image image;
 	double speed;
@@ -25,6 +25,7 @@ public class Droid extends Entity {
 	double meleeDamage;
 	double meleeRange;
 	double range;
+	double rarity;
 	int red, blue, green;
 	String weaponName;
 	String meleeName;
@@ -32,14 +33,15 @@ public class Droid extends Entity {
 	LinkedList<Block> path;
 	PathFinder pathFinder;
 	boolean firing = false;
+	private double sortValue;
 
 	/**
 	 * @param name
 	 * @param sX
 	 * @param sY
 	 */
-	public Droid(String name, double sX, double sY, PathFinder p) {
-		loadDroid(name);
+	public Droid(ResultSet rs, double sX, double sY, PathFinder p) {
+		loadDroid(rs);
 		setSX(sX);
 		setSY(sY);
 		pathFinder = p;
@@ -69,6 +71,7 @@ public class Droid extends Entity {
 		pathFinder = d.pathFinder;
 		setHealth(d.health);
 		range = d.range;
+		rarity = d.rarity;
 	}
 
 	/**
@@ -87,7 +90,6 @@ public class Droid extends Entity {
 		}
 		g.setFill(Color.ORANGERED);
 		g.fillOval(x, y, sizeX, sizeY);
-		//System.out.println("Droid scale: " + sizeX + "/" + sizeY);
 		// g.drawImage(image, posX, posY, sizeX, sizeY);
 	}
 
@@ -97,49 +99,28 @@ public class Droid extends Entity {
 	 *
 	 * @param name
 	 */
-	public void loadDroid(String name) {
+	public void loadDroid(ResultSet rs) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
-					"root");
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from droids where droids.name = \"" + name + "\"");
-			while (rs.next()) {
-				name = rs.getString(1);
-				setHealth(rs.getDouble(2));
-				speed = rs.getDouble(3);
-				accuracy = rs.getDouble(4);
-				skill = rs.getDouble(5);
-				weaponName = rs.getString(6);
-				// image = new Image(rs.getBlob(7).getBinaryStream());
-				meleeName = rs.getString(8);
-				range = rs.getDouble(9);
-				System.out.println("Name: " + name + " Speed: " + speed);
-			}
-
-			rs = stmt.executeQuery(
-					"select * from weapons where name = (select weapon from droids where name = \"" + name + "\");");
-			while (rs.next()) {
-				weaponDamage = rs.getDouble(2);
-				weaponRoF = rs.getDouble(3);
-				weaponMagSize = rs.getDouble(4);
-				weaponOverheat = rs.getDouble(5);
-				red = rs.getInt(6);
-				blue = rs.getInt(7);
-				green = rs.getInt(8);
-			}
-
-			rs = stmt.executeQuery(
-					"select * from melees where name = (select melee from droids where name = \"" + name + "\");");
-			while (rs.next()) {
-				meleeDamage = rs.getDouble(2);
-				meleeRange = rs.getDouble(3);
-			}
-			con.close();
-
+			setHealth(rs.getDouble(2));
+			speed = rs.getDouble(3);
+			accuracy = rs.getDouble(4);
+			skill = rs.getDouble(5);
+			weaponName = rs.getString(6);
+			// image = new Image(rs.getBlob(7).getBinaryStream());
+			meleeName = rs.getString(8);
+			range = rs.getDouble(9);
+			rarity = rs.getDouble(10);
+			weaponDamage = rs.getDouble(12);
+			weaponRoF = rs.getDouble(13);
+			weaponMagSize = rs.getDouble(14);
+			weaponOverheat = rs.getDouble(15);
+			red = rs.getInt(16);
+			blue = rs.getInt(17);
+			green = rs.getInt(18);
+			meleeDamage = rs.getDouble(20);
+			meleeRange = rs.getDouble(21);
 		} catch (Exception e) {
-			System.out.println(e.toString());
-			System.exit(1);
+
 		}
 	}
 
@@ -239,13 +220,34 @@ public class Droid extends Entity {
 	public double getRoF() {
 		return (60 / weaponRoF) * Game.FRAME_RATE;
 	}
-	
+
 	/**
 	 * Returns the droid's speed value
-	 * 
+	 *
 	 * @return
 	 */
-	public double getSpeed(){
+	public double getSpeed() {
 		return speed;
+	}
+
+	/**
+	 * Returns the droid's rarity value
+	 *
+	 * @return
+	 */
+	public double getRarity(){
+		return rarity;
+	}
+
+	@Override
+	public double getValue() {
+		return sortValue;
+	}
+
+	@Override
+	public void setValue(String value) {
+		if(value == "rarity"){
+			sortValue = rarity;
+		}
 	}
 }

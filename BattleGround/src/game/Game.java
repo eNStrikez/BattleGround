@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import ai.PathFinder;
 import javafx.animation.KeyFrame;
@@ -43,8 +45,8 @@ public class Game {
 	int scaleX, scaleY;
 	Player player;
 	ArrayList<Weapon> weapons = new ArrayList<Weapon>();
-	Droid b1, b2, bx, droideka, ig100, grievous;
 	ArrayList<Droid> droids = new ArrayList<Droid>();
+	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
 	public final static double ZOOM = 5;
@@ -56,6 +58,8 @@ public class Game {
 	double offX, offY;
 	int score;
 	PathFinder pF;
+	double probability = 0;
+	Sorter sorter = new Sorter();
 
 	/**
 	 * @param sX
@@ -263,7 +267,7 @@ public class Game {
 					if (count % (int) (player.getRoF()) == 0 && firing) {
 						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
 					}
-					
+
 					if(count % player.getCharacter().getSpeed() == 0){
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
@@ -379,12 +383,24 @@ public class Game {
 	 * Initialises each type of droid
 	 */
 	public void initEnemyTypes() {
-		b1 = new Droid("b1", scaleX, scaleY, pF);
-		b2 = new Droid("b2", scaleX, scaleY, pF);
-		bx = new Droid("bx", scaleX, scaleY, pF);
-		droideka = new Droid("droideka", scaleX, scaleY, pF);
-		ig100 = new Droid("ig100", scaleX, scaleY, pF);
-		grievous = new Droid("grievous", scaleX, scaleY, pF);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from droids join weapons on droids.weapon = weapons.name joins melees on droid.melee = melees.name");
+			while (rs.next()) {
+				Droid droid = new Droid(rs, scaleX, scaleY, pF);
+				droid.setValue("rarity");
+				droidTypes.add(droid);
+				probability += rs.getDouble(10);
+			}
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
+		droidTypes = sorter.sort(droidTypes, false);
+
 	}
 
 	/**
@@ -448,21 +464,13 @@ public class Game {
 		if (spawners.size() > 0 && droidsLeft > 0) {
 			int spawnerIndex = (int) (Math.random() * spawners.size());
 			Block spawn = spawners.get(spawnerIndex);
-			double rand = Math.random() * 1250;
-			Droid droid;
+			double rand = Math.random()* probability;
+			Droid droid = droidTypes.get(0);
 
-			if (rand < 10) {
-				droid = new Droid(grievous);
-			} else if (rand < 45) {
-				droid = new Droid(ig100);
-			} else if (rand < 100) {
-				droid = new Droid(droideka);
-			} else if (rand < 225) {
-				droid = new Droid(bx);
-			} else if (rand < 600) {
-				droid = new Droid(b2);
-			} else {
-				droid = new Droid(b1);
+			for(Droid d : droidTypes){
+				if(rand <= d.getRarity()){
+					droid = d;
+				}
 			}
 
 			droid.setX(spawn.getX());

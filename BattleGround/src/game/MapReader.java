@@ -47,7 +47,8 @@ public class MapReader {
 	}
 
 	/**
-	 * Returns the map as a 2-dimensional block array and saves a list of the spawner locations
+	 * Returns the map as a 2-dimensional block array and saves a list of the
+	 * spawner locations
 	 *
 	 * @param name
 	 * @return
@@ -55,15 +56,13 @@ public class MapReader {
 	public Block[][] readFile(String name) {
 		Map<String, Block> blockTypes = new HashMap<String, Block>();
 		try {
-			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
-			System.out.println("Connected.");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from blocks");
 			while (rs.next()) {
-				blockTypes.put(rs.getString(2),
-						new Block(rs.getInt(3), rs.getBoolean(4), rs.getBlob(5)));
+				blockTypes.put(rs.getString(2), new Block(rs.getInt(3), rs.getBoolean(4), rs.getBlob(5)));
 
 			}
 			con.close();
