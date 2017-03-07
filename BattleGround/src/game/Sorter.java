@@ -3,12 +3,13 @@ package game;
 import java.util.ArrayList;
 
 public class Sorter {
-	public ArrayList<Sortable> sort(ArrayList<Sortable> list, boolean ascending) {
+
+	public ArrayList<Sortable> sort(ArrayList<? extends Sortable> list, boolean ascending) {
 		if (list.size() <= 1) {
-			return list;
+			return (ArrayList<Sortable>) list;
 		}
-		ArrayList<Sortable> list1 = new ArrayList<Sortable>();
-		ArrayList<Sortable> list2 = new ArrayList<Sortable>();
+		ArrayList<Sortable> list1 = new ArrayList<>();
+		ArrayList<Sortable> list2 = new ArrayList<>();
 		for (int i = 0; i < list.size(); i++) {
 			if (i < list.size() / 2) {
 				list1.add(list.get(i));
@@ -23,7 +24,7 @@ public class Sorter {
 		return performMerge(list1, list2, ascending);
 	}
 
-	public ArrayList<Sortable> performMerge(ArrayList<Sortable> list1, ArrayList<Sortable> list2, boolean ascending) {
+	public ArrayList<Sortable> performMerge(ArrayList<? extends Sortable> list1, ArrayList<? extends Sortable> list2, boolean ascending) {
 		ArrayList<Sortable> result = new ArrayList<Sortable>();
 		while (!list1.isEmpty() && !list2.isEmpty()) {
 			if (ascending) {
