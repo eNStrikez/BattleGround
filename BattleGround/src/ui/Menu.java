@@ -154,12 +154,10 @@ public class Menu extends Stage {
 
 		result.ifPresent(usernamePassword -> {
 			try {
-				System.out.println("Loading...");
 				Class.forName("com.mysql.jdbc.Driver");
 
 				Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 						"root");
-				System.out.println("Connected.");
 				Statement stmt = con.createStatement();
 
 				ResultSet rs = stmt.executeQuery(
@@ -185,7 +183,6 @@ public class Menu extends Stage {
 				}
 
 				USER_ID = rs.getInt(1);
-				System.out.println(USER_ID);
 
 				con.close();
 

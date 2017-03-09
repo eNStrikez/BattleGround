@@ -465,11 +465,11 @@ public class Game {
 			int spawnerIndex = (int) (Math.random() * spawners.size());
 			Block spawn = spawners.get(spawnerIndex);
 			double rand = Math.random()* probability;
-			Droid droid = droidTypes.get(0);
+			Droid droid = new Droid(droidTypes.get(0));
 
 			for(Droid d : droidTypes){
 				if(rand <= d.getRarity()){
-					droid = d;
+					droid = new Droid(d);
 				}
 			}
 

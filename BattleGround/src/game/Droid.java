@@ -88,9 +88,12 @@ public class Droid extends Entity implements Sortable {
 			g.setFill(Color.LIMEGREEN);
 			g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
 		}
-		g.setFill(Color.ORANGERED);
-		g.fillOval(x, y, sizeX, sizeY);
-		g.drawImage(image, x, y, sizeX, sizeY);
+		if (image == null) {
+			g.setFill(Color.ORANGERED);
+			g.fillOval(x, y, sizeX, sizeY);
+		} else {
+			g.drawImage(image, x, y, sizeX, sizeY);
+		}
 	}
 
 	/**
@@ -106,7 +109,7 @@ public class Droid extends Entity implements Sortable {
 			accuracy = rs.getDouble(4);
 			skill = rs.getDouble(5);
 			weaponName = rs.getString(6);
-			if (rs.getBlob(7) != null){
+			if (rs.getBlob(7) != null) {
 				image = new Image(rs.getBlob(7).getBinaryStream());
 			}
 			meleeName = rs.getString(8);
