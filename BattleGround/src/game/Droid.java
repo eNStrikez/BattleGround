@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import ui.Main;
 
-public class Droid extends Entity implements Sortable{
+public class Droid extends Entity implements Sortable {
 
 	Image image;
 	double speed;
@@ -90,7 +90,7 @@ public class Droid extends Entity implements Sortable{
 		}
 		g.setFill(Color.ORANGERED);
 		g.fillOval(x, y, sizeX, sizeY);
-		// g.drawImage(image, posX, posY, sizeX, sizeY);
+		g.drawImage(image, x, y, sizeX, sizeY);
 	}
 
 	/**
@@ -106,7 +106,9 @@ public class Droid extends Entity implements Sortable{
 			accuracy = rs.getDouble(4);
 			skill = rs.getDouble(5);
 			weaponName = rs.getString(6);
-			// image = new Image(rs.getBlob(7).getBinaryStream());
+			if (rs.getBlob(7) != null){
+				image = new Image(rs.getBlob(7).getBinaryStream());
+			}
 			meleeName = rs.getString(8);
 			range = rs.getDouble(9);
 			rarity = rs.getDouble(10);
@@ -235,7 +237,7 @@ public class Droid extends Entity implements Sortable{
 	 *
 	 * @return
 	 */
-	public double getRarity(){
+	public double getRarity() {
 		return rarity;
 	}
 
@@ -246,7 +248,7 @@ public class Droid extends Entity implements Sortable{
 
 	@Override
 	public void setValue(String value) {
-		if(value == "rarity"){
+		if (value == "rarity") {
 			sortValue = rarity;
 		}
 	}

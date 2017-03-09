@@ -387,7 +387,7 @@ public class Game {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from droids join weapons on droids.weapon = weapons.name joins melees on droid.melee = melees.name");
+			ResultSet rs = stmt.executeQuery("select * from droids join weapons on droids.weapon = weapons.name join melees on droids.melee = melees.name;");
 			while (rs.next()) {
 				Droid droid = new Droid(rs, scaleX, scaleY, pF);
 				droid.setValue("rarity");
@@ -486,6 +486,9 @@ public class Game {
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void saveScore() {
 		try {
 			System.out.println("Loading...");
@@ -497,7 +500,6 @@ public class Game {
 			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID
 					+ "," + score + "," + round.getRound() + ",\"" + round.getDifficultyS() + "\",\""
 					+ player.getCharacter().getName() + "\");");
-
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.exit(1);
