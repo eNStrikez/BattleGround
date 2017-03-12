@@ -55,19 +55,23 @@ public class Selection {
 	 * percentage of stats they have out of the maximum stats possible
 	 */
 	public void addClones() {
-
+		int playerScore = 0;
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
+			ResultSet rs = stmt.executeQuery("select max(score) from scores where userID = \"" + Menu.USER_ID + "\";");
+			while (rs.next()) {
+				playerScore = rs.getInt(1);
+			}
+			rs = stmt.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
 			while (rs.next()) {
 				clones.add(new Character(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4),
 						rs.getDouble(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-						rs.getBlob(10), rs.getBlob(11)));
+						rs.getBlob(10), rs.getBlob(11), rs.getInt(12), playerScore));
 			}
 			con.close();
 
@@ -146,13 +150,15 @@ public class Selection {
 	}
 
 	/**
-	 * Start the game with the selected clone and initialises the clone's weapons
+	 * Start the game with the selected clone and initialises the clone's
+	 * weapons
 	 */
 	public void chooseStart() {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt

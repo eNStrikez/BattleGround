@@ -24,6 +24,8 @@ public class Character {
 	double weaponMagSize;
 	double meleeDamage;
 	double meleeRange;
+	int unlock;
+	int playerScore;
 	int red, blue, green;
 	String weaponName;
 	String grenadeName;
@@ -42,17 +44,18 @@ public class Character {
 	 * @param r
 	 * @param i
 	 */
-	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r, Blob i1, Blob i2) {
+	public Character(String n, double h, double sp, double a, double sk, String w, String g, String m, String r,
+			Blob i1, Blob i2, int u, int pS) {
 		name = n;
 		try {
 			image = new Image(i1.getBinaryStream());
-			if(i2 != null){
-				gImage  = new Image(i2.getBinaryStream());
+			if (i2 != null) {
+				gImage = new Image(i2.getBinaryStream());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		aspectRatio = image.getWidth()/image.getHeight();
+		aspectRatio = image.getWidth() / image.getHeight();
 		health = h;
 		speed = sp;
 		accuracy = a;
@@ -61,6 +64,8 @@ public class Character {
 		grenadeName = g;
 		meleeName = m;
 		rank = r;
+		unlock = u;
+		playerScore = pS;
 	}
 
 	/**
@@ -74,7 +79,7 @@ public class Character {
 	 * @param g
 	 * @param b
 	 */
-	public void initWeapon(double damage, double roF, double overheat, double magSize, int r, int g, int b){
+	public void initWeapon(double damage, double roF, double overheat, double magSize, int r, int g, int b) {
 		weaponDamage = damage;
 		weaponRoF = roF;
 		weaponOverheat = overheat;
@@ -90,7 +95,7 @@ public class Character {
 	 * @param damage
 	 * @param range
 	 */
-	public void initMelee(double damage, double range){
+	public void initMelee(double damage, double range) {
 		meleeDamage = damage;
 		meleeRange = range;
 	}
@@ -106,7 +111,12 @@ public class Character {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(Color.AQUAMARINE);
 		g.fillRect(0, 0, sX, sY);
-		g.drawImage(image, (sX - sY*aspectRatio)/2, 0, sY*aspectRatio, sY);
+		if (playerScore >= unlock) {
+			g.drawImage(image, (sX - sY * aspectRatio) / 2, 0, sY * aspectRatio, sY);
+		} else {
+			g.setFill(Color.GRAY);
+			g.fillRect((sX - sY * aspectRatio) / 2, 0, sY * aspectRatio, sY);
+		}
 	}
 
 	/**
@@ -114,7 +124,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
@@ -123,7 +133,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getSpeed(){
+	public double getSpeed() {
 		return speed;
 	}
 
@@ -132,7 +142,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getHealth(){
+	public double getHealth() {
 		return health;
 	}
 
@@ -141,7 +151,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getOverheat(){
+	public double getOverheat() {
 		return weaponOverheat;
 	}
 
@@ -150,7 +160,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getRoF(){
+	public double getRoF() {
 		return weaponRoF;
 	}
 
@@ -159,7 +169,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getAccuracy(){
+	public double getAccuracy() {
 		return accuracy;
 	}
 
@@ -168,7 +178,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public String getWeaponName(){
+	public String getWeaponName() {
 		return weaponName;
 	}
 
@@ -177,7 +187,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public String getMeleeName(){
+	public String getMeleeName() {
 		return meleeName;
 	}
 
@@ -186,7 +196,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getMeleeDamage(){
+	public double getMeleeDamage() {
 		return meleeDamage;
 	}
 
@@ -195,7 +205,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getMeleeRange(){
+	public double getMeleeRange() {
 		return meleeRange;
 	}
 
@@ -204,7 +214,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public double getWeaponDamage(){
+	public double getWeaponDamage() {
 		return weaponDamage;
 	}
 
@@ -213,7 +223,7 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public Image getImage(){
+	public Image getImage() {
 		return gImage;
 	}
 
@@ -230,10 +240,15 @@ public class Character {
 
 		// name
 		g.setFont(new Font("Consolas", 30));
-		if (!name.equals("Default")) {
-			g.fillText(rank + " " + name.toUpperCase(), sX / 8, sY / 8);
+		if (playerScore >= unlock) {
+			if (!name.equals("Default")) {
+				g.fillText(rank + " " + name.toUpperCase(), sX / 8, sY / 8);
+			} else {
+				g.fillText("CT-" + (int) (Math.random() * 9999), sX / 8, sY / 8, sX);
+			}
 		} else {
-			g.fillText("CT-" + (int) (Math.random() * 9999), sX / 8, sY / 8, sX);
+			g.fillText("REQUIRES CLEARANCE LEVEL: " + unlock, sX / 8, sY / 8);
+			g.fillText("CURRENT CLEARANCE LEVEL: " + playerScore, sX / 8, sY / 8 + sY / 16);
 		}
 		g.setFont(new Font("Consolas", 16));
 
@@ -255,15 +270,20 @@ public class Character {
 		g.fillText("Weapon", sX / 8, sY / 4 + 4 * sY / 16 + sY / 32);
 		g.fillText("Grenade", sX / 8, sY / 4 + 5 * sY / 16 + sY / 32);
 		g.fillText("Melee", sX / 8, sY / 4 + 6 * sY / 16 + sY / 32);
-
-		g.setFill(Color.MEDIUMAQUAMARINE);
-		g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
-		g.fillRect(sX / 3, sY / 4 + sY / 16, (speed / 40) * sX / 2, (sY / 32));
-		g.fillRect(sX / 3, sY / 4 + sY / 8, accuracy * sX / 2, (sY / 32));
-		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (skill / 5) * sX / 2, (sY / 32));
-		g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
-		g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
-		g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
+		if (playerScore >= unlock) {
+			g.setFill(Color.MEDIUMAQUAMARINE);
+			g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + sY / 16, (speed / 40) * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + sY / 8, accuracy * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (skill / 5) * sX / 2, (sY / 32));
+			g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
+			g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
+			g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
+		} else {
+			g.fillText("CLASSIFIED", sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
+			g.fillText("CLASSIFIED", sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
+			g.fillText("CLASSIFIED", sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
+		}
 	}
 
 	/**
@@ -271,10 +291,8 @@ public class Character {
 	 *
 	 * @return
 	 */
-	public int[] getRGB(){
-		return new int[]{
-			red, green, blue
-		};
+	public int[] getRGB() {
+		return new int[] { red, green, blue };
 	}
 
 }
