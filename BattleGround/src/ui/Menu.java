@@ -170,7 +170,7 @@ public class Menu extends Stage {
 					alert.setHeaderText("Account with username " + usernamePassword.getKey() + " will be created.");
 					alert.setContentText("Confirm that these will be the login credentials.");
 					Optional<ButtonType> option = alert.showAndWait();
-					if (option.get() == ButtonType.OK) {
+					if (option.get() == ButtonType.OK && usernamePassword.getKey().matches("^[a-zA-Z]{1}\\w{4,11}$") && usernamePassword.getValue().matches("^[a-zA-Z]{1}\\w{4,11}$")) {
 						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
 								+ usernamePassword.getKey() + "', '"
 								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "');");
@@ -178,7 +178,7 @@ public class Menu extends Stage {
 								"select userID from user where username = '" + usernamePassword.getKey() + "';");
 						rs.next();
 					} else {
-						System.exit(1);
+						throw new Exception("Invalid input");
 					}
 				}
 
