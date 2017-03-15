@@ -135,13 +135,13 @@ public class Player extends Entity {
 	 * @param sizeY
 	 * @return
 	 */
-	public Laser fire(double tX, double tY) {
-		return new Laser(character.getAccuracy(), posX, posY, character.getWeaponDamage(), tX, tY,
+	public Laser fire(double tX, double tY, double x, double y) {
+		return new Laser(character.getAccuracy(), x, y, character.getWeaponDamage(), tX, tY,
 				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], true);
 	}
 
-	public Melee melee(double tX, double tY){
-		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), posX, posY, tX, tY, true);
+	public Melee melee(double tX, double tY, double x, double y){
+		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true);
 	}
 
 	/**

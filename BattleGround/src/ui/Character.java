@@ -239,7 +239,7 @@ public class Character {
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));
 
 		// name
-		g.setFont(new Font("Consolas", 30));
+		g.setFont(new Font("Consolas", 20));
 		if (playerScore >= unlock) {
 			if (!name.equals("Default")) {
 				g.fillText(rank + " " + name.toUpperCase(), sX / 8, sY / 8);
@@ -293,6 +293,14 @@ public class Character {
 	 */
 	public int[] getRGB() {
 		return new int[] { red, green, blue };
+	}
+
+	public boolean accessible(){
+		if (playerScore >= unlock) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

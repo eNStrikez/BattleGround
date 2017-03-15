@@ -1,7 +1,5 @@
 package game;
 
-import javafx.geometry.Rectangle2D;
-
 public class Entity {
 	double posX, posY, sizeX, sizeY, health, maxHealth;
 	boolean alive;
@@ -91,7 +89,6 @@ public class Entity {
 	public double getFarthestY() {
 		return posY + sizeY;
 	}
-
 
 	/**
 	 * Returns whether the entity is alive

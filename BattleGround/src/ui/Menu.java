@@ -4,21 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import game.Game;
 import game.Sortable;
 import game.Sorter;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -170,7 +164,7 @@ public class Menu extends Stage {
 					alert.setHeaderText("Account with username " + usernamePassword.getKey() + " will be created.");
 					alert.setContentText("Confirm that these will be the login credentials.");
 					Optional<ButtonType> option = alert.showAndWait();
-					if (option.get() == ButtonType.OK && usernamePassword.getKey().matches("^[a-zA-Z]{1}\\w{4,11}$") && usernamePassword.getValue().matches("^[a-zA-Z]{1}\\w{4,11}$")) {
+					if (option.get() == ButtonType.OK && usernamePassword.getKey().matches("^[a-zA-Z]{1}\\w{2,11}$") && usernamePassword.getValue().matches("^[a-zA-Z]{1}\\w{2,11}$")) {
 						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
 								+ usernamePassword.getKey() + "', '"
 								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "');");

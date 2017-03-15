@@ -48,7 +48,7 @@ public class Game {
 	ArrayList<Droid> droids = new ArrayList<Droid>();
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
-	public final static double FRAME_RATE = 100;
+	public final static double FRAME_RATE = 30;
 	public final static double ZOOM = 5;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
@@ -239,7 +239,9 @@ public class Game {
 								}
 							}
 							if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
-								weapons.add(droid.fire(player.getX(), player.getY()));
+								weapons.add(droid.fire(player.getX() + transformStoX(scaleX),
+										player.getY() + transformStoY(scaleY), droid.getX() + transformStoX(scaleX)/2,
+										droid.getY() + transformStoY(scaleY)/2));
 							}
 							for (Weapon weapon : weapons) {
 								if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
@@ -265,10 +267,17 @@ public class Game {
 					}
 
 					if (count % (int) (player.getRoF()) == 0 && firing) {
-						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY)));
+						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY),
+								player.getX() + transformStoX(scaleX)/2, player.getY() + transformStoX(scaleY)/2));
 					}
 
-					if(count % player.getCharacter().getSpeed() == 0){
+					if (meleeing) {
+						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY),
+								player.getX() + transformStoX(scaleX)/2, player.getY() + transformStoY(scaleY)/2));
+					}
+
+					System.out.println(transformStoX(scaleX / 2));
+					if (count % player.getCharacter().getSpeed() == 0) {
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
 						if (offX < 0) {
@@ -292,7 +301,6 @@ public class Game {
 			}
 		}));
 		t.play();
-
 
 		Timeline spawnT = new Timeline();
 		spawnT.setCycleCount(Timeline.INDEFINITE);
@@ -385,9 +393,11 @@ public class Game {
 	public void initEnemyTypes() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from droids join weapons on droids.weapon = weapons.name join melees on droids.melee = melees.name;");
+			ResultSet rs = stmt.executeQuery(
+					"select * from droids join weapons on droids.weapon = weapons.name join melees on droids.melee = melees.name;");
 			while (rs.next()) {
 				Droid droid = new Droid(rs, scaleX, scaleY, pF);
 				droid.setValue("rarity");
@@ -464,11 +474,11 @@ public class Game {
 		if (spawners.size() > 0 && droidsLeft > 0) {
 			int spawnerIndex = (int) (Math.random() * spawners.size());
 			Block spawn = spawners.get(spawnerIndex);
-			double rand = Math.random()* probability;
+			double rand = Math.random() * probability;
 			Droid droid = new Droid(droidTypes.get(0));
 
-			for(Droid d : droidTypes){
-				if(rand <= d.getRarity()){
+			for (Droid d : droidTypes) {
+				if (rand <= d.getRarity()) {
 					droid = new Droid(d);
 				}
 			}

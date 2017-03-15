@@ -2,40 +2,41 @@ package game;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
-public class Melee implements Weapon{
+public class Melee implements Weapon {
 
 	double posX, posY, damage, speedX, speedY, height, width, range, maxRangeX, maxRangeY;
+	double rangeX = 0;
+	double rangeY = 0;
 	double speed = 0.1;
 	double size;
 	boolean marked = false;
 	boolean player;
 
-	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP){
-		damage = d;
-		range = r;
+	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP) {
 		posX = x;
 		posY = y;
-		double angle = Math.atan((tX - x) / (tY - y));
+		damage = d;
+		size = 2;
+
+		double angle = Math.atan2((tX - x) , (tY - y));
 		double angleSin = Math.sin(angle);
 		double angleCos = Math.cos(angle);
+
 		speedX = speed * angleSin;
 		speedY = speed * angleCos;
-
-		if (tY < y) {
-			speedX *= -1;
-			speedY *= -1;
-		}
 		maxRangeX = range * angleSin;
 		maxRangeY = range * angleCos;
 
-		width = maxRangeX/speedX;
-		height = maxRangeY/speedY;
-		
+		width = size * angleSin;
+		height = size * angleCos;
 		player = isP;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#doDamage(game.Entity)
 	 */
 	@Override
@@ -43,8 +44,11 @@ public class Melee implements Weapon{
 		e.takeDamage(damage);
 	}
 
-	/* (non-Javadoc)
-	 * @see game.Weapon#checkCollision(double, double, double, double, double, double, double, double)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see game.Weapon#checkCollision(double, double, double, double, double,
+	 * double, double, double)
 	 */
 	@Override
 	public boolean checkCollision(double x1, double y1, double sX1, double sY1, double x2, double y2, double sX2,
@@ -57,29 +61,39 @@ public class Melee implements Weapon{
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see game.Weapon#draw(javafx.scene.canvas.GraphicsContext, double, double, double, double)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see game.Weapon#draw(javafx.scene.canvas.GraphicsContext, double,
+	 * double, double, double)
 	 */
 	@Override
 	public void draw(GraphicsContext g, double x, double y, double h, double w) {
-		// TODO Auto-generated method stub
-
+		g.setStroke(Color.GREY);
+		g.setLineWidth(5);
+		g.strokeLine(x, y, h, w);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#move()
 	 */
 	@Override
 	public void move() {
-		if(width < maxRangeX && height <  maxRangeY){
-			width += maxRangeX/speedX;
-			height += maxRangeY/speedY;
+		if (rangeX < maxRangeX && rangeY < maxRangeY) {
+			rangeX += speedX;
+			rangeY += speedY;
+			posX += speedX;
+			posY += speedY;
 		} else {
 			setMarked();
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#getX()
 	 */
 	@Override
@@ -87,7 +101,9 @@ public class Melee implements Weapon{
 		return posX;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#getY()
 	 */
 	@Override
@@ -95,7 +111,9 @@ public class Melee implements Weapon{
 		return posY;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#setMarked()
 	 */
 	@Override
@@ -103,7 +121,9 @@ public class Melee implements Weapon{
 		marked = true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#isMarked()
 	 */
 	@Override
@@ -111,7 +131,9 @@ public class Melee implements Weapon{
 		return marked;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#isPlayer()
 	 */
 	@Override
@@ -119,7 +141,9 @@ public class Melee implements Weapon{
 		return player;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#getH()
 	 */
 	@Override
@@ -127,7 +151,9 @@ public class Melee implements Weapon{
 		return height;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#getW()
 	 */
 	@Override
@@ -135,7 +161,9 @@ public class Melee implements Weapon{
 		return width;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Weapon#getDamage()
 	 */
 	@Override

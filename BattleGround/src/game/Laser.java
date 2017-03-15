@@ -31,19 +31,13 @@ public class Laser implements Weapon {
 		damage = d;
 		size = 2;
 
-		double angle = Math.atan((tX - x) / (tY - y));
+		double angle = Math.atan2((tX - x) , (tY - y));
 		double rand = (Math.random() * accuracy - accuracy / 2);
 		double angleSin = Math.sin(angle - Math.toRadians(rand));
 		double angleCos = Math.cos(angle - Math.toRadians(rand));
 
 		speedX = speed * angleSin;
 		speedY = speed * angleCos;
-
-		if (tY < y) {
-			speedX *= -1;
-			speedY *= -1;
-		}
-
 		width = size * angleSin;
 		height = size * angleCos;
 		red = r;
@@ -100,7 +94,6 @@ public class Laser implements Weapon {
 		g.setStroke(Color.rgb(red, green, blue));
 		g.setLineWidth(5);
 		g.strokeLine(x, y, h, w);
-		//g.fillRect(x, y, Math.abs(h - x), w - y);
 	}
 
 	/* (non-Javadoc)

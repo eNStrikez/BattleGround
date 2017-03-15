@@ -213,8 +213,8 @@ public class Droid extends Entity implements Sortable {
 	 * @param tY
 	 * @return
 	 */
-	public Laser fire(double tX, double tY) {
-		return new Laser(accuracy, posX, posY, weaponDamage, tX, tY, red, green, blue, false);
+	public Laser fire(double tX, double tY,  double x, double y) {
+		return new Laser(accuracy, x, y, weaponDamage, tX, tY, red, green, blue, false);
 	}
 
 	/**

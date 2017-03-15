@@ -103,11 +103,13 @@ public class Selection {
 		root.setVgap(40);
 		left.setOnAction(e -> {
 			chooseLeft();
+			start.setDisable(!clones.get(index).accessible());
 			drawPlayer(playerG);
 			drawStats(statsG);
 		});
 		right.setOnAction(e -> {
 			chooseRight();
+			start.setDisable(!clones.get(index).accessible());
 			drawPlayer(playerG);
 			drawStats(statsG);
 		});
