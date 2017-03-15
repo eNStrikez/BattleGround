@@ -240,8 +240,8 @@ public class Game {
 							}
 							if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
 								weapons.add(droid.fire(player.getX() + transformStoX(scaleX),
-										player.getY() + transformStoY(scaleY), droid.getX() + transformStoX(scaleX)/2,
-										droid.getY() + transformStoY(scaleY)/2));
+										player.getY() + transformStoY(scaleY), droid.getX() + transformStoX(scaleX) / 2,
+										droid.getY() + transformStoY(scaleY) / 2));
 							}
 							for (Weapon weapon : weapons) {
 								if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
@@ -268,12 +268,13 @@ public class Game {
 
 					if (count % (int) (player.getRoF()) == 0 && firing) {
 						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY),
-								player.getX() + transformStoX(scaleX)/2, player.getY() + transformStoX(scaleY)/2));
+								player.getX() + transformStoX(scaleX) / 2, player.getY() + transformStoX(scaleY) / 2));
 					}
 
 					if (meleeing) {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY),
-								player.getX() + transformStoX(scaleX)/2, player.getY() + transformStoY(scaleY)/2));
+								player.getX() + transformStoX(scaleX) / 2, player.getY() + transformStoY(scaleY) / 2,
+								transformStoX(scaleX), transformStoY(scaleY)));
 					}
 
 					System.out.println(transformStoX(scaleX / 2));

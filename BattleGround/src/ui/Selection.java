@@ -24,6 +24,7 @@ public class Selection {
 	Button back, left, right, start;
 	double screenX, screenY;
 	ArrayList<Character> clones = new ArrayList<Character>();
+	ArrayList<Modifier> modifiers = new ArrayList<Modifier>();
 	int index = 0;
 	int menuOption = 0;
 	GraphicsContext statsG, playerG;
@@ -81,6 +82,27 @@ public class Selection {
 		}
 	}
 
+	public void addModifiers(){
+		try {
+			System.out.println("Loading...");
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
+			System.out.println("Connected.");
+			Statement stmt = con.createStatement();
+
+			ResultSet rs = stmt.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
+			while (rs.next()) {
+
+			}
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
+	}
+
 	/**
 	 * Sets up the character selection screen
 	 */
@@ -102,13 +124,13 @@ public class Selection {
 		root.setHgap(20);
 		root.setVgap(40);
 		left.setOnAction(e -> {
-			chooseLeft();
+			chooseLeft(clones);
 			start.setDisable(!clones.get(index).accessible());
 			drawPlayer(playerG);
 			drawStats(statsG);
 		});
 		right.setOnAction(e -> {
-			chooseRight();
+			chooseRight(clones);
 			start.setDisable(!clones.get(index).accessible());
 			drawPlayer(playerG);
 			drawStats(statsG);
@@ -129,22 +151,58 @@ public class Selection {
 		drawStats(statsG);
 	}
 
+	public void modifierSelect(){
+		back = new Button("Back");
+		left = new Button("<-");
+		right = new Button("->");
+		start = new Button("Start");
+		stats = new Canvas(screenX * 0.6, screenY * 0.8);
+		statsG = stats.getGraphicsContext2D();
+		root = new GridPane();
+		root.setHgap(20);
+		root.setVgap(40);
+		left.setOnAction(e -> {
+			chooseLeft(modifiers);
+			start.setDisable(!clones.get(index).accessible());
+			drawPlayer(playerG);
+			drawStats(statsG);
+		});
+		right.setOnAction(e -> {
+			chooseRight(modifiers);
+			start.setDisable(!clones.get(index).accessible());
+			drawPlayer(playerG);
+			drawStats(statsG);
+		});
+		start.setOnAction(e -> chooseStart());
+		back.setOnAction(e -> chooseBack());
+		scene = new Scene(root, screenX, screenY);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		root.add(stats, 0, 0, 2, 4);
+		root.add(player, 2, 0, 4, 4);
+		root.add(back, 0, 4, 2, 1);
+		root.add(left, 2, 4, 1, 1);
+		root.add(start, 3, 4, 1, 1);
+		root.add(right, 4, 4, 1, 1);
+		root.add(difficultyBox, 2, 5, 3, 1);
+		root.setId("selection");
+	}
+
 	/**
 	 * Decrement the index
 	 */
-	public void chooseLeft() {
+	public void chooseLeft(ArrayList a) {
 		if (index > 0) {
 			index--;
 		} else {
-			index = clones.size() - 1;
+			index = a.size() - 1;
 		}
 	}
 
 	/**
 	 * Increment the index
 	 */
-	public void chooseRight() {
-		if (index < clones.size() - 1) {
+	public void chooseRight(ArrayList a) {
+		if (index < a.size() - 1) {
 			index++;
 		} else {
 			index = 0;

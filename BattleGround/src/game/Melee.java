@@ -9,16 +9,14 @@ public class Melee implements Weapon {
 	double posX, posY, damage, speedX, speedY, height, width, range, maxRangeX, maxRangeY;
 	double rangeX = 0;
 	double rangeY = 0;
-	double speed = 0.1;
-	double size;
+	double speed = 0.5;
 	boolean marked = false;
 	boolean player;
 
-	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP) {
+	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP, double scaleX, double scaleY) {
 		posX = x;
 		posY = y;
 		damage = d;
-		size = 2;
 
 		double angle = Math.atan2((tX - x) , (tY - y));
 		double angleSin = Math.sin(angle);
@@ -26,11 +24,8 @@ public class Melee implements Weapon {
 
 		speedX = speed * angleSin;
 		speedY = speed * angleCos;
-		maxRangeX = range * angleSin;
-		maxRangeY = range * angleCos;
-
-		width = size * angleSin;
-		height = size * angleCos;
+		maxRangeX = range * angleSin + scaleX/2;
+		maxRangeY = range * angleCos + scaleY/2;
 		player = isP;
 	}
 
@@ -81,11 +76,13 @@ public class Melee implements Weapon {
 	 */
 	@Override
 	public void move() {
-		if (rangeX < maxRangeX && rangeY < maxRangeY) {
+		if (Math.abs(rangeX) < maxRangeX && Math.abs(rangeY) < maxRangeY) {
 			rangeX += speedX;
 			rangeY += speedY;
 			posX += speedX;
 			posY += speedY;
+			width = rangeX;
+			height = rangeY;
 		} else {
 			setMarked();
 		}

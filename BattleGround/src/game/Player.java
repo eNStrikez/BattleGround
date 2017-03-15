@@ -140,8 +140,8 @@ public class Player extends Entity {
 				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], true);
 	}
 
-	public Melee melee(double tX, double tY, double x, double y){
-		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true);
+	public Melee melee(double tX, double tY, double x, double y, double sX, double sY){
+		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true, sX, sY);
 	}
 
 	/**
