@@ -18,10 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 public class Selection {
-	Scene scene;
-	GridPane root;
-	Canvas stats, player;
-	Button back, left, right, start;
 	double screenX, screenY;
 	ArrayList<Character> clones = new ArrayList<Character>();
 	ArrayList<Modifier> modifiers = new ArrayList<Modifier>();
@@ -30,13 +26,14 @@ public class Selection {
 	GraphicsContext statsG, playerG;
 	Timer drawTimer;
 	SceneManager sManager;
-	ObservableList<String> options;
-	ComboBox<String> difficultyBox;
+	Character selectedClone;
+	String value;
+	Scene scene;
 
 	public Selection(double sX, double sY) {
 		screenX = sX;
 		screenY = sY;
-		addClones();
+
 		initCharacterSelect();
 
 	}
@@ -58,7 +55,7 @@ public class Selection {
 	public void addClones() {
 		int playerScore = 0;
 		try {
-			System.out.println("Loading...");
+			System.out.println("Loading Clones...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
@@ -82,18 +79,20 @@ public class Selection {
 		}
 	}
 
-	public void addModifiers(){
+	public void addModifiers(String name) {
 		try {
-			System.out.println("Loading...");
+			System.out.println("Loading Mods...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 
-			ResultSet rs = stmt.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
+			ResultSet rs = stmt.executeQuery(
+					"select * from clone_perks join perks on perks.name = clone_perks.perk where clone = \"" + name
+							+ "\";");
 			while (rs.next()) {
-
+				modifiers.add(new Modifier(rs.getString(3), rs.getString(4), rs.getDouble(5)));
 			}
 			con.close();
 
@@ -107,20 +106,21 @@ public class Selection {
 	 * Sets up the character selection screen
 	 */
 	public void initCharacterSelect() {
-		back = new Button("Back");
-		left = new Button("<-");
-		right = new Button("->");
-		start = new Button("Start");
-		stats = new Canvas(screenX * 0.3, screenY * 0.8);
-		player = new Canvas(screenX * 0.6, screenY * 0.8);
-		options = FXCollections.observableArrayList("Youngling", "Padawan", "Jedi Knight", "Jedi Master", "Sith Lord",
-				"Emperor");
-		difficultyBox = new ComboBox<String>(options);
+		addClones();
+		Button back = new Button("Back");
+		Button left = new Button("<-");
+		Button right = new Button("->");
+		Button start = new Button("Start");
+		Canvas stats = new Canvas(screenX * 0.3, screenY * 0.8);
+		Canvas player = new Canvas(screenX * 0.6, screenY * 0.8);
+		ObservableList<String> options = FXCollections.observableArrayList("Youngling", "Padawan", "Jedi Knight",
+				"Jedi Master", "Sith Lord", "Emperor");
+		ComboBox<String> difficultyBox = new ComboBox<String>(options);
 		difficultyBox.getSelectionModel().selectFirst();
 
 		statsG = stats.getGraphicsContext2D();
 		playerG = player.getGraphicsContext2D();
-		root = new GridPane();
+		GridPane root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
 		left.setOnAction(e -> {
@@ -135,7 +135,11 @@ public class Selection {
 			drawPlayer(playerG);
 			drawStats(statsG);
 		});
-		start.setOnAction(e -> chooseStart());
+		start.setOnAction(e -> {
+			value = difficultyBox.getValue();
+			selectedClone = clones.get(index);
+			modifierSelect();
+		});
 		back.setOnAction(e -> chooseBack());
 		scene = new Scene(root, screenX, screenY);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -151,39 +155,34 @@ public class Selection {
 		drawStats(statsG);
 	}
 
-	public void modifierSelect(){
-		back = new Button("Back");
-		left = new Button("<-");
-		right = new Button("->");
-		start = new Button("Start");
-		stats = new Canvas(screenX * 0.6, screenY * 0.8);
+	public void modifierSelect() {
+		addModifiers(selectedClone.getName());
+		Button back = new Button("Back");
+		Button left = new Button("<-");
+		Button right = new Button("->");
+		Button start = new Button("Start");
+		Canvas stats = new Canvas(screenX * 0.3, screenY * 0.8);
 		statsG = stats.getGraphicsContext2D();
-		root = new GridPane();
+		GridPane root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
 		left.setOnAction(e -> {
 			chooseLeft(modifiers);
-			start.setDisable(!clones.get(index).accessible());
-			drawPlayer(playerG);
-			drawStats(statsG);
+			drawModifierStats(statsG);
 		});
 		right.setOnAction(e -> {
 			chooseRight(modifiers);
-			start.setDisable(!clones.get(index).accessible());
-			drawPlayer(playerG);
-			drawStats(statsG);
+			drawModifierStats(statsG);
 		});
 		start.setOnAction(e -> chooseStart());
 		back.setOnAction(e -> chooseBack());
 		scene = new Scene(root, screenX, screenY);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		root.add(stats, 0, 0, 2, 4);
-		root.add(player, 2, 0, 4, 4);
 		root.add(back, 0, 4, 2, 1);
 		root.add(left, 2, 4, 1, 1);
 		root.add(start, 3, 4, 1, 1);
 		root.add(right, 4, 4, 1, 1);
-		root.add(difficultyBox, 2, 5, 3, 1);
 		root.setId("selection");
 	}
 
@@ -222,11 +221,11 @@ public class Selection {
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("select * from weapons where name = \"" + clones.get(index).getWeaponName() + "\";");
+					.executeQuery("select * from weapons where name = \"" + selectedClone.getWeaponName() + "\";");
 			while (rs.next())
 				clones.get(index).initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6),
 						rs.getInt(7), rs.getInt(8));
-			rs = stmt.executeQuery("select * from melees where name = \"" + clones.get(index).getMeleeName() + "\";");
+			rs = stmt.executeQuery("select * from melees where name = \"" + selectedClone.getMeleeName() + "\";");
 			while (rs.next())
 				clones.get(index).initMelee(rs.getInt(2), rs.getInt(3));
 			con.close();
@@ -235,7 +234,7 @@ public class Selection {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-		sManager.newGame(screenX, screenY, clones.get(index), difficultyBox.getValue());
+		sManager.newGame(screenX, screenY, selectedClone, value);
 	}
 
 	/**
@@ -259,6 +258,10 @@ public class Selection {
 	 */
 	public void drawStats(GraphicsContext g) {
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
+	}
+
+	public void drawModifierStats(GraphicsContext g) {
+		modifiers.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
 	/**

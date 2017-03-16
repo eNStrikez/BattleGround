@@ -138,6 +138,15 @@ public class Character {
 	}
 
 	/**
+	 * Return the skill of the player
+	 *
+	 * @return
+	 */
+	public double getSkill() {
+		return skill;
+	}
+
+	/**
 	 * Returns the health of the player
 	 *
 	 * @return

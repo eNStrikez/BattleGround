@@ -228,7 +228,12 @@ public class Game {
 						if (droid.getSpeed() == 0) {
 							droidIt.remove();
 						} else {
-							droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
+							if (droid.isFiring()) {
+								droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()),
+										transformXtoS(player.getX()), transformYtoS(player.getY()));
+							} else {
+								droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
+							}
 							if (count % (int) droid.getSpeed() == 0) {
 								if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
 										droid.getY())) {
@@ -239,9 +244,8 @@ public class Game {
 								}
 							}
 							if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
-								weapons.add(droid.fire(player.getX() + transformStoX(scaleX),
-										player.getY() + transformStoY(scaleY), droid.getX() + transformStoX(scaleX) / 2,
-										droid.getY() + transformStoY(scaleY) / 2));
+								weapons.add(droid.fire(player.getX() + 0.5, player.getY() + 0.5, droid.getX() + 0.5,
+										droid.getY() + 0.5));
 							}
 							for (Weapon weapon : weapons) {
 								if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
@@ -267,17 +271,14 @@ public class Game {
 					}
 
 					if (count % (int) (player.getRoF()) == 0 && firing) {
-						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY),
-								player.getX() + transformStoX(scaleX) / 2, player.getY() + transformStoX(scaleY) / 2));
+						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
+								player.getY() + 0.5));
 					}
 
 					if (meleeing) {
-						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY),
-								player.getX() + transformStoX(scaleX) / 2, player.getY() + transformStoY(scaleY) / 2,
-								transformStoX(scaleX), transformStoY(scaleY)));
+						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
+								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
 					}
-
-					System.out.println(transformStoX(scaleX / 2));
 					if (count % player.getCharacter().getSpeed() == 0) {
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);

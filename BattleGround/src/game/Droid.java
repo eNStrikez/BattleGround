@@ -7,8 +7,10 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import ai.PathFinder;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import ui.Main;
 
@@ -34,6 +36,7 @@ public class Droid extends Entity implements Sortable {
 	PathFinder pathFinder;
 	boolean firing = false;
 	private double sortValue;
+	ImageView iV;
 
 	/**
 	 * @param name
@@ -72,6 +75,7 @@ public class Droid extends Entity implements Sortable {
 		setHealth(d.health);
 		range = d.range;
 		rarity = d.rarity;
+		iV = new ImageView(image);
 	}
 
 	/**
@@ -88,12 +92,37 @@ public class Droid extends Entity implements Sortable {
 			g.setFill(Color.LIMEGREEN);
 			g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
 		}
-		if (image == null) {
-			g.setFill(Color.ORANGERED);
-			g.fillOval(x, y, sizeX, sizeY);
-		} else {
-			g.drawImage(image, x, y, sizeX, sizeY);
+
+		g.drawImage(image, x, y, sizeX, sizeY);
+
+	}
+
+	/**
+	 * Draws the droid facing the player and its health bar
+	 *
+	 * @param g
+	 * @param x
+	 * @param y
+	 */
+	public void draw(GraphicsContext g, double x, double y, double targetX, double targetY) {
+		if (health < maxHealth) {
+			g.setFill(Color.CRIMSON);
+			g.fillRect(x, y - sizeY / 4, sizeX, sizeY / 4);
+			g.setFill(Color.LIMEGREEN);
+			g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
 		}
+
+		double angle = 0;
+		angle = -Math.atan2(targetX - x, targetY - y);
+		iV.setRotate(Math.toDegrees(angle));
+
+		SnapshotParameters params = new SnapshotParameters();
+		params.setFill(Color.TRANSPARENT);
+		double length = Math.abs(sizeY * Math.sin(angle)) + Math.abs(sizeX * Math.cos(angle));
+		double height = Math.abs(sizeY * Math.cos(angle)) + Math.abs(sizeX * Math.sin(angle));
+		g.setFill(Color.YELLOW);
+		g.drawImage(iV.snapshot(params, null), x, y, length, height);
+
 	}
 
 	/**
@@ -213,8 +242,8 @@ public class Droid extends Entity implements Sortable {
 	 * @param tY
 	 * @return
 	 */
-	public Laser fire(double tX, double tY,  double x, double y) {
-		return new Laser(accuracy, x, y, weaponDamage, tX, tY, red, green, blue, false);
+	public Laser fire(double tX, double tY, double x, double y) {
+		return new Laser(accuracy, x, y, weaponDamage, tX, tY, red, green, blue);
 	}
 
 	/**

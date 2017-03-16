@@ -23,7 +23,7 @@ public class Laser implements Weapon {
 	 * @param g
 	 * @param b
 	 */
-	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b, boolean isP) {
+	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b, double skill) {
 		posX = x;
 		posY = y;
 
@@ -43,7 +43,37 @@ public class Laser implements Weapon {
 		red = r;
 		green = g;
 		blue = b;
-		player = isP;
+		if(Math.random()*100 < skill){
+			damage = damage*10*skill;
+			red = 255;
+			green = 226;
+			blue = 140;
+		}
+
+		player = true;
+	}
+
+	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b) {
+		posX = x;
+		posY = y;
+
+		double accuracy = a;
+		damage = d;
+		size = 2;
+
+		double angle = Math.atan2((tX - x) , (tY - y));
+		double rand = (Math.random() * accuracy - accuracy / 2);
+		double angleSin = Math.sin(angle - Math.toRadians(rand));
+		double angleCos = Math.cos(angle - Math.toRadians(rand));
+
+		speedX = speed * angleSin;
+		speedY = speed * angleCos;
+		width = size * angleSin;
+		height = size * angleCos;
+		red = r;
+		green = g;
+		blue = b;
+		player = false;
 	}
 
 	/* (non-Javadoc)

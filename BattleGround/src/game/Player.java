@@ -137,7 +137,7 @@ public class Player extends Entity {
 	 */
 	public Laser fire(double tX, double tY, double x, double y) {
 		return new Laser(character.getAccuracy(), x, y, character.getWeaponDamage(), tX, tY,
-				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], true);
+				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], character.getSkill());
 	}
 
 	public Melee melee(double tX, double tY, double x, double y, double sX, double sY){
