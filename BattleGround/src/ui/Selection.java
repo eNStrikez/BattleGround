@@ -65,7 +65,7 @@ public class Selection {
 			while (rs.next()) {
 				playerScore = rs.getInt(1);
 			}
-			rs = stmt.executeQuery("select * from clones order by (health/250 + speed/40 + accuracy + skill/5)");
+			rs = stmt.executeQuery("select * from clones order by (health/250 + speed/10 + accuracy + skill/5)");
 			while (rs.next()) {
 				clones.add(new Character(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4),
 						rs.getDouble(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
@@ -79,7 +79,14 @@ public class Selection {
 		}
 	}
 
+	/**
+	 * Performs an SQL query to return all the modifiers linked to the selected
+	 * character
+	 * 
+	 * @param name
+	 */
 	public void addModifiers(String name) {
+		modifiers.add(new Modifier("No Modifier", "", 0));
 		try {
 			System.out.println("Loading Mods...");
 			Class.forName("com.mysql.jdbc.Driver");
@@ -94,6 +101,7 @@ public class Selection {
 			while (rs.next()) {
 				modifiers.add(new Modifier(rs.getString(3), rs.getString(4), rs.getDouble(5)));
 			}
+
 			con.close();
 
 		} catch (Exception e) {
@@ -155,6 +163,9 @@ public class Selection {
 		drawStats(statsG);
 	}
 
+	/**
+	 * Sets up the modification selection screen
+	 */
 	public void modifierSelect() {
 		addModifiers(selectedClone.getName());
 		Button back = new Button("Back");
@@ -168,11 +179,11 @@ public class Selection {
 		root.setVgap(40);
 		left.setOnAction(e -> {
 			chooseLeft(modifiers);
-			drawModifierStats(statsG);
+			drawModifierStats(statsG, selectedClone);
 		});
 		right.setOnAction(e -> {
 			chooseRight(modifiers);
-			drawModifierStats(statsG);
+			drawModifierStats(statsG, selectedClone);
 		});
 		start.setOnAction(e -> chooseStart());
 		back.setOnAction(e -> chooseBack());
@@ -186,7 +197,7 @@ public class Selection {
 		root.setId("selection");
 		sManager.selectSelection(scene);
 		index = 0;
-		drawModifierStats(statsG);
+		drawModifierStats(statsG, selectedClone);
 	}
 
 	/**
@@ -263,8 +274,13 @@ public class Selection {
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
-	public void drawModifierStats(GraphicsContext g) {
-		modifiers.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
+	/**
+	 * Draws the stat bars for the modifiers
+	 * 
+	 * @param g
+	 */
+	public void drawModifierStats(GraphicsContext g, Character c) {
+		modifiers.get(index).drawStats(g, screenX * 0.3, screenY * 0.8, c);
 	}
 
 	/**

@@ -15,15 +15,15 @@ public class Modifier {
 		multiplier = m;
 	}
 
-	public String getStat(){
+	public String getStat() {
 		return type;
 	}
 
-	public double getMultiplier(){
+	public double getMultiplier() {
 		return multiplier;
 	}
 
-	public void drawStats(GraphicsContext g, double sX, double sY) {
+	public void drawStats(GraphicsContext g, double sX, double sY, Character c) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));
 
@@ -49,15 +49,28 @@ public class Modifier {
 		// skill
 		g.fillText("Skill", sX / 8, sY / 4 + 3 * sY / 16 + sY / 32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, sX / 2, sY / 32);
-
 		g.setFill(Color.MEDIUMAQUAMARINE);
-		if (type.equals("Health"))
-			g.fillRect(sX / 3, sY / 4, multiplier * sX / 2, (sY / 32));
-		else if (type.equals("Speed"))
-			g.fillRect(sX / 3, sY / 4 + sY / 16, multiplier * sX / 2, (sY / 32));
-		else if (type.equals("Accuracy"))
-			g.fillRect(sX / 3, sY / 4 + sY / 8, multiplier * sX / 2, (sY / 32));
-		else if (type.equals("Skill"))
-			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, multiplier * sX / 2, (sY / 32));
+		g.fillRect(sX / 3, sY / 4, (c.getHealth() / 250) * sX / 2, (sY / 32));
+		g.fillRect(sX / 3, sY / 4 + sY / 16, (c.getSpeed() / 10) * sX / 2, (sY / 32));
+		g.fillRect(sX / 3, sY / 4 + sY / 8, c.getAccuracy() * sX / 2, (sY / 32));
+		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (c.getSkill() / 5) * sX / 2, (sY / 32));
+		g.setFill(Color.CRIMSON);
+		if (type.equals("Health")) {
+			g.fillRect(sX / 3, sY / 4, (c.getHealth() / 250) * sX / 2, (sY / 32));
+			g.setFill(Color.MEDIUMAQUAMARINE);
+			g.fillRect(sX / 3, sY / 4, (multiplier * c.getHealth() / 250) * sX / 2, (sY / 32));
+		} else if (type.equals("Speed")) {
+			g.fillRect(sX / 3, sY / 4 + sY / 16, (c.getSpeed() / 10) * sX / 2, (sY / 32));
+			g.setFill(Color.MEDIUMAQUAMARINE);
+			g.fillRect(sX / 3, sY / 4 + sY / 16, multiplier * (c.getSpeed() / 10) * sX / 2, (sY / 32));
+		} else if (type.equals("Accuracy")) {
+			g.fillRect(sX / 3, sY / 4 + sY / 8, c.getAccuracy() * sX / 2, (sY / 32));
+			g.setFill(Color.MEDIUMAQUAMARINE);
+			g.fillRect(sX / 3, sY / 4 + sY / 8, multiplier * c.getAccuracy() * sX / 2, (sY / 32));
+		} else if (type.equals("Skill")) {
+			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (c.getSkill() / 5) * sX / 2, (sY / 32));
+			g.setFill(Color.MEDIUMAQUAMARINE);
+			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (multiplier * c.getSkill() / 5) * sX / 2, (sY / 32));
+		}
 	}
 }

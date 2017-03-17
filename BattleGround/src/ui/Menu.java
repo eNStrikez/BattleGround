@@ -165,7 +165,8 @@ public class Menu extends Stage {
 					alert.setHeaderText("Account with username " + usernamePassword.getKey() + " will be created.");
 					alert.setContentText("Confirm that these will be the login credentials.");
 					Optional<ButtonType> option = alert.showAndWait();
-					if (option.get() == ButtonType.OK && usernamePassword.getKey().matches("^[a-zA-Z]{1}\\w{2,11}$") && usernamePassword.getValue().matches("^[a-zA-Z]{1}\\w{2,11}$")) {
+					if (option.get() == ButtonType.OK && usernamePassword.getKey().matches("^[a-zA-Z]{1}\\w{2,11}$")
+							&& usernamePassword.getValue().matches("^[a-zA-Z]{1}\\w{2,11}$")) {
 						stmt.executeUpdate("insert into user (userID, username, password) values(null, '"
 								+ usernamePassword.getKey() + "', '"
 								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "');");
@@ -236,6 +237,12 @@ public class Menu extends Stage {
 		setScene(scene);
 	}
 
+	/**
+	 * Sets up the Stats scene. It creates buttons and a table of high scores.
+	 *
+	 * @param sX
+	 * @param sY
+	 */
 	public void initStatsScene(double sX, double sY) {
 
 		GridPane root = new GridPane();
@@ -250,18 +257,20 @@ public class Menu extends Stage {
 		try {
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root", "root");
+			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
+					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt
-					.executeQuery("select username, score, date, round, difficulty, clone from scores join user on scores.userID = user.userID;");
-			while(rs.next()){
-				list.add(new Score(rs.getString(1), rs.getInt(2), rs.getTimestamp(3).toString(), rs.getInt(4), rs.getString(5), rs.getString(6)));
+			ResultSet rs = stmt.executeQuery(
+					"select username, score, date, round, difficulty, clone from scores join user on scores.userID = user.userID;");
+			while (rs.next()) {
+				list.add(new Score(rs.getString(1), rs.getInt(2), rs.getTimestamp(3).toString(), rs.getInt(4),
+						rs.getString(5), rs.getString(6)));
 			}
 			table.setItems(FXCollections.observableArrayList(list));
 			ResultSetMetaData rsmd = rs.getMetaData();
 
-			for(int c = 1; c < rsmd.getColumnCount(); c++){
+			for (int c = 1; c < rsmd.getColumnCount(); c++) {
 				TableColumn col = new TableColumn(rsmd.getColumnName(c));
 				col.setCellValueFactory(new PropertyValueFactory<Score, String>(rsmd.getColumnName(c)));
 				col.setSortable(false);
@@ -273,8 +282,6 @@ public class Menu extends Stage {
 			System.exit(1);
 		}
 
-
-
 		Button back = new Button("BACK");
 		Button score = new Button("SORT BY SCORE");
 		Button round = new Button("SORT BY ROUND");
@@ -284,12 +291,12 @@ public class Menu extends Stage {
 		});
 
 		score.setOnAction(e -> {
-			for(Sortable s: list){
+			for (Sortable s : list) {
 				s.setValue("score");
 			}
 			table.setItems(FXCollections.observableArrayList(sorter.sort(list, scoreAsc)));
 			scoreAsc = !scoreAsc;
-			if(scoreAsc){
+			if (scoreAsc) {
 				score.setText("SORT BY SCORE (ASCENDING)");
 			} else {
 				score.setText("SORT BY SCORE (DESCENDING)");
@@ -297,12 +304,12 @@ public class Menu extends Stage {
 		});
 
 		round.setOnAction(e -> {
-			for(Sortable s: list){
+			for (Sortable s : list) {
 				s.setValue("round");
 			}
 			table.setItems(FXCollections.observableArrayList(sorter.sort(list, roundAsc)));
 			roundAsc = !roundAsc;
-			if(roundAsc){
+			if (roundAsc) {
 				round.setText("SORT BY ROUND (ASCENDING)");
 			} else {
 				round.setText("SORT BY ROUND (DESCENDING)");
@@ -315,4 +322,3 @@ public class Menu extends Stage {
 		root.add(table, 1, 0);
 	}
 }
-

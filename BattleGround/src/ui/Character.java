@@ -282,7 +282,7 @@ public class Character {
 		if (playerScore >= unlock) {
 			g.setFill(Color.MEDIUMAQUAMARINE);
 			g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
-			g.fillRect(sX / 3, sY / 4 + sY / 16, (getSpeed() / 40) * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + sY / 16, (getSpeed() / 10) * sX / 2, (sY / 32));
 			g.fillRect(sX / 3, sY / 4 + sY / 8, getAccuracy() * sX / 2, (sY / 32));
 			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (getSkill() / 5) * sX / 2, (sY / 32));
 			g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);

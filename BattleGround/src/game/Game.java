@@ -49,7 +49,7 @@ public class Game {
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
-	public final static double ZOOM = 5;
+	public final static double ZOOM = 10;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
