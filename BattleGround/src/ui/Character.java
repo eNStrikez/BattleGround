@@ -57,9 +57,9 @@ public class Character {
 		}
 		aspectRatio = image.getWidth() / image.getHeight();
 		health = h;
-		speed = sp;
-		accuracy = a;
-		skill = sk;
+		setSpeed(sp);
+		setAccuracy(a);
+		setSkill(sk);
 		weaponName = w;
 		grenadeName = g;
 		meleeName = m;
@@ -282,9 +282,9 @@ public class Character {
 		if (playerScore >= unlock) {
 			g.setFill(Color.MEDIUMAQUAMARINE);
 			g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
-			g.fillRect(sX / 3, sY / 4 + sY / 16, (speed / 40) * sX / 2, (sY / 32));
-			g.fillRect(sX / 3, sY / 4 + sY / 8, accuracy * sX / 2, (sY / 32));
-			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (skill / 5) * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + sY / 16, (getSpeed() / 40) * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + sY / 8, getAccuracy() * sX / 2, (sY / 32));
+			g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, (getSkill() / 5) * sX / 2, (sY / 32));
 			g.fillText(weaponName, sX / 3, sY / 4 + 4 * sY / 16 + sY / 32);
 			g.fillText(grenadeName, sX / 3, sY / 4 + 5 * sY / 16 + sY / 32);
 			g.fillText(meleeName, sX / 3, sY / 4 + 6 * sY / 16 + sY / 32);
@@ -310,6 +310,18 @@ public class Character {
 		} else {
 			return false;
 		}
+	}
+
+	public void setSpeed(double s) {
+		speed = s;
+	}
+
+	public void setAccuracy(double a) {
+		accuracy = a;
+	}
+
+	public void setSkill(double s) {
+		skill = s;
 	}
 
 }

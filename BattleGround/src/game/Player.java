@@ -6,13 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import ui.Character;
+import ui.Modifier;
 
 public class Player extends Entity {
 	Character character;
 	double moveX, moveY;
 	double roF;
-	double overheatMax;
-	double overheatCurrent;
 	ImageView iV;
 	Image i;
 
@@ -30,7 +29,6 @@ public class Player extends Entity {
 		setSY(sy);
 		setHealth(c.getHealth());
 		character = c;
-		overheatMax = c.getOverheat();
 		roF = c.getRoF();
 		iV = new ImageView(c.getImage());
 	}
@@ -45,23 +43,19 @@ public class Player extends Entity {
 	 * @param sizeY
 	 */
 	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY, double mX, double mY) {
+		g.setFill(Color.CRIMSON);
+		g.fillRect(x, y - sizeY / 4, sizeX, sizeY / 4);
+		g.setFill(Color.LIMEGREEN);
+		g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
 		double angle = 0;
-
 		angle = -Math.atan2(mX - x, mY - y);
-
-
 		iV.setRotate(Math.toDegrees(angle));
-
 		SnapshotParameters params = new SnapshotParameters();
 		params.setFill(Color.TRANSPARENT);
 		double length = Math.abs(sizeY*Math.sin(angle)) + Math.abs(sizeX*Math.cos(angle));
 		double height = Math.abs(sizeY*Math.cos(angle)) + Math.abs(sizeX*Math.sin(angle));
-		//System.out.println("Player logical scale: " + sizeX + "/" + sizeY);
-		//System.out.println("Player image scale: " + length + "/" + height);
-		g.setFill(Color.YELLOW);
-		//g.fillRect(x, y, length, height);
 		g.drawImage(iV.snapshot(params, null), x, y, length, height);
-		//g.fillText("" + Math.toDegrees(angle), x, y + height * 1.5);
+
 	}
 
 	/**
@@ -144,22 +138,17 @@ public class Player extends Entity {
 		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true, sX, sY);
 	}
 
-	/**
-	 * Reduces the heat of the weapon
-	 */
-	public void cool() {
-		if (overheatCurrent > 0) {
-			overheatCurrent -= 60;
-		}
-	}
-
-	/**
-	 * Increases the heat of the weapon
-	 */
-	public void heat() {
-		if (overheatCurrent < overheatMax) {
-			overheatCurrent += overheatMax / getRoF();
-		}
+	public void modifyStat(Modifier mod){
+		String stat = mod.getStat();
+		double multiplier = mod.getMultiplier();
+		if (stat.equals("Health"))
+			setHealth(health*multiplier);
+		else if (stat.equals("Speed"))
+			character.setSpeed(character.getSpeed() * multiplier);
+		else if (stat.equals("Accuracy"))
+			character.setAccuracy(character.getAccuracy() * multiplier);
+		else if (stat.equals("Skill"))
+			character.setSkill(character.getSkill() * multiplier);
 	}
 
 	/**

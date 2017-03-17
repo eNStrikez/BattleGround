@@ -15,6 +15,14 @@ public class Modifier {
 		multiplier = m;
 	}
 
+	public String getStat(){
+		return type;
+	}
+
+	public double getMultiplier(){
+		return multiplier;
+	}
+
 	public void drawStats(GraphicsContext g, double sX, double sY) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));

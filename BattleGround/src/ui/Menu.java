@@ -99,10 +99,11 @@ public class Menu extends Stage {
 	 * @param sY
 	 * @param c
 	 * @param diff
+	 * @param mod
 	 */
-	public void createGame(double sX, double sY, Character c, String diff) {
+	public void createGame(double sX, double sY, Character c, String diff, Modifier mod) {
 		if (!USER_ID.equals(null)) {
-			gameScene = new Game(sX, sY, c, sManager, diff).getScene();
+			gameScene = new Game(sX, sY, c, sManager, diff, mod).getScene();
 			setScene(gameScene);
 		} else {
 			System.exit(1);

@@ -184,12 +184,15 @@ public class Selection {
 		root.add(start, 3, 4, 1, 1);
 		root.add(right, 4, 4, 1, 1);
 		root.setId("selection");
+		sManager.selectSelection(scene);
+		index = 0;
+		drawModifierStats(statsG);
 	}
 
 	/**
 	 * Decrement the index
 	 */
-	public void chooseLeft(ArrayList a) {
+	public void chooseLeft(ArrayList<?> a) {
 		if (index > 0) {
 			index--;
 		} else {
@@ -200,7 +203,7 @@ public class Selection {
 	/**
 	 * Increment the index
 	 */
-	public void chooseRight(ArrayList a) {
+	public void chooseRight(ArrayList<?> a) {
 		if (index < a.size() - 1) {
 			index++;
 		} else {
@@ -223,18 +226,18 @@ public class Selection {
 			ResultSet rs = stmt
 					.executeQuery("select * from weapons where name = \"" + selectedClone.getWeaponName() + "\";");
 			while (rs.next())
-				clones.get(index).initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6),
+				selectedClone.initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6),
 						rs.getInt(7), rs.getInt(8));
 			rs = stmt.executeQuery("select * from melees where name = \"" + selectedClone.getMeleeName() + "\";");
 			while (rs.next())
-				clones.get(index).initMelee(rs.getInt(2), rs.getInt(3));
+				selectedClone.initMelee(rs.getInt(2), rs.getInt(3));
 			con.close();
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-		sManager.newGame(screenX, screenY, selectedClone, value);
+		sManager.newGame(screenX, screenY, selectedClone, value, modifiers.get(index));
 	}
 
 	/**

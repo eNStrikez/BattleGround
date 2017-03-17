@@ -48,7 +48,7 @@ public class Game {
 	ArrayList<Droid> droids = new ArrayList<Droid>();
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
-	public final static double FRAME_RATE = 30;
+	public final static double FRAME_RATE = 100;
 	public final static double ZOOM = 5;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
@@ -68,7 +68,7 @@ public class Game {
 	 * @param s
 	 * @param diff
 	 */
-	public Game(double sX, double sY, Character c, SceneManager s, String diff) {
+	public Game(double sX, double sY, Character c, SceneManager s, String diff, Modifier mod) {
 		score = 0;
 		sManager = s;
 		screenX = sX;
@@ -84,6 +84,7 @@ public class Game {
 		initEnemyTypes();
 		round = new Round(diff);
 		droidsLeft = round.calculateDroids();
+		player.modifyStat(mod);
 	}
 
 	/**
@@ -279,7 +280,7 @@ public class Game {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
 								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
 					}
-					if (count % player.getCharacter().getSpeed() == 0) {
+					if (count % (int)(Main.FRAME_RATE/player.getCharacter().getSpeed()) == 0) {
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
 						if (offX < 0) {

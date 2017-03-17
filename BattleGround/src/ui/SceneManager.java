@@ -61,6 +61,10 @@ public class SceneManager {
 		menu.setMenu();
 	}
 
+	public void selectSelection(Scene scene){
+		menu.setScene(scene);
+	}
+
 	/**
 	 * Shows the game window1
 	 */
@@ -76,7 +80,7 @@ public class SceneManager {
 	 * @param c
 	 * @param diff
 	 */
-	public void newGame(double sX, double sY, Character c, String diff){
-		menu.createGame(sX, sY, c, diff);
+	public void newGame(double sX, double sY, Character c, String diff, Modifier mod){
+		menu.createGame(sX, sY, c, diff, mod);
 	}
 }
