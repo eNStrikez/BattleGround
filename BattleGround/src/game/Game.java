@@ -500,7 +500,7 @@ public class Game {
 	}
 
 	/**
-	 *
+	 * Performs a SQL update to add the users score to the score database
 	 */
 	public void saveScore() {
 		try {

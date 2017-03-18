@@ -22,6 +22,8 @@ public class Main extends Application {
 	}
 
 	/**
+	 * Launches the program
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {

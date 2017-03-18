@@ -134,10 +134,26 @@ public class Player extends Entity {
 				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], character.getSkill());
 	}
 
+	/**
+	 * Creates a melee at the player's current position aimed at the mouse's position
+	 *
+	 * @param tX
+	 * @param tY
+	 * @param x
+	 * @param y
+	 * @param sX
+	 * @param sY
+	 * @return
+	 */
 	public Melee melee(double tX, double tY, double x, double y, double sX, double sY){
 		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true, sX, sY);
 	}
 
+	/**
+	 * Changes the player's stats corresponding to their chosen modifier
+	 *
+	 * @param mod
+	 */
 	public void modifyStat(Modifier mod){
 		String stat = mod.getStat();
 		double multiplier = mod.getMultiplier();

@@ -15,6 +15,14 @@ public class Score implements Sortable{
 	private final StringProperty clone;
 	private double sortValue;
 
+	/**
+	 * @param u
+	 * @param s
+	 * @param da
+	 * @param r
+	 * @param di
+	 * @param c
+	 */
 	public Score(String u, int s, String da, int r, String di, String c){
 		username = new SimpleStringProperty(u);
 		score = new SimpleIntegerProperty(s);
@@ -24,35 +32,66 @@ public class Score implements Sortable{
 		clone = new SimpleStringProperty(c);
 	}
 
+	/**
+	 * Returns the username
+	 * 
+	 * @return
+	 */
 	public String getUsername(){
 		return username.get();
 	}
-
+	/**
+	 * Returns the score
+	 * 
+	 * @return
+	 */
 	public int getScore(){
 		return score.get();
 	}
-
+	/**
+	 * Returns the date
+	 * 
+	 * @return
+	 */
 	public String getDate(){
 		return date.get();
 	}
-
+	/**
+	 * Returns the round
+	 * 
+	 * @return
+	 */
 	public int getRound(){
 		return round.get();
 	}
-
+	/**
+	 * Returns the difficulty
+	 * 
+	 * @return
+	 */
 	public String getDifficulty(){
 		return difficulty.get();
 	}
-
+	/**
+	 * Returns the clone
+	 * 
+	 * @return
+	 */
 	public String getClone(){
 		return clone.get();
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Sortable#getValue()
+	 */
 	@Override
 	public double getValue() {
 		return sortValue;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Sortable#setValue(java.lang.String)
+	 */
 	@Override
 	public void setValue(String value) {
 		if(value.equals("score")){

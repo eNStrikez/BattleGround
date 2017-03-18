@@ -304,6 +304,11 @@ public class Character {
 		return new int[] { red, green, blue };
 	}
 
+	/**
+	 * Returns whether the player's highest score is greater than the required unlock score
+	 *
+	 * @return
+	 */
 	public boolean accessible(){
 		if (playerScore >= unlock) {
 			return true;
@@ -312,14 +317,29 @@ public class Character {
 		}
 	}
 
+	/**
+	 * Sets the player's speed
+	 *
+	 * @param s
+	 */
 	public void setSpeed(double s) {
 		speed = s;
 	}
 
+	/**
+	 * Sets the player's accuracy
+	 *
+	 * @param a
+	 */
 	public void setAccuracy(double a) {
 		accuracy = a;
 	}
 
+	/**
+	 * Sets the player's skill
+	 *
+	 * @param s
+	 */
 	public void setSkill(double s) {
 		skill = s;
 	}

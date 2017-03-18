@@ -9,20 +9,43 @@ public class Modifier {
 	String type;
 	double multiplier;
 
+	/**
+	 * @param n
+	 * @param t
+	 * @param m
+	 */
 	public Modifier(String n, String t, double m) {
 		name = n;
 		type = t;
 		multiplier = m;
 	}
 
+	/**
+	 * Returns the stat the modifier effects
+	 *
+	 * @return
+	 */
 	public String getStat() {
 		return type;
 	}
 
+	/**
+	 * Returns the multiplier the modifier effects
+	 *
+	 * @return
+	 */
 	public double getMultiplier() {
 		return multiplier;
 	}
 
+	/**
+	 * Draws the user's stats when affected by the selected modifier
+	 * 
+	 * @param g
+	 * @param sX
+	 * @param sY
+	 * @param c
+	 */
 	public void drawStats(GraphicsContext g, double sX, double sY, Character c) {
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));

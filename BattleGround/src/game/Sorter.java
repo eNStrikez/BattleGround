@@ -4,6 +4,13 @@ import java.util.ArrayList;
 
 public class Sorter {
 
+	/**
+	 * Breaks down an inputted list into lists containing single items
+	 *
+	 * @param list
+	 * @param ascending
+	 * @return
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T extends Sortable> ArrayList<T> sort(ArrayList<? extends Sortable> list, boolean ascending) {
 		if (list.size() <= 1) {
@@ -25,6 +32,14 @@ public class Sorter {
 		return performMerge(list1, list2, ascending);
 	}
 
+	/**
+	 * Merges together two lists in order dependent on a comparison
+	 *
+	 * @param list1
+	 * @param list2
+	 * @param ascending
+	 * @return
+	 */
 	public <T extends Sortable> ArrayList<T> performMerge(ArrayList<T> list1, ArrayList<T> list2, boolean ascending) {
 		ArrayList<T> result = new ArrayList<T>();
 		while (!list1.isEmpty() && !list2.isEmpty()) {

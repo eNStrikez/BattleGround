@@ -53,6 +53,17 @@ public class Laser implements Weapon {
 		player = true;
 	}
 
+	/**
+	 * @param a
+	 * @param x
+	 * @param y
+	 * @param d
+	 * @param tX
+	 * @param tY
+	 * @param r
+	 * @param g
+	 * @param b
+	 */
 	public Laser(double a, double x, double y, double d, double tX, double tY, int r, int g, int b) {
 		posX = x;
 		posY = y;
@@ -142,26 +153,41 @@ public class Laser implements Weapon {
 		return posY;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#getH()
+	 */
 	@Override
 	public double getH() {
 		return height;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#getW()
+	 */
 	@Override
 	public double getW() {
 		return width;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#setMarked()
+	 */
 	@Override
 	public void setMarked() {
 		marked = true;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#isMarked()
+	 */
 	@Override
 	public boolean isMarked() {
 		return marked;
 	}
 
+	/* (non-Javadoc)
+	 * @see game.Weapon#isPlayer()
+	 */
 	@Override
 	public boolean isPlayer() {
 		return player;
