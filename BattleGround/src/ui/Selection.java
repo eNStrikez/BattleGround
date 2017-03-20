@@ -31,9 +31,10 @@ public class Selection {
 	Scene scene;
 
 	public Selection(double sX, double sY) {
+		// Saves the dimensions of the window
 		screenX = sX;
 		screenY = sY;
-
+		// Initialises the character selection screen
 		initCharacterSelect();
 
 	}
@@ -45,7 +46,6 @@ public class Selection {
 	 */
 	public void setSceneManager(SceneManager s) {
 		sManager = s;
-
 	}
 
 	/**
@@ -53,18 +53,22 @@ public class Selection {
 	 * percentage of stats they have out of the maximum stats possible
 	 */
 	public void addClones() {
+		// Sets the player score default as zero
 		int playerScore = 0;
 		try {
+			// Connects to the database server
 			System.out.println("Loading Clones...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
+			// Retrieves the player's highest score
 			ResultSet rs = stmt.executeQuery("select max(score) from scores where userID = \"" + Menu.USER_ID + "\";");
 			while (rs.next()) {
 				playerScore = rs.getInt(1);
 			}
+			// Retrieves the clones in order of the cumalative percentages of the character's stats
 			rs = stmt.executeQuery("select * from clones order by (health/250 + speed/10 + accuracy + skill/5)");
 			while (rs.next()) {
 				clones.add(new Character(rs.getString(1), rs.getDouble(2), rs.getDouble(3), rs.getDouble(4),
@@ -82,19 +86,21 @@ public class Selection {
 	/**
 	 * Performs an SQL query to return all the modifiers linked to the selected
 	 * character
-	 * 
+	 *
 	 * @param name
 	 */
 	public void addModifiers(String name) {
+		// Adds the 'No Modifier' mod for all characters by default
 		modifiers.add(new Modifier("No Modifier", "", 0));
 		try {
+			// Connects to the database server
 			System.out.println("Loading Mods...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-
+			// Retrieves all of the selected character's perks
 			ResultSet rs = stmt.executeQuery(
 					"select * from clone_perks join perks on perks.name = clone_perks.perk where clone = \"" + name
 							+ "\";");
@@ -114,41 +120,56 @@ public class Selection {
 	 * Sets up the character selection screen
 	 */
 	public void initCharacterSelect() {
+		// Loads the clones from the server
 		addClones();
+		// Creates the buttons and canvases for the character selection
 		Button back = new Button("Back");
 		Button left = new Button("<-");
 		Button right = new Button("->");
 		Button start = new Button("Start");
 		Canvas stats = new Canvas(screenX * 0.3, screenY * 0.8);
 		Canvas player = new Canvas(screenX * 0.6, screenY * 0.8);
+		// Adds the combo box for selecting the difficulty
 		ObservableList<String> options = FXCollections.observableArrayList("Youngling", "Padawan", "Jedi Knight",
 				"Jedi Master", "Sith Lord", "Emperor");
 		ComboBox<String> difficultyBox = new ComboBox<String>(options);
 		difficultyBox.getSelectionModel().selectFirst();
-
+		// Retrieves the graphcis context for each canvas
 		statsG = stats.getGraphicsContext2D();
 		playerG = player.getGraphicsContext2D();
+		// Creates the layout
 		GridPane root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
+		// Sets the left button to decrement the index of clones
 		left.setOnAction(e -> {
 			chooseLeft(clones);
+			// Disable the start button if the player has not unlocked the currently selected clone
 			start.setDisable(!clones.get(index).accessible());
+			// Draws the player image
 			drawPlayer(playerG);
+			// Draws the player's stats
 			drawStats(statsG);
 		});
+		// Sets the right button to increment the index of clones
 		right.setOnAction(e -> {
 			chooseRight(clones);
+			// Disable the start button if the player has not unlocked the currently selected clone
 			start.setDisable(!clones.get(index).accessible());
+			// Draws the player image
 			drawPlayer(playerG);
+			// Draws the player's stats
 			drawStats(statsG);
 		});
+		// Sets the start button to save the difficulty and character chosen and creates and shows the mod selection screen
 		start.setOnAction(e -> {
 			value = difficultyBox.getValue();
 			selectedClone = clones.get(index);
 			modifierSelect();
 		});
+		// Sets the back button to return to the main menu
 		back.setOnAction(e -> chooseBack());
+		// Initialises the scene and adds components to it
 		scene = new Scene(root, screenX, screenY);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		root.add(stats, 0, 0, 2, 4);
@@ -159,6 +180,7 @@ public class Selection {
 		root.add(right, 4, 4, 1, 1);
 		root.add(difficultyBox, 2, 5, 3, 1);
 		root.setId("selection");
+		// Draws the initial player and stats
 		drawPlayer(playerG);
 		drawStats(statsG);
 	}
@@ -167,26 +189,37 @@ public class Selection {
 	 * Sets up the modification selection screen
 	 */
 	public void modifierSelect() {
+		// Loads the modifiers from the server
 		addModifiers(selectedClone.getName());
+		// Creates the buttons and canvas for the mod selection
 		Button back = new Button("Back");
 		Button left = new Button("<-");
 		Button right = new Button("->");
 		Button start = new Button("Start");
 		Canvas stats = new Canvas(screenX * 0.3, screenY * 0.8);
+		// Retrieves the graphcis context for the canvas
 		statsG = stats.getGraphicsContext2D();
+		// Creates the layout
 		GridPane root = new GridPane();
 		root.setHgap(20);
 		root.setVgap(40);
+		// Sets the left button to decrement the index of modifiers
 		left.setOnAction(e -> {
 			chooseLeft(modifiers);
+			// Draws the mod stats
 			drawModifierStats(statsG, selectedClone);
 		});
+		// Sets the right button to increment the index of modifiers
 		right.setOnAction(e -> {
 			chooseRight(modifiers);
+			// Draws the mod stats
 			drawModifierStats(statsG, selectedClone);
 		});
+		// Sets the start button to launch the game
 		start.setOnAction(e -> chooseStart());
+		// Sets the back button to return to the main menu
 		back.setOnAction(e -> chooseBack());
+		// Initialises the scene and adds the components
 		scene = new Scene(root, screenX, screenY);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		root.add(stats, 0, 0, 2, 4);
@@ -195,8 +228,11 @@ public class Selection {
 		root.add(start, 3, 4, 1, 1);
 		root.add(right, 4, 4, 1, 1);
 		root.setId("selection");
+		// Sets the scene to be shown
 		sManager.selectSelection(scene);
+		// Resets the index
 		index = 0;
+		// Draws the initial mod stats
 		drawModifierStats(statsG, selectedClone);
 	}
 
@@ -205,8 +241,10 @@ public class Selection {
 	 */
 	public void chooseLeft(ArrayList<?> a) {
 		if (index > 0) {
+			// Decrements the index if the value is higher than 0
 			index--;
 		} else {
+			// Sets the index as the maximum value
 			index = a.size() - 1;
 		}
 	}
@@ -216,8 +254,10 @@ public class Selection {
 	 */
 	public void chooseRight(ArrayList<?> a) {
 		if (index < a.size() - 1) {
+			// Increments the index if the value is less than the maxiumum
 			index++;
 		} else {
+			// Sets the index as the minimum value
 			index = 0;
 		}
 	}
@@ -228,17 +268,20 @@ public class Selection {
 	 */
 	public void chooseStart() {
 		try {
+			// Connects to the database server
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
+			// Retrieves the weapon stats for the selected clone
 			ResultSet rs = stmt
 					.executeQuery("select * from weapons where name = \"" + selectedClone.getWeaponName() + "\";");
 			while (rs.next())
 				selectedClone.initWeapon(rs.getInt(2), rs.getInt(3), rs.getInt(5), rs.getInt(4), rs.getInt(6),
 						rs.getInt(7), rs.getInt(8));
+			// Retrieves the melee stats for the selected clone
 			rs = stmt.executeQuery("select * from melees where name = \"" + selectedClone.getMeleeName() + "\";");
 			while (rs.next())
 				selectedClone.initMelee(rs.getInt(2), rs.getInt(3));
@@ -248,6 +291,7 @@ public class Selection {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
+		// Creates a new instance of the game
 		sManager.newGame(screenX, screenY, selectedClone, value, modifiers.get(index));
 	}
 
@@ -255,6 +299,7 @@ public class Selection {
 	 * Go back to the menu screen
 	 */
 	public void chooseBack() {
+		// Sets the scene as the menu
 		sManager.selectMenu();
 	}
 
@@ -262,6 +307,7 @@ public class Selection {
 	 * Return the scene
 	 */
 	public Scene getScene() {
+		// Returns the current scene
 		return scene;
 	}
 
@@ -271,15 +317,17 @@ public class Selection {
 	 * @param g
 	 */
 	public void drawStats(GraphicsContext g) {
+		// Draws the stats of the selected clone
 		clones.get(index).drawStats(g, screenX * 0.3, screenY * 0.8);
 	}
 
 	/**
 	 * Draws the stat bars for the modifiers
-	 * 
+	 *
 	 * @param g
 	 */
 	public void drawModifierStats(GraphicsContext g, Character c) {
+		// Draws the stats of the selected modifier
 		modifiers.get(index).drawStats(g, screenX * 0.3, screenY * 0.8, c);
 	}
 
@@ -289,6 +337,7 @@ public class Selection {
 	 * @param g
 	 */
 	public void drawPlayer(GraphicsContext g) {
+		// Draws the image of the selected clone
 		clones.get(index).drawPlayer(g, screenX * 0.6, screenY * 0.8);
 	}
 
