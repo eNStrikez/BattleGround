@@ -74,11 +74,16 @@ public class Game {
 		screenX = sX;
 		screenY = sY;
 		mapR = new MapReader();
+		// Creates the map from a file
 		map = mapR.readFile("map2");
+		// Sets the spawners on the map
 		spawners = mapR.getSpawners();
+		// Sets the size of each block in pixels
 		scaleX = (int) (ZOOM * (screenY / mapR.getMapY()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
+		// Initialises the player
 		player = new Player(1, 1, scaleX, scaleY, c);
+		// Creates the path finder based on the map
 		pF = new PathFinder(map, mapR.getMapX(), mapR.getMapY());
 		initComponents();
 		initEnemyTypes();
@@ -91,86 +96,99 @@ public class Game {
 	 * Generates GUI Starts graphics and movement timers
 	 */
 	public void initComponents() {
+		// Creates the layout for the window
 		root = new GridPane();
+		// Creates the scene for the game
 		gameScene = new Scene(root, screenX, screenY);
+		// Creates the canvas for the game to be drawn on
 		Canvas canvas = new Canvas();
 		canvas.setWidth(screenX);
 		canvas.setHeight(screenY);
 		GraphicsContext g = canvas.getGraphicsContext2D();
-
+		// Creates the event handler for key presses
 		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent k) {
+				// Moves the player horizontally depending on which key is
+				// pressed
 				if (k.getCode() == KeyCode.A) {
 					player.setMoveX(-1);
 				} else if (k.getCode() == KeyCode.D) {
 					player.setMoveX(1);
 				}
-
+				// Moves the player vertically depending on which key is pressed
 				if (k.getCode() == KeyCode.W) {
 					player.setMoveY(-1);
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(1);
 				}
 
+				// Sets the player as meleeing if the v key is pressed
 				if (k.getCode() == KeyCode.V) {
 					meleeing = true;
 				}
 
 			}
 		});
-
+		// Creates the event handler for key releases
 		gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent k) {
+				// Stops the player moving horizontally
 				if (k.getCode() == KeyCode.A) {
 					player.setMoveX(0);
 				} else if (k.getCode() == KeyCode.D) {
 					player.setMoveX(0);
 				}
-
+				// Stops the player moving vertically
 				if (k.getCode() == KeyCode.W) {
 					player.setMoveY(0);
 				} else if (k.getCode() == KeyCode.S) {
 					player.setMoveY(0);
 				}
-
+				// Stops the player meleeing
 				if (k.getCode() == KeyCode.V) {
 					meleeing = false;
 				}
 			}
 		});
 
+		// Creates the event handler for mouse presses
 		gameScene.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// Sets the player as firing if the left button is clicked
 				if (event.isPrimaryButtonDown()) {
 					firing = true;
 				}
 			}
 		});
-
+		// Creates the event handler for mouse movement
 		gameScene.setOnMouseMoved(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// Sets the player's target as the mouse location
 				firingX = event.getX();
 				firingY = event.getY();
 
 			}
 		});
-
+		// Creates the event handler for mouse releasing
 		gameScene.setOnMouseReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// Stops the player firing when the left button is released
 				if (!event.isPrimaryButtonDown()) {
 					firing = false;
 				}
 			}
 		});
-
+		// Creates the event handler for mouse dragging
 		gameScene.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// Sets the player as firing and update the target location to
+				// the mouse location
 				if (event.isPrimaryButtonDown()) {
 					firing = true;
 					firingX = event.getX();
@@ -178,44 +196,66 @@ public class Game {
 				}
 			}
 		});
-
+		// Creates the event handler for mouse drag releasing
 		gameScene.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				// Stops the player firing
 				if (!event.isPrimaryButtonDown()) {
 					firing = false;
 				}
 			}
 		});
 
+		// Creates the global timer for the game, running at 100 FPS default
 		Timeline t = new Timeline();
 		t.setCycleCount(Timeline.INDEFINITE);
 		t.getKeyFrames().add(new KeyFrame(Duration.millis(1000 / FRAME_RATE), new EventHandler<ActionEvent>() {
+			// Initialises the count for the timer, used to keep track of the
+			// time for events that happen less frequently than the frame rate
 			int count = 0;
 
 			@Override
 			public void handle(ActionEvent event) {
+				// The timer only functions while the player is alive
 				if (player.isAlive()) {
+					// Draws the map
 					drawMap(g);
+					// Creates an iterator to safely iterate through the weapons
+					// array
 					Iterator<Weapon> weaponIt = weapons.iterator();
 					while (weaponIt.hasNext()) {
 						Weapon weapon = weaponIt.next();
+						// Draws the weapon on the screen
 						weapon.draw(g, transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
 								transformXtoS(weapon.getX() + weapon.getW()),
 								transformYtoS(weapon.getY() + weapon.getH()));
+						// Moves the weapon
 						weapon.move();
+						// Checks for collisions between the weapon and any
+						// collidable blocks
 						if (collidableCheck(weapon.getX(), weapon.getY())) {
+							// Sets the weapon as marked for removal
 							weapon.setMarked();
 						}
+						// If the weapon is marked for removal, it is safely
+						// removed by the weapon iterator
 						if (weapon.isMarked()) {
 							weaponIt.remove();
 						}
+						// Checks for a collision between the weapon and the
+						// player
 						if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
 								scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(player.getX()),
 								transformYtoS(player.getY()), scaleX, scaleY) && !weapon.isMarked()
 								&& !weapon.isPlayer()) {
+							// Does damage to the player
 							weapon.doDamage(player);
+							// Marks the weapon for removal
 							weapon.setMarked();
+							// If the player is killed by the weapon, the score
+							// is saved and the user is returned to the main
+							// menu
 							if (!player.isAlive()) {
 								saveScore();
 								sManager.selectMenu();
@@ -224,18 +264,29 @@ public class Game {
 					}
 
 					Iterator<Droid> droidIt = droids.iterator();
+					// Creates an iterator to safely iterate through the droids
+					// array
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
+						// Removes droids with no speed to avoid division by 0
 						if (droid.getSpeed() == 0) {
 							droidIt.remove();
 						} else {
+							// If the droid is firing, draws the rotated
+							// variation of the droid, otherwise draws the
+							// regular version
 							if (droid.isFiring()) {
 								droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()),
 										transformXtoS(player.getX()), transformYtoS(player.getY()));
 							} else {
 								droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
 							}
+							// Checks if the droid can move in the current frame
 							if (count % (int) droid.getSpeed() == 0) {
+								// If the droid is in range of the player, it
+								// will stand still and start firing at the
+								// player, else it will not fire and move
+								// through its designated path
 								if (droid.range * droid.range > distance(player.getX(), player.getY(), droid.getX(),
 										droid.getY())) {
 									droid.setFiring(true);
@@ -244,18 +295,29 @@ public class Game {
 									droid.moveThroughPath();
 								}
 							}
+							// If the droid can fire this frame and it is in a
+							// firing state, it will create a fire a laser
+							// towards the player
 							if (count % (int) (droid.getRoF()) == 0 && droid.isFiring()) {
 								weapons.add(droid.fire(player.getX() + 0.5, player.getY() + 0.5, droid.getX() + 0.5,
 										droid.getY() + 0.5));
 							}
+							// Iterates through each weapon currently existing
 							for (Weapon weapon : weapons) {
+								// Checks if the current weapon is intersecting
+								// the current droid
 								if (weapon.checkCollision(transformXtoS(weapon.getX()), transformYtoS(weapon.getY()),
 										scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
 										transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked()
 										&& weapon.isPlayer()) {
+									// Applies daage to the player
 									weapon.doDamage(droid);
+									// Adds to the score of the player
 									incrementScore((int) weapon.getDamage());
+									// Marks the weapon for removal
 									weapon.setMarked();
+									// If the droid has its health reduced to 0,
+									// it is removed
 									if (!droid.isAlive()) {
 										droidIt.remove();
 										break;
@@ -265,22 +327,26 @@ public class Game {
 						}
 
 					}
-
+					// If all the droids in the current round have been
+					// destroyed, the player advances to the next round
 					if (droids.size() == 0 && droidsLeft == 0) {
 						round.increaseRound();
 						droidsLeft = round.calculateDroids();
 					}
-
+					// If the player can fire in the current frame and is in a
+					// state of firing, the player fires a laser towards the
+					// mouse location
 					if (count % (int) (player.getRoF()) == 0 && firing) {
 						weapons.add(player.fire(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
 								player.getY() + 0.5));
 					}
-
+					// If the player is in a state of meleeing, an instance of
+					// melee is created towards the mouse location
 					if (meleeing) {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
 								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
 					}
-					if (count % (int)(Main.FRAME_RATE/player.getCharacter().getSpeed()) == 0) {
+					if (count % (int) (Main.FRAME_RATE / player.getCharacter().getSpeed()) == 0) {
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
 						if (offX < 0) {

@@ -6,7 +6,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Score implements Sortable{
+public class Score implements Sortable {
+	// Properties are used instead of normal data types because it allows the
+	// cell factory to recognise and generate the table for the classes
+	// autonomously
 	private final StringProperty username;
 	private final IntegerProperty score;
 	private final StringProperty date;
@@ -23,7 +26,7 @@ public class Score implements Sortable{
 	 * @param di
 	 * @param c
 	 */
-	public Score(String u, int s, String da, int r, String di, String c){
+	public Score(String u, int s, String da, int r, String di, String c) {
 		username = new SimpleStringProperty(u);
 		score = new SimpleIntegerProperty(s);
 		date = new SimpleStringProperty(da);
@@ -34,54 +37,61 @@ public class Score implements Sortable{
 
 	/**
 	 * Returns the username
-	 * 
+	 *
 	 * @return
 	 */
-	public String getUsername(){
+	public String getUsername() {
 		return username.get();
 	}
+
 	/**
 	 * Returns the score
-	 * 
+	 *
 	 * @return
 	 */
-	public int getScore(){
+	public int getScore() {
 		return score.get();
 	}
+
 	/**
 	 * Returns the date
-	 * 
+	 *
 	 * @return
 	 */
-	public String getDate(){
+	public String getDate() {
 		return date.get();
 	}
+
 	/**
 	 * Returns the round
-	 * 
+	 *
 	 * @return
 	 */
-	public int getRound(){
+	public int getRound() {
 		return round.get();
 	}
+
 	/**
 	 * Returns the difficulty
-	 * 
+	 *
 	 * @return
 	 */
-	public String getDifficulty(){
+	public String getDifficulty() {
 		return difficulty.get();
 	}
+
 	/**
 	 * Returns the clone
-	 * 
+	 *
 	 * @return
 	 */
-	public String getClone(){
+	public String getClone() {
 		return clone.get();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Sortable#getValue()
 	 */
 	@Override
@@ -89,14 +99,17 @@ public class Score implements Sortable{
 		return sortValue;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see game.Sortable#setValue(java.lang.String)
 	 */
 	@Override
 	public void setValue(String value) {
-		if(value.equals("score")){
+		// Sets the value for sorting as either the score or round
+		if (value.equals("score")) {
 			sortValue = score.getValue();
-		} else if (value.equals("round")){
+		} else if (value.equals("round")) {
 			sortValue = round.getValue();
 		}
 	}

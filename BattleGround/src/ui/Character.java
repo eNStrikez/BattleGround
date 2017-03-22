@@ -48,13 +48,16 @@ public class Character {
 			Blob i1, Blob i2, int u, int pS) {
 		name = n;
 		try {
-			image = new Image(i1.getBinaryStream());
-			if (i2 != null) {
+			// If the image inputs exist, they are loaded from the
+			// blob (Binary Large OBject) in the database
+			if (i1 != null)
+				image = new Image(i1.getBinaryStream());
+			if (i2 != null)
 				gImage = new Image(i2.getBinaryStream());
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		// Sets the aspect ratio of the image so the rescaling reduce quality
 		aspectRatio = image.getWidth() / image.getHeight();
 		health = h;
 		setSpeed(sp);
@@ -108,9 +111,14 @@ public class Character {
 	 * @param sY
 	 */
 	public void drawPlayer(GraphicsContext g, double sX, double sY) {
+		// Clears the previous drawing(s)
 		g.clearRect(0, 0, sX, sY);
+		// Draws a background for the image
 		g.setFill(Color.AQUAMARINE);
 		g.fillRect(0, 0, sX, sY);
+		// If the player has a high enough score to unlock the selected
+		// character, draws the player image, else a grey rectangle is painted
+		// over it to show the player does not have access
 		if (playerScore >= unlock) {
 			g.drawImage(image, (sX - sY * aspectRatio) / 2, 0, sY * aspectRatio, sY);
 		} else {
@@ -244,15 +252,23 @@ public class Character {
 	 * @param sY
 	 */
 	public void drawStats(GraphicsContext g, double sX, double sY) {
+		// Clears the previous drawing(s)
 		g.clearRect(0, 0, sX, sY);
 		g.setFill(new Color(0.8, 0.8, 0.8, 1));
 
-		// name
+		// Draws the player name
 		g.setFont(new Font("Consolas", 20));
+		// If the player has unlocked the selected character, the name is drawn,
+		// otherwise the required score is shown with the player's current
+		// highest score
 		if (playerScore >= unlock) {
 			if (!name.equals("Default")) {
+				// Draws the name for the character as the rank followed by the
+				// name in capitals
 				g.fillText(rank + " " + name.toUpperCase(), sX / 8, sY / 8);
 			} else {
+				// Draws the default character's name as "CT" followed by a
+				// random number up to 9999
 				g.fillText("CT-" + (int) (Math.random() * 9999), sX / 8, sY / 8, sX);
 			}
 		} else {
@@ -261,24 +277,22 @@ public class Character {
 		}
 		g.setFont(new Font("Consolas", 16));
 
-		// health
+		// Draws the labels and bars for the stats
 		g.fillText("Health", sX / 8, sY / 4 + sY / 32, sX / 3);
 		g.fillRect(sX / 3, sY / 4, sX / 2, sY / 32);
-
-		// speed
 		g.fillText("Speed", sX / 8, sY / 4 + sY / 16 + sY / 32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + sY / 16, sX / 2, sY / 32);
-
-		// accuracy
 		g.fillText("Accuracy", sX / 8, sY / 4 + sY / 8 + sY / 32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + sY / 8, sX / 2, sY / 32);
-
-		// skill
 		g.fillText("Skill", sX / 8, sY / 4 + 3 * sY / 16 + sY / 32, sX / 3);
 		g.fillRect(sX / 3, sY / 4 + 3 * sY / 16, sX / 2, sY / 32);
+		// Draws the labels for the weapons
 		g.fillText("Weapon", sX / 8, sY / 4 + 4 * sY / 16 + sY / 32);
 		g.fillText("Grenade", sX / 8, sY / 4 + 5 * sY / 16 + sY / 32);
 		g.fillText("Melee", sX / 8, sY / 4 + 6 * sY / 16 + sY / 32);
+		// If the player has unlocked the character, fills in their stats bars
+		// and weapons, otherwise it leaves the stat bars blank and censors the
+		// weapons
 		if (playerScore >= unlock) {
 			g.setFill(Color.MEDIUMAQUAMARINE);
 			g.fillRect(sX / 3, sY / 4, (health / 250) * sX / 2, (sY / 32));
@@ -305,11 +319,12 @@ public class Character {
 	}
 
 	/**
-	 * Returns whether the player's highest score is greater than the required unlock score
+	 * Returns whether the player's highest score is greater than the required
+	 * unlock score
 	 *
 	 * @return
 	 */
-	public boolean accessible(){
+	public boolean accessible() {
 		if (playerScore >= unlock) {
 			return true;
 		} else {
