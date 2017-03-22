@@ -346,6 +346,9 @@ public class Game {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
 								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
 					}
+					// If the player can move on the current frame, their
+					// position is adjusted and the offset of the map is changed
+					// correspondingly
 					if (count % (int) (Main.FRAME_RATE / player.getCharacter().getSpeed()) == 0) {
 						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
@@ -363,26 +366,28 @@ public class Game {
 							offY = mapR.mapY - 2 * (player.getY() - offY);
 						}
 					}
-
+					// Increments the count
 					count++;
 				}
+				// Draws the player on the screen
 				drawPlayer(g);
 			}
 		}));
+		// Starts the timer
 		t.play();
-
+		// Creates the timer for spawning droid, running at a speed of 1 second
 		Timeline spawnT = new Timeline();
 		spawnT.setCycleCount(Timeline.INDEFINITE);
 		spawnT.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				// Spawns a droid on the map
 				spawnRandomDroid();
 			}
 		}));
+		// Starts the timer
 		spawnT.play();
-
-		System.out.println(screenX + "/" + screenY);
-
+		// Adds the canvas to the layout
 		root.add(canvas, 0, 0);
 	}
 
@@ -394,9 +399,13 @@ public class Game {
 	 * @return
 	 */
 	public boolean collidableCheck(double x, double y) {
+		// Checks if the input coordinates are on the map
 		if (x < mapR.getMapX() && y < mapR.getMapY() && x > 0 && y > 0) {
+			// Returns whether the block chosen is collidable
 			return map[(int) x][(int) y].isCollidable();
 		} else {
+			// Returns true, as it should be impossible for anything to exist
+			// off of the map
 			return true;
 		}
 	}
@@ -408,6 +417,7 @@ public class Game {
 	 * @param s
 	 */
 	public void incrementScore(int s) {
+		// Increments the score by the damage multiplied
 		score += s * round.getDifficulty() * round.getRound();
 	}
 
@@ -417,18 +427,22 @@ public class Game {
 	 * @param g
 	 */
 	public void drawMap(GraphicsContext g) {
+		// Clears the previous drawing(s)
 		g.clearRect(0, 0, screenX, screenY);
-
+		// Loops through each block in the map
 		for (int y = 0; y < mapR.getMapY(); y++) {
 			for (int x = 0; x < mapR.getMapX(); x++) {
+				// Draws the block at the transformed coordinates
 				map[x][y].draw(g, transformXtoS(x), transformYtoS(y), scaleX, scaleY);
 			}
 		}
-
+		// Draws text to show information relating to the current round
 		g.setFill(Color.CRIMSON);
 		g.fillText("Round " + round.getRound(), 10, 10);
 		g.fillText("Droids left: " + droids.size(), 10, 25);
 		g.fillText("Score: " + score, 10, 40);
+		// If the debugging mode is on, more information is shown for testing
+		// purposes
 		if (DEBUG) {
 			g.fillText("Offset: (" + offX + "," + offY + ")", 10, 55);
 			g.fillText("Player Location: (" + player.getX() + "," + player.getY() + ")", 10, 70);
@@ -444,6 +458,8 @@ public class Game {
 	 * @param g
 	 */
 	public void drawPlayer(GraphicsContext g) {
+		// Draws the player at the transformed coordinates, rotated towards the
+		// current cursor location
 		player.draw(g, transformXtoS(player.getX()), transformYtoS(player.getY()), scaleX, scaleY, firingX, firingY);
 	}
 
@@ -461,16 +477,23 @@ public class Game {
 	 */
 	public void initEnemyTypes() {
 		try {
+			// Connects to the database on the server
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			Statement stmt = con.createStatement();
+			// Retrieves data for each type of droid, along with its weapon and
+			// melee
 			ResultSet rs = stmt.executeQuery(
 					"select * from droids join weapons on droids.weapon = weapons.name join melees on droids.melee = melees.name;");
 			while (rs.next()) {
+				// Creates a template droid for each type
 				Droid droid = new Droid(rs, scaleX, scaleY, pF);
+				// Sets the droid's sorting value as its rarity
 				droid.setValue("rarity");
+				// Adds the droid template to the list
 				droidTypes.add(droid);
+				// Accumulates the rarity of each droid
 				probability += rs.getDouble(10);
 			}
 			con.close();
@@ -478,6 +501,8 @@ public class Game {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
+		// Sorts the droids in descending order of rarity, as the rarity is used
+		// in the spawnRandomDroid function for comparison
 		droidTypes = sorter.sort(droidTypes, false);
 
 	}
@@ -540,27 +565,38 @@ public class Game {
 	 * spawner. The probability of each type of droid is weighted
 	 */
 	public void spawnRandomDroid() {
+		// Checks whether any more droids can spawn in the round
 		if (spawners.size() > 0 && droidsLeft > 0) {
+			// Chooses a random spawner from the list of spawners
 			int spawnerIndex = (int) (Math.random() * spawners.size());
 			Block spawn = spawners.get(spawnerIndex);
+			// Chooses a random type of droid
 			double rand = Math.random() * probability;
+			// Creates a default droid from the template
 			Droid droid = new Droid(droidTypes.get(0));
-
+			// Iterates the types of droid to find the droid with the lowest
+			// rarity above the random value
 			for (Droid d : droidTypes) {
+				// If the droid's rarity is higher than the random value, it is
+				// overwritten by the rarer type of droid
 				if (rand <= d.getRarity()) {
 					droid = new Droid(d);
 				}
 			}
-
+			// Sets the droid's position as the spawner's position
 			droid.setX(spawn.getX());
 			droid.setY(spawn.getY());
+			////////////////////////////////////////////////////
 			if (spawnerIndex + 1 >= spawners.size()) {
 				spawnerIndex = 0;
 			}
 			Block target = spawners.get(spawnerIndex + 1);
 
 			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
+			////////////////////////////////////////////////////
+			// Adds the droid to the list of currently active droids
 			droids.add(droid);
+			// Decrements the number of droids left to spawn for the round
 			droidsLeft--;
 		}
 	}
@@ -570,12 +606,14 @@ public class Game {
 	 */
 	public void saveScore() {
 		try {
+			// Connects to the database on the server
 			System.out.println("Loading...");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
+			// Updates the scores table in the database with the player's score from the round
 			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID
 					+ "," + score + "," + round.getRound() + ",\"" + round.getDifficultyS() + "\",\""
 					+ player.getCharacter().getName() + "\");");

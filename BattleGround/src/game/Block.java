@@ -8,15 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 public class Block{
-	int posX;
-	int posY;
-	boolean collidable;;
-	double h = 0;
-	double g = 0;
-	Block precursor;
-	String type;
-	int moveCost;
-	Image image;
+	int posX; // The x coordinate of the block
+	int posY; // The y coordinate of the block
+	boolean collidable; // If collidable is true, all entities and projectiles cannot travel through the block
+	double h = 0; // The heuristic distance between the block and the target when pathfinding
+	double g = 0; // The cost to get to the block from the start when pathfinding
+	Block precursor; // The previous block on a path to the current block
+	String type; // The name of the block
+	int moveCost; // The cost of moving through the block
+	Image image; // The image used for the block
 
 	/**
 	 * @param mC

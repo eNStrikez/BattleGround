@@ -1,10 +1,15 @@
 package game;
 
 public class Entity {
-	double posX, posY, sizeX, sizeY, health, maxHealth;
-	boolean alive;
+	double posX; // The x coordinate of the entity
+	double posY; // The y coordinate of the entity
+	double sizeX; // The width of the entity
+	double sizeY; // The height of the entity
+	double health; // The health of the entity
+	double maxHealth; // The maximum health of the entity
+	boolean alive; // Whether the entity's health is more than zero
 
-	public Entity(){
+	public Entity() {
 		alive = true;
 	}
 
@@ -13,7 +18,7 @@ public class Entity {
 	 *
 	 * @param x
 	 */
-	public void setX(double x){
+	public void setX(double x) {
 		posX = x;
 	}
 
@@ -22,7 +27,7 @@ public class Entity {
 	 *
 	 * @param y
 	 */
-	public void setY(double y){
+	public void setY(double y) {
 		posY = y;
 	}
 
@@ -31,7 +36,7 @@ public class Entity {
 	 *
 	 * @param sx
 	 */
-	public void setSX(double sx){
+	public void setSX(double sx) {
 		sizeX = sx;
 	}
 
@@ -40,7 +45,7 @@ public class Entity {
 	 *
 	 * @param sy
 	 */
-	public void setSY(double sy){
+	public void setSY(double sy) {
 		sizeY = sy;
 	}
 
@@ -49,7 +54,7 @@ public class Entity {
 	 *
 	 * @param h
 	 */
-	public void setHealth(double h){
+	public void setHealth(double h) {
 		health = h;
 		maxHealth = h;
 	}
@@ -99,16 +104,15 @@ public class Entity {
 		return alive;
 	}
 
-
 	/**
-	 * Deals damage to the player by reducing health
-	 * If health becomes 0 or less, the entity is set to no longer be alive
+	 * Deals damage to the player by reducing health If health becomes 0 or
+	 * less, the entity is set to no longer be alive
 	 *
 	 * @param d
 	 */
-	public void takeDamage(double d){
+	public void takeDamage(double d) {
 		health -= d;
-		if(health <= 0){
+		if (health <= 0) {
 			alive = false;
 		}
 	}
