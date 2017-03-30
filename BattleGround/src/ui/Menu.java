@@ -331,7 +331,7 @@ public class Menu extends Stage {
 				// Sets each item to be sorted by score
 				s.setValue("score");
 			}
-			table.setItems(FXCollections.observableArrayList(sorter.sort(list, scoreAsc)));
+			table.setItems(FXCollections.observableArrayList(sorter.breakDown(list, scoreAsc)));
 			// Changes the button text to alternate between ascending and descending
 			scoreAsc = !scoreAsc;
 			if (scoreAsc) {
@@ -346,7 +346,7 @@ public class Menu extends Stage {
 				// Sets each item to be sorted by round
 				s.setValue("round");
 			}
-			table.setItems(FXCollections.observableArrayList(sorter.sort(list, roundAsc)));
+			table.setItems(FXCollections.observableArrayList(sorter.breakDown(list, roundAsc)));
 			// Changes the button text to alternate between ascending and descending
 			roundAsc = !roundAsc;
 			if (roundAsc) {

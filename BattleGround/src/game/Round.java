@@ -9,6 +9,7 @@ public class Round {
 	 * @param dS
 	 */
 	public Round(String dS){
+		// Sets the difficulty value dependent on the chosen difficulty
 		difficultyS = dS;
 		if(dS.equals("Youngling")){
 			difficulty = 1;
@@ -65,8 +66,6 @@ public class Round {
 	 * @return
 	 */
 	public int calculateDroids(){
-		int droids;
-		droids = difficulty*currentRound + 10;
-		return droids;
+		return difficulty*currentRound + 10;
 	}
 }

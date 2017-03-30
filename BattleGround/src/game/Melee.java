@@ -13,19 +13,24 @@ public class Melee implements Weapon {
 	boolean marked = false;
 	boolean player;
 
-	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP, double scaleX, double scaleY) {
+	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP, double scaleX,
+			double scaleY) {
+		// Sets the initial position of the melee
 		posX = x;
 		posY = y;
+		// Sets the damage of the melee
 		damage = d;
-
-		double angle = Math.atan2((tX - x) , (tY - y));
+		// Calculates the angle of the melee with the cursor
+		double angle = Math.atan2((tX - x), (tY - y));
 		double angleSin = Math.sin(angle);
 		double angleCos = Math.cos(angle);
-
+		// Sets the horizontal and vertical components of the speed of the melee
 		speedX = speed * angleSin;
 		speedY = speed * angleCos;
-		maxRangeX = range * angleSin + scaleX/2;
-		maxRangeY = range * angleCos + scaleY/2;
+		// Sets the horizontal and vertical components of the range of the melee
+		maxRangeX = range * angleSin + scaleX / 2;
+		maxRangeY = range * angleCos + scaleY / 2;
+		// Sets the melee as the player's
 		player = isP;
 	}
 
@@ -48,8 +53,12 @@ public class Melee implements Weapon {
 	@Override
 	public boolean checkCollision(double x1, double y1, double sX1, double sY1, double x2, double y2, double sX2,
 			double sY2) {
+		// Creates a hitbox around the melee and enemy and checks for
+		// intersection
 		Rectangle2D meleeHitbox = new Rectangle2D(x1, y1, Math.abs(sX1), Math.abs(sY1));
 		Rectangle2D enemyHitBox = new Rectangle2D(x2, y2, Math.abs(sX2), Math.abs(sY2));
+		// If the hitboxes intersect eachother, true is returned, else false is
+		// returned
 		if (enemyHitBox.intersects(meleeHitbox)) {
 			return true;
 		}
@@ -64,8 +73,10 @@ public class Melee implements Weapon {
 	 */
 	@Override
 	public void draw(GraphicsContext g, double x, double y, double h, double w) {
+		// Draws the laser as a line of width 2 along the diagonal of a
+		// rectangle specified by the input
 		g.setStroke(Color.GREY);
-		g.setLineWidth(5);
+		g.setLineWidth(2);
 		g.strokeLine(x, y, h, w);
 	}
 
@@ -76,6 +87,9 @@ public class Melee implements Weapon {
 	 */
 	@Override
 	public void move() {
+		// If the current range of the melee is less than the maximum range, it
+		// extends the melee towards the target, otherwise it sets the melee as
+		// marked for removal
 		if (Math.abs(rangeX) < maxRangeX && Math.abs(rangeY) < maxRangeY) {
 			rangeX += speedX;
 			rangeY += speedY;

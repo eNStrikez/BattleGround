@@ -503,7 +503,7 @@ public class Game {
 		}
 		// Sorts the droids in descending order of rarity, as the rarity is used
 		// in the spawnRandomDroid function for comparison
-		droidTypes = sorter.sort(droidTypes, false);
+		droidTypes = sorter.breakDown(droidTypes, false);
 
 	}
 

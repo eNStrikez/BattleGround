@@ -43,19 +43,22 @@ public class Player extends Entity {
 	 * @param sizeY
 	 */
 	public void draw(GraphicsContext g, double x, double y, double sizeX, double sizeY, double mX, double mY) {
+		// Calculates the angle between the player and the cursor
+		double angle = -Math.atan2(mX - x, mY - y);
+		// Rotates the image according to the angle
+		iV.setRotate(Math.toDegrees(angle));
+		SnapshotParameters params = new SnapshotParameters();
+		params.setFill(Color.TRANSPARENT);
+		// Resizes the image to maintain the image aspect ratio
+		double length = Math.abs(sizeY * Math.sin(angle)) + Math.abs(sizeX * Math.cos(angle));
+		double height = Math.abs(sizeY * Math.cos(angle)) + Math.abs(sizeX * Math.sin(angle));
+		// Draws the player's image
+		g.drawImage(iV.snapshot(params, null), x, y, length, height);
+		// Draws the player's health bar above the player
 		g.setFill(Color.CRIMSON);
 		g.fillRect(x, y - sizeY / 4, sizeX, sizeY / 4);
 		g.setFill(Color.LIMEGREEN);
 		g.fillRect(x, y - sizeY / 4, sizeX * health / maxHealth, sizeY / 4);
-		double angle = 0;
-		angle = -Math.atan2(mX - x, mY - y);
-		iV.setRotate(Math.toDegrees(angle));
-		SnapshotParameters params = new SnapshotParameters();
-		params.setFill(Color.TRANSPARENT);
-		double length = Math.abs(sizeY*Math.sin(angle)) + Math.abs(sizeX*Math.cos(angle));
-		double height = Math.abs(sizeY*Math.cos(angle)) + Math.abs(sizeX*Math.sin(angle));
-		g.drawImage(iV.snapshot(params, null), x, y, length, height);
-
 	}
 
 	/**
@@ -67,8 +70,11 @@ public class Player extends Entity {
 	 * @param mapY
 	 */
 	public void move(Block[][] map, double mapX, double mapY) {
+		// Checks that the player is on the map
 		if (posX + moveX < mapX - 1 && posY + moveY < mapY - 1 && posX + moveX >= 0 && posY + moveY >= 0)
+			// Checks whether the block the player is attempting to move into is collidable
 			if (!map[(int) (posX + moveX)][(int) (posY + moveY)].isCollidable()) {
+				// Moves the player according to the player velocity
 				posX += moveX;
 				posY += moveY;
 			}
@@ -130,12 +136,13 @@ public class Player extends Entity {
 	 * @return
 	 */
 	public Laser fire(double tX, double tY, double x, double y) {
-		return new Laser(character.getAccuracy(), x, y, character.getWeaponDamage(), tX, tY,
-				character.getRGB()[0], character.getRGB()[1], character.getRGB()[2], character.getSkill());
+		return new Laser(character.getAccuracy(), x, y, character.getWeaponDamage(), tX, tY, character.getRGB()[0],
+				character.getRGB()[1], character.getRGB()[2], character.getSkill());
 	}
 
 	/**
-	 * Creates a melee at the player's current position aimed at the mouse's position
+	 * Creates a melee at the player's current position aimed at the mouse's
+	 * position
 	 *
 	 * @param tX
 	 * @param tY
@@ -145,7 +152,7 @@ public class Player extends Entity {
 	 * @param sY
 	 * @return
 	 */
-	public Melee melee(double tX, double tY, double x, double y, double sX, double sY){
+	public Melee melee(double tX, double tY, double x, double y, double sX, double sY) {
 		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true, sX, sY);
 	}
 
@@ -154,11 +161,14 @@ public class Player extends Entity {
 	 *
 	 * @param mod
 	 */
-	public void modifyStat(Modifier mod){
+	public void modifyStat(Modifier mod) {
+		// Gets the stat that the modifier affects
 		String stat = mod.getStat();
+		// Gets the multiplier of the modifier
 		double multiplier = mod.getMultiplier();
+		// Alters the stats of the player depending on the modifer chosen
 		if (stat.equals("Health"))
-			setHealth(health*multiplier);
+			setHealth(health * multiplier);
 		else if (stat.equals("Speed"))
 			character.setSpeed(character.getSpeed() * multiplier);
 		else if (stat.equals("Accuracy"))
