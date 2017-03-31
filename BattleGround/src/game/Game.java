@@ -49,7 +49,7 @@ public class Game {
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
-	public final static double ZOOM = 5;
+	public final static double ZOOM = 2;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
@@ -75,7 +75,7 @@ public class Game {
 		screenY = sY;
 		mapR = new MapReader();
 		// Creates the map from a file
-		map = mapR.readFile("map2");
+		map = mapR.readFile("map");
 		// Sets the spawners on the map
 		spawners = mapR.getSpawners();
 		// Sets the size of each block in pixels

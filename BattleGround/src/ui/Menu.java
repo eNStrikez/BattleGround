@@ -170,7 +170,7 @@ public class Menu extends Stage {
 				Connection con = DriverManager.getConnection("jdbc:mysql://" + Main.IP + ":3306/battleground", "root",
 						"root");
 				Statement stmt = con.createStatement();
-				// Returns the user ID for the data matching th einput
+				// Returns the user ID for the data matching the input
 				ResultSet rs = stmt.executeQuery(
 						"select userID from user where username = '" + usernamePassword.getKey() + "' and password = '"
 								+ encrypt(usernamePassword.getKey(), usernamePassword.getValue()) + "';");
