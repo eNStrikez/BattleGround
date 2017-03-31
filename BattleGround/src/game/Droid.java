@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ai.PathFinder;
@@ -160,10 +161,10 @@ public class Droid extends Entity implements Sortable {
 	 * @param s
 	 * @param e
 	 */
-	public void setPatrolling(Block s, Block e) {
+	public void setPatrolling(Block[][] map, ArrayList<Block> spawners) {
 		// Sets the path for the droid to patrol
-		start = s;
-		end = e;
+		start = map[(int) getX()][(int) getY()];
+		end = spawners.get((int) (Math.random()*spawners.size()));
 		path = pathFinder.findPath(start, end);
 	}
 
@@ -171,7 +172,7 @@ public class Droid extends Entity implements Sortable {
 	 * Makes the droid move to the next block in the path. If the path has been
 	 * traversed, it reverses the path and continues
 	 */
-	public void moveThroughPath() {
+	public void moveThroughPath(Block[][] map, ArrayList<Block> spawners) {
 		// If the droid has a path to move through, it locates itself to the
 		// next block on the path, else it will reverse its path
 		if (path.size() > 0) {
@@ -179,7 +180,7 @@ public class Droid extends Entity implements Sortable {
 			posX = next.getX();
 			posY = next.getY();
 		} else {
-			setPatrolling(end, start);
+			setPatrolling(map, spawners);
 		}
 	}
 

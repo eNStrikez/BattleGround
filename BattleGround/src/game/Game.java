@@ -49,7 +49,7 @@ public class Game {
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
-	public final static double ZOOM = 10;
+	public final static double ZOOM = 5;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
@@ -292,7 +292,7 @@ public class Game {
 									droid.setFiring(true);
 								} else {
 									droid.setFiring(false);
-									droid.moveThroughPath();
+									droid.moveThroughPath(map, spawners);
 								}
 							}
 							// If the droid can fire this frame and it is in a
@@ -586,14 +586,9 @@ public class Game {
 			// Sets the droid's position as the spawner's position
 			droid.setX(spawn.getX());
 			droid.setY(spawn.getY());
-			////////////////////////////////////////////////////
-			if (spawnerIndex + 1 >= spawners.size()) {
-				spawnerIndex = 0;
-			}
-			Block target = spawners.get(spawnerIndex + 1);
+			// Sets the droid patrolling between spawners
+			droid.setPatrolling(map, spawners);
 
-			droid.setPatrolling(map[spawn.getX()][spawn.getY()], map[target.getX()][target.getY()]);
-			////////////////////////////////////////////////////
 			// Adds the droid to the list of currently active droids
 			droids.add(droid);
 			// Decrements the number of droids left to spawn for the round
