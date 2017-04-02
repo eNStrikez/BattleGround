@@ -275,7 +275,7 @@ public class Game {
 								droid.draw(g, transformXtoS(droid.getX()), transformYtoS(droid.getY()));
 							}
 							// Checks if the droid can move in the current frame
-							if (count % (int) droid.getSpeed() == 0) {
+							if (count % (int) (Main.FRAME_RATE / droid.getSpeed()) == 0) {
 								// If the droid is in range of the player, it
 								// will stand still and start firing at the
 								// player, else it will not fire and move
