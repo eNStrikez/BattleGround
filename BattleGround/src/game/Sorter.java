@@ -74,7 +74,8 @@ public class Sorter {
 			}
 		}
 
-		// If the one list has values remaining while the other list is empty, the result list has all of the leftover values added to it
+		// If the one list has values remaining while the other list is empty,
+		// the result list has all of the leftover values added to it
 		while (!list1.isEmpty()) {
 			result.add(list1.get(0));
 			list1.remove(0);

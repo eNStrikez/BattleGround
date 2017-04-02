@@ -44,6 +44,8 @@ public class Laser implements Weapon {
 		double angle = Math.atan2((tX - x), (tY - y));
 		// Calculates the random deviation of the laser
 		double rand = (Math.random() * accuracy - accuracy / 2);
+		// Stores the sine and cosine of the angle, combined with the random
+		// adjustment
 		double angleSin = Math.sin(angle - Math.toRadians(rand));
 		double angleCos = Math.cos(angle - Math.toRadians(rand));
 		// Sets the horizontal and vertical components of the laser's speed

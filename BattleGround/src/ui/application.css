@@ -1,12 +1,14 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/* Sets the background colour for the window as a dark grey */
 .background{
 	-fx-background-color: #1d1d1d;
 }
 
+/* Sets the background colour of the canvas as dark grey */
 .canvas{
 	-fx-background-color: #1d1d1d;
 }
 
+/* Sets the background image as an image resourced from the github repository for any components with the id 'root' */
 #root{
 	-fx-background-color: #000000;
 	-fx-background-image: url("https://raw.githubusercontent.com/eNStrikez/BattleGround/master/Logo.png");
@@ -16,10 +18,12 @@
 
 }
 
+/* Sets the background colour for any components with the id 'selection' as dark grey */
 #selection{
 	-fx-background-color: #1d1d1d;
 }
 
+/* Sets the button as dark grey with a light grey outline and Sefoe UI font */
 .button{
 	-fx-padding: 5 22 5 22;
 	-fx-border-color: #e2e2e2;
@@ -32,28 +36,22 @@
 	-fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
+/* Sets the button as a lighter grey when the cursor hovers over it  */
 .button:hover {
 	-fx-background-color: #3a3a3a;
 }
 
+/* Sets the button as light grey while the player presses the button*/
 .button:pressed, .button:default:hover:pressed {
-	-fx-background-color: white;
+	-fx-background-color: #d8d8d8;
 	-fx-text-fill: #1d1d1d;
 }
 
+/* Sets the button's border as white while the button is focused */
 .button:focused {
 	-fx-border-color: white, white;
 	-fx-border-width: 1, 1;
 	-fx-border-style: solid, segments(1,1);
 	-fx-border-radius: 0, 0;
 	-fx-border-insets: 1 1 1 1, 0;
-}
-
-.button:default {
-	-fx-background-color: -fx-focus-color;
-	-fx-text-fill: #ffffff;
-}
-
-.button:default:hover {
-	-fx-background-color: derive(-fx-focus-color, 30%);
 }

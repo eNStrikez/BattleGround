@@ -3,24 +3,17 @@ package game;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import ai.PathFinder;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -310,7 +303,7 @@ public class Game {
 										scaleX * weapon.getW(), scaleY * weapon.getH(), transformXtoS(droid.getX()),
 										transformYtoS(droid.getY()), scaleX, scaleY) && !weapon.isMarked()
 										&& weapon.isPlayer()) {
-									// Applies daage to the player
+									// Applies damage to the player
 									weapon.doDamage(droid);
 									// Adds to the score of the player
 									incrementScore((int) weapon.getDamage());
@@ -608,7 +601,8 @@ public class Game {
 					"root");
 			System.out.println("Connected.");
 			Statement stmt = con.createStatement();
-			// Updates the scores table in the database with the player's score from the round
+			// Updates the scores table in the database with the player's score
+			// from the round
 			stmt.executeUpdate("insert into scores (userID, score, round, difficulty, clone) values (" + Menu.USER_ID
 					+ "," + score + "," + round.getRound() + ",\"" + round.getDifficultyS() + "\",\""
 					+ player.getCharacter().getName() + "\");");
