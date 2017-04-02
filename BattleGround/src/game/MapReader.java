@@ -66,7 +66,7 @@ public class MapReader {
 			ResultSet rs = stmt.executeQuery("select * from blocks");
 			while (rs.next()) {
 				// Adds each block to the hash map, using the name as an index
-				blockTypes.put(rs.getString(2), new Block(rs.getInt(3), rs.getBoolean(4), rs.getBlob(5)));
+				blockTypes.put(rs.getString(2), new Block(rs.getInt(3), rs.getBoolean(5), rs.getBlob(4)));
 			}
 			con.close();
 		} catch (Exception e) {

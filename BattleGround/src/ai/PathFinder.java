@@ -208,8 +208,8 @@ public class PathFinder {
 	}
 
 	/**
-	 * Returns the average movement cost between two adjacent blocks 
-	 * 
+	 * Returns the average movement cost between two adjacent blocks
+	 *
 	 * @param b1
 	 * @param b2
 	 * @return
