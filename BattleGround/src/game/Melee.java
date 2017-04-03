@@ -13,8 +13,7 @@ public class Melee implements Weapon {
 	boolean marked = false;
 	boolean player;
 
-	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP, double scaleX,
-			double scaleY) {
+	public Melee(double d, double r, double x, double y, double tX, double tY, boolean isP) {
 		// Sets the initial position of the melee
 		posX = x;
 		posY = y;
@@ -28,8 +27,8 @@ public class Melee implements Weapon {
 		speedX = speed * angleSin;
 		speedY = speed * angleCos;
 		// Sets the horizontal and vertical components of the range of the melee
-		maxRangeX = range * angleSin + scaleX / 2;
-		maxRangeY = range * angleCos + scaleY / 2;
+		maxRangeX = range * angleSin + 1;
+		maxRangeY = range * angleCos + 1;
 		// Sets the melee as the player's
 		player = isP;
 	}

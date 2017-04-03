@@ -42,7 +42,7 @@ public class Game {
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
-	public final static double ZOOM = 2;
+	public final static double ZOOM = 5;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
@@ -68,7 +68,7 @@ public class Game {
 		screenY = sY;
 		mapR = new MapReader();
 		// Creates the map from a file
-		map = mapR.readFile("map");
+		map = mapR.readFile("map2");
 		// Sets the spawners on the map
 		spawners = mapR.getSpawners();
 		// Sets the size of each block in pixels
@@ -337,7 +337,7 @@ public class Game {
 					// melee is created towards the mouse location
 					if (meleeing) {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
-								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
+								player.getY() + 0 / 5));
 					}
 					// If the player can move on the current frame, their
 					// position is adjusted and the offset of the map is changed
@@ -360,8 +360,8 @@ public class Game {
 						}
 					}
 
+					// Spawns a droid on the map every second
 					if(count % 1000 == 0){
-						// Spawns a droid on the map
 						spawnRandomDroid();
 					}
 
@@ -491,7 +491,6 @@ public class Game {
 		// Sorts the droids in descending order of rarity, as the rarity is used
 		// in the spawnRandomDroid function for comparison
 		droidTypes = sorter.breakDown(droidTypes, false);
-
 	}
 
 	/**

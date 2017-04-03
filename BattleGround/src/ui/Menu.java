@@ -93,6 +93,9 @@ public class Menu extends Stage {
 			initStatsScene(bounds.getWidth(), bounds.getHeight());
 			setScene(statsScene);
 		});
+		
+		options.setDisable(true);
+		
 		// Adds the buttons to the layout
 		root.add(start, 0, 0);
 		root.add(stats, 0, 1);

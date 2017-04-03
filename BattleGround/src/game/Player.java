@@ -152,8 +152,8 @@ public class Player extends Entity {
 	 * @param sY
 	 * @return
 	 */
-	public Melee melee(double tX, double tY, double x, double y, double sX, double sY) {
-		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true, sX, sY);
+	public Melee melee(double tX, double tY, double x, double y) {
+		return new Melee(character.getMeleeDamage(), character.getMeleeRange(), x, y, tX, tY, true);
 	}
 
 	/**
