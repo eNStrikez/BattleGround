@@ -337,7 +337,7 @@ public class Game {
 					// melee is created towards the mouse location
 					if (meleeing) {
 						weapons.add(player.melee(transformStoX(firingX), transformStoY(firingY), player.getX() + 0.5,
-								player.getY() + 0 / 5, transformStoX(scaleX), transformStoY(scaleY)));
+								player.getY() + 0.5));
 					}
 					// If the player can move on the current frame, their
 					// position is adjusted and the offset of the map is changed
