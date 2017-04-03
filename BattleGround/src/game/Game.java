@@ -42,7 +42,7 @@ public class Game {
 	ArrayList<Droid> droidTypes = new ArrayList<Droid>();
 	Round round;
 	public final static double FRAME_RATE = 100;
-	public final static double ZOOM = 5;
+	public final static double ZOOM = 2;
 	public final static boolean DEBUG = false;
 	int droidsLeft = 0;
 	boolean firing = false;
@@ -68,7 +68,7 @@ public class Game {
 		screenY = sY;
 		mapR = new MapReader();
 		// Creates the map from a file
-		map = mapR.readFile("map2");
+		map = mapR.readFile("map");
 		// Sets the spawners on the map
 		spawners = mapR.getSpawners();
 		// Sets the size of each block in pixels
@@ -343,7 +343,7 @@ public class Game {
 					// position is adjusted and the offset of the map is changed
 					// correspondingly
 					if (count % (int) (Main.FRAME_RATE / player.getCharacter().getSpeed()) == 0) {
-						player.move(map, transformXtoS(mapR.getMapX()), transformYtoS(mapR.getMapY()));
+						player.move(map, transformXtoS(mapR.getMapX()), mapR.getMapY());
 						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
 						if (offX < 0) {
 							offX = 0;

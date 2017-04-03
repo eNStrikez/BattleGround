@@ -36,7 +36,7 @@ public class Sorter {
 		// Returns the merged and sorted lists
 		return performMerge(list1, list2, ascending);
 	}
-
+	
 	/**
 	 * Merges together two lists in order dependent on a comparison
 	 *
@@ -73,14 +73,14 @@ public class Sorter {
 				}
 			}
 		}
-
+	
 		// If the one list has values remaining while the other list is empty,
 		// the result list has all of the leftover values added to it
 		while (!list1.isEmpty()) {
 			result.add(list1.get(0));
 			list1.remove(0);
 		}
-
+	
 		while (!list2.isEmpty()) {
 			result.add(list2.get(0));
 			list2.remove(0);
