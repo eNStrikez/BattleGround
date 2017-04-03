@@ -256,9 +256,10 @@ public class Game {
 						}
 					}
 
-					Iterator<Droid> droidIt = droids.iterator();
 					// Creates an iterator to safely iterate through the droids
 					// array
+					Iterator<Droid> droidIt = droids.iterator();
+					// Iterates through the list of droids
 					while (droidIt.hasNext()) {
 						Droid droid = droidIt.next();
 						// Removes droids with no speed to avoid division by 0
@@ -318,7 +319,6 @@ public class Game {
 								}
 							}
 						}
-
 					}
 					// If all the droids in the current round have been
 					// destroyed, the player advances to the next round
@@ -359,6 +359,12 @@ public class Game {
 							offY = mapR.mapY - 2 * (player.getY() - offY);
 						}
 					}
+
+					if(count % 1000 == 0){
+						// Spawns a droid on the map
+						spawnRandomDroid();
+					}
+
 					// Increments the count
 					count++;
 				}
@@ -368,18 +374,6 @@ public class Game {
 		}));
 		// Starts the timer
 		t.play();
-		// Creates the timer for spawning droid, running at a speed of 1 second
-		Timeline spawnT = new Timeline();
-		spawnT.setCycleCount(Timeline.INDEFINITE);
-		spawnT.getKeyFrames().add(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				// Spawns a droid on the map
-				spawnRandomDroid();
-			}
-		}));
-		// Starts the timer
-		spawnT.play();
 		// Adds the canvas to the layout
 		root.add(canvas, 0, 0);
 	}
