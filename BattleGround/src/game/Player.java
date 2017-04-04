@@ -71,13 +71,15 @@ public class Player extends Entity {
 	 */
 	public void move(Block[][] map, double mapX, double mapY) {
 		// Checks that the player is on the map
-		if (posX + moveX < mapX - 2 && posY + moveY < mapY - 2 && posX + moveX >= 0 && posY + moveY >= 0)
-			// Checks whether the block the player is attempting to move into is collidable
+		if (posX + moveX < mapX && posY + moveY < mapY && posX + moveX >= 0 && posY + moveY >= 0) {
+			// Checks whether the block the player is attempting to move into is
+			// collidable
 			if (!map[(int) (posX + moveX)][(int) (posY + moveY)].isCollidable()) {
 				// Moves the player according to the player velocity
 				posX += moveX;
 				posY += moveY;
 			}
+		}
 	}
 
 	/**

@@ -43,7 +43,8 @@ public class Game {
 	Round round;
 	public final static double FRAME_RATE = 100;
 	public final static double ZOOM = 2;
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
+	double zoomX;
 	int droidsLeft = 0;
 	boolean firing = false;
 	boolean meleeing = false;
@@ -74,6 +75,7 @@ public class Game {
 		// Sets the size of each block in pixels
 		scaleX = (int) (ZOOM * (screenY / mapR.getMapY()));
 		scaleY = (int) (ZOOM * (screenY / mapR.getMapY()));
+		zoomX = (scaleX * mapR.getMapX()) /screenX;
 		// Initialises the player
 		player = new Player(1, 1, scaleX, scaleY, c);
 		// Creates the path finder based on the map
@@ -343,25 +345,25 @@ public class Game {
 					// position is adjusted and the offset of the map is changed
 					// correspondingly
 					if (count % (int) (Main.FRAME_RATE / player.getCharacter().getSpeed()) == 0) {
-						player.move(map, transformXtoS(mapR.getMapX()), mapR.getMapY());
-						offX = player.getX() - ((mapR.getMapX() / ZOOM) / 2);
+						player.move(map, mapR.getMapX(), mapR.getMapY());
+						offX = player.getX() - ((mapR.getMapX() / zoomX) / 2);
 						if (offX < 0) {
 							offX = 0;
-						} else if (offX + 2 * (player.getX() - offX) > mapR.mapX) {
+						} else if ((offX + 2 * (player.getX() - offX)) > mapR.mapX) {
 							offX = mapR.mapX - 2 * (player.getX() - offX);
 						}
-
+					
 						offY = player.getY() - ((mapR.getMapY() / ZOOM) / 2);
-
+					
 						if (offY < 0) {
 							offY = 0;
-						} else if (offY + 2 * (player.getY() - offY) > mapR.mapY) {
+						} else if ((offY + 2 * (player.getY() - offY)) > mapR.mapY) {
 							offY = mapR.mapY - 2 * (player.getY() - offY);
 						}
 					}
 
 					// Spawns a droid on the map every second
-					if(count % 1000 == 0){
+					if (count % 1000 == 0) {
 						spawnRandomDroid();
 					}
 
