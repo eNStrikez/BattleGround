@@ -69,7 +69,7 @@ public class Game {
 		screenY = sY;
 		mapR = new MapReader();
 		// Creates the map from a file
-		map = mapR.readFile("map");
+		map = mapR.readFile("map2");
 		// Sets the spawners on the map
 		spawners = mapR.getSpawners();
 		// Sets the size of each block in pixels

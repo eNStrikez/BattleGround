@@ -1,9 +1,6 @@
 package game;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -13,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import ui.Main;
 
 public class Droid extends Entity implements Sortable {
 

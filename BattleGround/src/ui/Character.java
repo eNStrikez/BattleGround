@@ -2,8 +2,6 @@ package ui;
 
 import java.sql.Blob;
 import java.sql.SQLException;
-
-import game.Laser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;

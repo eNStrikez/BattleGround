@@ -2,9 +2,7 @@ package ai;
 
 import game.Block;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 public class PathFinder {
 	Block[][] map;

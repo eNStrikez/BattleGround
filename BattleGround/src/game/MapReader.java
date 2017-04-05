@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import ui.Character;
 import ui.Main;
 
 public class MapReader {

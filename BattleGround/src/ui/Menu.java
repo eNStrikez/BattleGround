@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
-
 import game.Game;
 import game.Sortable;
 import game.Sorter;

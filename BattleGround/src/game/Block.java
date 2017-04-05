@@ -2,7 +2,6 @@ package game;
 
 import java.sql.Blob;
 import java.sql.SQLException;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
