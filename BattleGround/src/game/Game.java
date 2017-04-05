@@ -43,7 +43,7 @@ public class Game {
 	Round round;
 	public final static double FRAME_RATE = 100;
 	public final static double ZOOM = 2;
-	public final static boolean DEBUG = true;
+	public final static boolean DEBUG = false;
 	double zoomX;
 	int droidsLeft = 0;
 	boolean firing = false;
@@ -352,9 +352,9 @@ public class Game {
 						} else if ((offX + 2 * (player.getX() - offX)) > mapR.mapX) {
 							offX = mapR.mapX - 2 * (player.getX() - offX);
 						}
-					
+
 						offY = player.getY() - ((mapR.getMapY() / ZOOM) / 2);
-					
+
 						if (offY < 0) {
 							offY = 0;
 						} else if ((offY + 2 * (player.getY() - offY)) > mapR.mapY) {
